@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/01 19:04:48 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/01 19:20:22 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,10 @@ typedef struct s_token {
 	t_token_type	type;
 }	t_token;
 
-typedef struct s_lexed {
-	t_token		*tokens;
-	uint32_t	size;
-}			t_lexed;
-
 typedef struct s_env {
 	t_token	*tab;
-	t_lexed	*lexed;
+	t_token	*lexed;
+	uint32_t	size;
 }			t_env;
 
 typedef struct command_table_list
