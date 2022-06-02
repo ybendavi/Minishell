@@ -6,10 +6,11 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 23:13:31 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/02 23:16:05 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/02 23:23:20 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../../includes/minishell.h"
 
 int	handle_pipe(char **temp, t_env *env)
 {

@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/02 23:15:57 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/02 23:22:40 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct command_table_list
 void	*ft_calloc(size_t nmem);
 char	**ft_cpy(char **temp, char *s1);
 size_t	ft_strlen(char *str);
+int	get_lexed(char **temp, t_env *env, t_token_type type);
 int	token_init(t_env *env);
 int	check_temp(char **temp, t_env *env);
 int	handle_quote(char *line, int *i, char **temp, t_env *env);
