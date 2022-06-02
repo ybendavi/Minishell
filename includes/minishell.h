@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/01 19:20:22 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/02 23:15:57 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ typedef enum e_token_type {
 	REDIR_IN,
 	REDIR_OUT,
 	PIPE,
-	QUOTE,
-	S_QUOTE,
 	WHITE_SPACE,
 	STR,
 	FLAG,
@@ -41,6 +39,7 @@ typedef struct s_token {
 typedef struct s_env {
 	t_token	*tab;
 	t_token	*lexed;
+	uint32_t	nb_token;
 	uint32_t	size;
 }			t_env;
 
@@ -51,5 +50,16 @@ typedef struct command_table_list
 	int							out;
 	struct command_table_list	*next;
 }					t_cmds;
+
+void	*ft_calloc(size_t nmem);
+char	**ft_cpy(char **temp, char *s1);
+size_t	ft_strlen(char *str);
+int	token_init(t_env *env);
+int	check_temp(char **temp, t_env *env);
+int	handle_quote(char *line, int *i, char **temp, t_env *env);
+int	handle_pipe(char **temp, t_env *env);
+int	handle_redir(char *line, int *i, char **temp, t_env *env);
+int	handle_white_space(int *i, char *line, char **temp,
+		t_env *env);
 
 #endif
