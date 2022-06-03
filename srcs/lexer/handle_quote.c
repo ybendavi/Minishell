@@ -6,13 +6,13 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 23:10:03 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/02 23:10:28 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/03 15:21:24 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	copy_quote(char **temp, char *line, int i, int start)
+char	**copy_quote(char **temp, char *line, int i, int start)
 {
 	int	y;
 
@@ -23,14 +23,29 @@ void	copy_quote(char **temp, char *line, int i, int start)
 		y++;
 		start++;
 	}
+	return (temp);
 }
 
 void	count_q(char *line, int *i, int *nb_q, char q)
 {
-	while (line[*i] == q)
+	*nb_q = 0;
+	while (line[*i] == q && line[*i])
 	{
 		*i = *i + 1;
 		*nb_q = *nb_q + 1;
+	}
+}
+
+void	count_q2(char *line, int *i, int *nb_q2, int nb_q1)
+{
+	char	q;
+
+	*nb_q2 = 0;
+	q = line[*i];
+	while (line[*i] == q && line[*i] && *nb_q2 < nb_q1)
+	{
+		*i = *i + 1;
+		*nb_q2 = *nb_q2 + 1;
 	}
 }
 
@@ -38,21 +53,24 @@ int	handle_quote(char *line, int *i, char **temp, t_env *env)
 {
 	int		start;
 	int		nb_q;
+	int		nb_q2;
 	char	q;
 
 	if (check_temp(temp, env))
 		return (-1);
 	q = line[*i];
 	start = *i;
-	nb_q = 0;
 	count_q(line, i, &nb_q, q);
+	nb_q2 = *i;
 	while (line[*i] && line[*i] != q)
 		*i = *i + 1;
-	count_q(line, i, &nb_q, q);
-	if (nb_q % 2 == 0)
+	if (*i == nb_q2 && nb_q % 2 == 0)
+		return (get_lexed(copy_quote(temp, line, *i, start), env, STR));
+	count_q2(line, i, &nb_q2, nb_q);
+	*i = *i - 1;
+	if (nb_q == nb_q2)
 	{
-		copy_quote(temp, line, *i, start);
-		if (get_lexed(temp, env, STR))
+		if (get_lexed(copy_quote(temp, line, *i, start), env, STR))
 			return (-1);
 		return (0);
 	}

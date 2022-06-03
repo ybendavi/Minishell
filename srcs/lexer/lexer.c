@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 22:24:47 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/02 23:17:34 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/03 15:51:44 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,11 @@ int	lexer(char *line, t_env *env)
 		return (-1);
 	i = 0;
 	ret = 0;
+	while (line[i] != '\n' && line[i])
+		i++;
+	if (line[i] == '\n')
+		line[i] = 0;
+	i = 0;
 	while (line[i])
 	{
 		ret = lexer2(line, &temp, &i, env);
@@ -171,6 +176,9 @@ int	main(void)
 		if (ret != 0)
 			return (ft_return(ret, &env, &buff));
 		i = 0;
+		ret = init_parser(&env);
+		if (ret) //on peut free buffer ici
+			return (ft_return(ret, &env, &buff));
 		while (i < env.nb_token)
 		{
 			printf("%d = %d %d %s\n", i, env.lexed[i].type, env.lexed[i].size, env.lexed[i].token);

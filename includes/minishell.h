@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/02 23:22:40 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/03 15:52:27 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,6 @@ int	handle_pipe(char **temp, t_env *env);
 int	handle_redir(char *line, int *i, char **temp, t_env *env);
 int	handle_white_space(int *i, char *line, char **temp,
 		t_env *env);
+int	init_parser(t_env *env);
 
 #endif
