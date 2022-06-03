@@ -2,7 +2,7 @@
 
 void	free_cmds_table(t_cmds *tbls)
 {
-	int	i;
+	int		i;
 	t_cmds	*tmp;
 
 	i = 0;
@@ -24,3 +24,4 @@ void	free_cmds_table(t_cmds *tbls)
 		free_cmds_table(tmp);
 	free(tbls);
 }
+//Trouver une solution pour free les pfd.

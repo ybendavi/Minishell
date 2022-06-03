@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 19:03:51 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/02 23:03:23 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/03 14:05:58 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,17 @@ int	main(int ac, char **argv, char **env)
 {
 	t_env	envs;
 	t_cmds	*tmp;
-	int	i;
+	//int	i;
 	//(void)argv;
 	//if (ac > 1)
 	//	printf("This program doesn't take arguments.\n");
 	(void)ac;
 	envs.env = env;
 	parsing(&envs, argv[1]);
-	i = 0;
+	execution(&envs);
+	//i = 0;
 	tmp = envs.c_tbls;
-	if (envs.c_tbls)
+	/*if (envs.c_tbls)
 	{
 		while (envs.c_tbls)
 		{
@@ -48,7 +49,7 @@ int	main(int ac, char **argv, char **env)
 
 			envs.c_tbls = envs.c_tbls->next;
 		}
-	}
+	}*/
 	free_cmds_table(tmp);
 	return (0);
 }
