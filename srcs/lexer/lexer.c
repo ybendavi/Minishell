@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 22:24:47 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/03 15:51:44 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/03 20:17:34 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	init(t_env *env, char **temp)
 {
 	env->nb_token = 0;
-	env->lexed = ft_calloc(sizeof(t_token) * 100);
+	env->lexed = ft_calloc(sizeof(t_token) * 100);//DYMANIQUE
 	if (!env->lexed)
 		return (-1);
 	*temp = ft_calloc(1024);
@@ -28,6 +28,7 @@ int	get_lexed(char **temp, t_env *env, t_token_type type)
 {
 	int	y;
 
+	printf
 	env->lexed[env->nb_token].size = ft_strlen(*temp);
 	env->lexed[env->nb_token].type = type;
 	env->lexed[env->nb_token].token
@@ -117,9 +118,33 @@ void	free_lexed(t_env *env)
 		free(env->lexed);
 }
 
+void	free_parsed(t_env *env)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (i < env->nb_parsed)
+	{
+		if (env->parsed[i].token)
+			free(env->parsed[i].token);
+		i++;
+	}
+	if (env->parsed)
+		free(env->parsed);
+}
+
 int	ft_return(int ret, t_env *env, char **buff)
 {
 	unsigned int	i;
+	
+	if (ret == -1)
+		write(2, "Malloc error.\n", 14);
+	if (ret == -2)
+		write(1, "Lone quote.\n", 12);
+	if (ret == -3)
+		printf("bash : syntax error near unexpected token `%s'\n", env->error);
+	if (ret == -5)
+		printf("bash : syntax error near unexpected token `newline'\n");
 
 	if (*buff)
 		free(*buff);
@@ -132,12 +157,10 @@ int	ft_return(int ret, t_env *env, char **buff)
 	}
 	if (env->tab)
 		free(env->tab);
-	if (ret != 0)
+	if (ret < -2)
+		free_parsed(env);
+	if (ret < 0 && ret > -4)
 		free_lexed(env);
-	if (ret == -1)
-		write(2, "Malloc error.\n", 14);
-	if (ret == -2)
-		write(1, "Lone quote.\n", 12);
 	return (-1);
 }
 
@@ -179,12 +202,15 @@ int	main(void)
 		ret = init_parser(&env);
 		if (ret) //on peut free buffer ici
 			return (ft_return(ret, &env, &buff));
-		while (i < env.nb_token)
+		ret = check_parsing_errors(&env);
+		if (ret)
+			return (ft_return(ret, &env, &buff));
+		while (i < env.nb_parsed)
 		{
-			printf("%d = %d %d %s\n", i, env.lexed[i].type, env.lexed[i].size, env.lexed[i].token);
+			printf("%d = %d %d %s\n", i, env.parsed[i].type, env.parsed[i].size, env.parsed[i].token);
 			i++;
 		}
-		free_lexed(&env);
+		free_parsed(&env);
 	/*	while (i < 11)
 		{
 			printf("%d = %d %d %s\n", i, env.tab[i].type, env.tab[i].size, env.tab[i].token);

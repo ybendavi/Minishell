@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/03 15:52:27 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/03 19:21:58 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,10 @@ typedef struct s_token {
 typedef struct s_env {
 	t_token	*tab;
 	t_token	*lexed;
+	t_token	*parsed;
+	char	*error;
 	uint32_t	nb_token;
-	uint32_t	size;
+	uint32_t	nb_parsed;
 }			t_env;
 
 typedef struct command_table_list
@@ -63,5 +65,8 @@ int	handle_redir(char *line, int *i, char **temp, t_env *env);
 int	handle_white_space(int *i, char *line, char **temp,
 		t_env *env);
 int	init_parser(t_env *env);
+int	check_parsing_errors(t_env *env);
+int	ft_cmp(char *s1, char *s2);
+void	free_lexed(t_env *env);
 
 #endif

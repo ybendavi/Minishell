@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 23:10:03 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/03 15:21:24 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/03 20:14:16 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,20 @@ int	handle_quote(char *line, int *i, char **temp, t_env *env)
 	*i = *i - 1;
 	if (nb_q == nb_q2)
 	{
+		if (get_lexed(copy_quote(temp, line, *i, start), env, STR))
+			return (-1);
+		return (0);
+	}
+	nb_q = nb_q - nb_q2;
+	if (nb_q % 2 == 0)
+	{
+		while (nb_q)
+		{
+			if (get_lexed(copy_quote(temp, "\"\"", 2, 0), env, STR))
+				return (-1);
+			nb_q = nb_q - 2;
+			start = start + 2;
+		}
 		if (get_lexed(copy_quote(temp, line, *i, start), env, STR))
 			return (-1);
 		return (0);
