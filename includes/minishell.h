@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/03 19:21:58 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/05 15:58:04 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ typedef enum e_token_type {
 	PIPE,
 	WHITE_SPACE,
 	STR,
-	FLAG,
-	CMD
+	QUOTE
 }		t_token_type;
 
 typedef struct s_token {

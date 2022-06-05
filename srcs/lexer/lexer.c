@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 22:24:47 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/03 20:17:34 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/05 15:29:41 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	get_lexed(char **temp, t_env *env, t_token_type type)
 {
 	int	y;
 
-	printf
 	env->lexed[env->nb_token].size = ft_strlen(*temp);
 	env->lexed[env->nb_token].type = type;
 	env->lexed[env->nb_token].token

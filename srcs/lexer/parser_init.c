@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:49:03 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/03 18:47:11 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/05 17:41:06 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ char	*ft_cpy2(char *s1)
 
 int	get_parsed(t_env *env, t_token token)
 {
-	env->parsed[env->nb_parsed].token = ft_cpy2(token.token);
+	if (token.type == WHITESPACE)	
+		env->parsed[env->nb_parsed].token = ft_cpy2(" ");
+	else
+		env->parsed[env->nb_parsed].token = ft_cpy2(token.token);
 	if (!env->parsed[env->nb_parsed].token)
 		return (-1);
 	env->parsed[env->nb_parsed].size = token.size;
@@ -48,7 +51,8 @@ int	is_redir(unsigned int i, t_env *env)
 			return (-1);
 	}
 	else if (env->parsed[env->nb_parsed - 1].type != PIPE
-		&& env->parsed[env->nb_parsed - 1].type != STR)
+		&& env->parsed[env->nb_parsed - 1].type != STR
+		&& env->parsed[env->nb_parsed - 1].type != QUOTE)
 		return (-3);
 	else
 	{
@@ -62,7 +66,8 @@ int	is_pipe(unsigned int i, t_env *env)
 {
 	if (i == 0)
 		return (-3);
-	if (env->parsed[env->nb_parsed - 1].type != STR)
+	if (env->parsed[env->nb_parsed - 1].type != STR
+		&& env->parsed[env->nb_parsed - 1].type != QUOTE)
 		return (-3);
 	else
 	{
@@ -75,14 +80,22 @@ int	is_pipe(unsigned int i, t_env *env)
 /*
 int	is_str(unsigned int i, t_env *env)
 {
-	c'est l endroit ou on transforme les tokens en cmd, file ou autre si besoin
+	c'est l endroit ou on concat les bails jusqu'a ce au il n y ait plus de quote, faire gf et bien check ls variables d env
 }
 */
-
-int	check_type(unsigned int *i, t_env *env)
+int	is_whitespace(unsigned int *i, t_env *env)
 {
 	while (env->lexed[*i].type == WHITE_SPACE)
 		*i = *i + 1;
+	if (get_parsed(env, env->lexed[i]))
+		return (-1);
+	return (0);
+}
+
+int	check_type(unsigned int *i, t_env *env)
+{
+	if (env->lexed[*i].type == WHITE_SPACE)
+		return (is_whitespace(i, env));
 	if (env->lexed[*i].type == REDIR_ADD
 		|| env->lexed[*i].type == REDIR_LIM
 		|| env->lexed[*i].type == REDIR_IN 
@@ -90,9 +103,9 @@ int	check_type(unsigned int *i, t_env *env)
 		return (is_redir(*i, env));
 	else if (env->lexed[*i].type == PIPE)
 		return (is_pipe(*i, env));
-	else if (env->lexed[*i].type == STR)
+	else if (env->lexed[*i].type == STR || env->lexed[*i].type == QUOTE)
 	{
-	//	is_str(i, env);
+		is_str(i, env);
 		if (get_parsed(env, env->lexed[*i]))
 			return (-1);
 	}
