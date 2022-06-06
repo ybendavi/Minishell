@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 12:32:13 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/03 15:20:55 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/06 20:10:47 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,11 @@ int	new_table(t_env *envs)
 		tmp = malloc(sizeof(t_cmds) * 1);
 		if (!tmp)
 			return (-1);
+		tmp->prev = NULL;
 		envs->c_tbls = tmp;
 	}
+	tmp->file_in = NULL;
+	tmp->file_out = NULL;
 	tmp->cmds = NULL;
 	tmp->cmd = NULL;
 	tmp->in = 0;
@@ -89,10 +92,13 @@ int	pipe_parse(t_env *envs, char **strs)
 		tmp = tmp->next;
 	new_table(envs);
 	if (pipe(tmp->pfd_out) == -1)
+	{
+		perror(NULL);
 		return (-1);
+	}
 	tmp->out = tmp->pfd_out[1];
-	free(tmp->next->pfd_in);
-	tmp->next->pfd_in = tmp->pfd_out;
+	tmp->next->pfd_in[0] = tmp->pfd_out[0];
+	tmp->next->pfd_in[1] = tmp->pfd_out[1];
 	tmp->next->in = tmp->next->pfd_in[0];
 	tmp = tmp->next;
 	i = set_cmds(tmp, &strs[1]);
@@ -144,7 +150,7 @@ int	parsing(t_env *envs, char *av)
 		new_table(envs);
 		i = set_cmds(envs->c_tbls, strs);
 	}
-	if (recu_parse(envs, &strs[i]) == -1)
+	if (strs[i] && recu_parse(envs, &strs[i]) == -1)
 		return (-1);
 	i = 0;
 	while (strs[i])

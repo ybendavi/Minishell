@@ -2,10 +2,22 @@
 
 int	new_fd(char *filename, t_token_type type)
 {
+	int	fd;
+
 	if (type == REDIR_IN || type == REDIR_OUT)
-		return (open(filename, O_RDWR | O_TRUNC | O_CREAT, 0666 | O_TRUNC));
+	{
+		fd = open(filename, O_RDWR | O_TRUNC | O_CREAT, 0666 | O_TRUNC);
+		if (fd == -1)
+			perror(filename);
+		return (fd);
+	}
 	else
-		return (open(filename, O_RDWR | O_APPEND));
+	{
+		fd = open(filename, O_RDWR | O_APPEND);
+		if (fd == -1)
+			perror(filename);
+		return (fd);
+	}
 	return (0);
 }
 
@@ -27,9 +39,15 @@ t_token_type	choose_tok(char *str)
 int	set_fd(t_cmds *c_tbls, char **strs)
 {
 	if (choose_tok(strs[0]) == REDIR_IN || choose_tok(strs[0]) == REDIR_ADD)
+	{
 		c_tbls->out = new_fd(strs[1], choose_tok(strs[0]));
+		c_tbls->file_out = ft_strdup(strs[1]);
+	}
 	else
+	{
 		c_tbls->in = new_fd(strs[1], choose_tok(strs[0]));
+		c_tbls->file_in = ft_strdup(strs[1]);
+	}
 	return (0);
 }
 

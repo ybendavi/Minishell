@@ -1,5 +1,21 @@
 #include "minishell.h"
 
+void	paths_free(char **paths)
+{
+	int	i;
+
+	i = 0;
+	if (paths)
+	{
+		while (paths[i])
+		{
+			free(paths[i]);
+			i++;
+		}
+		free(paths);
+	}
+}
+
 char	**set_env(char **env)
 {
 	char	**paths;
@@ -10,12 +26,19 @@ char	**set_env(char **env)
 	while (env[i] && ft_strnstr(env[i], "PATH=", 6) == NULL)
 		i++;
 	paths = ft_split(ft_strchr(env[i], '=') + 1, ':');
+	if (!paths)
+		return (NULL);
 	i = 0;
 	while (paths[i])
 	{
 		tmp = paths[i];
 		paths[i] = ft_strjoin(tmp, "/");
 		free(tmp);
+		if (!paths[i])
+		{
+			paths_free(paths);
+			return (NULL);
+		}
 		i++;
 	}
 	return (paths);
@@ -32,11 +55,21 @@ int	set_path(t_cmds	*cmd, char **paths)
 	if (access(cmd->cmds[0], X_OK) != -1)
 		return (0);
 	tmp = ft_strjoin(paths[i], cmd->cmd);
+	if (!tmp)
+	{
+		paths_free(paths);
+		return (-1);
+	}
 	i++;
 	while (paths[i] && access(tmp, X_OK) == -1)
 	{
 		free(tmp);
 		tmp = ft_strjoin(paths[i], cmd->cmd);
+		if (!tmp)
+		{
+			paths_free(paths);
+			return (-1);
+		}
 		i++;
 	}
 	if (access(tmp, X_OK) != -1)
@@ -59,12 +92,16 @@ int	set_paths(t_env *envs)
 	t_cmds	*tmp;
 
 	paths = set_env(envs->env);
+	if (!paths)
+		return (-1);
 	tmp = envs->c_tbls;
 	while (tmp)
 	{
-		set_path(tmp, paths);
+		if (set_path(tmp, paths) == -1)
+			return (-1);
 		tmp = tmp->next;
 	}
+	paths_free(paths);
 	return (0);
 }
 
@@ -84,41 +121,96 @@ int	set_forks(t_env	*envs)
 
 int	child_process(t_cmds *cmd, char **env)
 {
+	pid_t	g_child;
+	int	status;
+
 	if (cmd->pfd_in[0] != -1 || cmd->pfd_out[0] != -1)
 	{
-		if (cmd->in == cmd->pfd_in[0])
-			close(cmd->pfd_in[1]);
-		if (cmd->out == cmd->pfd_out[1])
-			close(cmd->pfd_out[0]);
+		if (cmd->pfd_in[0] != -1 && cmd->in == cmd->pfd_in[0])
+		{
+			if (close(cmd->pfd_in[1]) != 0)
+			{
+				perror(cmd->cmd);
+			}
+		}
+		if (cmd->pfd_out[0] != -1 && cmd->out == cmd->pfd_out[0])
+		{	
+			if (close(cmd->pfd_out[1]) != 0)
+			{
+				perror("o");
+			}
+		}
 	}
-	if (cmd->in != 0)
+	if (cmd->in != 0 && cmd->in != -1)
 	{
 		if (dup2(cmd->in, 0) == -1)
+		{
+			perror("u");
 			return (-1);
+		}
 		if (cmd->pfd_out[0] != -1 && cmd->pfd_out[1])
 		{
 			if (cmd->out == cmd->pfd_out[1])
 			{
-				dup2(cmd->pfd_out[1], 1);
-				close(cmd->pfd_out[1]);
+				if (dup2(cmd->pfd_out[1], 1) == -1)
+				{
+					perror("i");
+					return (-1);
+				}
+				if (close(cmd->pfd_out[1]) != 0)
+				{
+					perror("l");
+				}
 			}
 		}
 	}
-	if (cmd->out != 1)
+	if (cmd->out != 1 && cmd->out != -1)
 	{
-		if (dup2(cmd->out, 1) == -1)
+		if (cmd->out != cmd->pfd_out[1] && dup2(cmd->out, 1) == -1)
+		{
+			printf("cmd:%s\n", cmd->cmd);
+			perror("e");
 			return (-1);
+		}
 		if (cmd->pfd_in[0] != -1 && cmd->pfd_in[0])
 		{
 			if (cmd->in == cmd->pfd_in[0])
 			{
-				dup2(cmd->pfd_in[0], 0);
-				close(cmd->pfd_in[0]);
+				if (dup2(cmd->pfd_in[0], 0) == -1)
+				{
+					perror("s");
+					return (-1);
+				}
+				if (close(cmd->pfd_in[0]) != 0)
+				{
+					perror("a");
+				}
 			}
 		}
 	}
-	execve(cmd->cmds[0], cmd->cmds, env);
-	perror(NULL);
+	status = 0;
+	g_child = fork();
+	if (g_child < 0)
+		perror("l");
+	if (g_child == 0)
+	{
+		execve(cmd->cmds[0], cmd->cmds, env);
+		perror(NULL);
+	}
+	if (g_child != 0)
+	{
+		waitpid(g_child, &status, 0);
+	}
+	if (close(0) != 0)
+	{
+		printf("cmd:%s", cmd->cmd);
+		perror("d");
+	}
+	if (close(1) != 0)
+	{	
+		printf("cmd:%s", cmd->cmd);
+		perror("r");
+	}
 	return (-1);
 }
 
@@ -144,7 +236,8 @@ int	execution(t_env *envs)
 	int	status;
 
 	status = 0;
-	set_paths(envs);
+	if (set_paths(envs) == -1)
+		return (-1);
 	set_forks(envs);
 	cmds = envs->c_tbls;
 	while (cmds)

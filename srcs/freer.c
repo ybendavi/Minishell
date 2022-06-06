@@ -1,5 +1,15 @@
 #include "minishell.h"
 
+void	free_pfds(t_cmds *cmds)
+{
+	while (cmds)
+	{
+		free(cmds->pfd_in);
+		free(cmds->pfd_out);
+		cmds = cmds->next;
+	}
+}
+
 void	free_cmds_table(t_cmds *tbls)
 {
 	int		i;
@@ -24,4 +34,9 @@ void	free_cmds_table(t_cmds *tbls)
 		free_cmds_table(tmp);
 	free(tbls);
 }
-//Trouver une solution pour free les pfd.
+
+void	freeer(t_env *envs)
+{
+	free_pfds(envs->c_tbls);
+	free_cmds_table(envs->c_tbls);
+}
