@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/05 15:58:04 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/06 19:30:54 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef enum e_token_type {
 	REDIR_OUT,
 	PIPE,
 	WHITE_SPACE,
+	ENV,
 	STR,
 	QUOTE
 }		t_token_type;
@@ -52,20 +53,26 @@ typedef struct command_table_list
 	struct command_table_list	*next;
 }					t_cmds;
 
-void	*ft_calloc(size_t nmem);
 char	**ft_cpy(char **temp, char *s1);
-size_t	ft_strlen(char *str);
-int	get_lexed(char **temp, t_env *env, t_token_type type);
-int	token_init(t_env *env);
-int	check_temp(char **temp, t_env *env);
-int	handle_quote(char *line, int *i, char **temp, t_env *env);
-int	handle_pipe(char **temp, t_env *env);
-int	handle_redir(char *line, int *i, char **temp, t_env *env);
+int	get_lexed(char **temp, t_env *data, t_token_type type);
+int	token_init(t_env *data);
+int	check_temp(char **temp, t_env *data);
+int	handle_env(char **temp, t_env *data);
+int	handle_pipe(char **temp, t_env *data);
+int	handle_redir(char *line, int *i, char **temp, t_env *data);
+int	handle_quote(char *line, int *i, char **temp, t_env *data);
 int	handle_white_space(int *i, char *line, char **temp,
-		t_env *env);
-int	init_parser(t_env *env);
-int	check_parsing_errors(t_env *env);
+		t_env *data);
+int	init_parser(t_env *data, char **env);
 int	ft_cmp(char *s1, char *s2);
-void	free_lexed(t_env *env);
+int	check_parsing_errors(t_env *data);
+void	free_lexed(t_env *data);
+
+/*********UTILS*************/
+
+char	*ft_strnstr(const char *big, const char *little, size_t len);
+void	*ft_calloc(size_t nmem);
+size_t	ft_strlen(const char *str);
+char	*ft_strchr(const char *s, int c);
 
 #endif

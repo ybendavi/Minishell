@@ -6,17 +6,17 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 22:24:47 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/05 15:29:41 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/06 21:01:25 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	init(t_env *env, char **temp)
+int	init(t_env *data, char **temp)
 {
-	env->nb_token = 0;
-	env->lexed = ft_calloc(sizeof(t_token) * 100);//DYMANIQUE
-	if (!env->lexed)
+	data->nb_token = 0;
+	data->lexed = ft_calloc(sizeof(t_token) * 100);//DYMANIQUE
+	if (!data->lexed)
 		return (-1);
 	*temp = ft_calloc(1024);
 	if (!temp)
@@ -24,24 +24,24 @@ int	init(t_env *env, char **temp)
 	return (0);
 }
 
-int	get_lexed(char **temp, t_env *env, t_token_type type)
+int	get_lexed(char **temp, t_env *data, t_token_type type)
 {
 	int	y;
 
-	env->lexed[env->nb_token].size = ft_strlen(*temp);
-	env->lexed[env->nb_token].type = type;
-	env->lexed[env->nb_token].token
-		= ft_calloc(env->lexed[env->nb_token].size + 1);
-	if (!env->lexed[env->nb_token].token)
+	data->lexed[data->nb_token].size = ft_strlen(*temp);
+	data->lexed[data->nb_token].type = type;
+	data->lexed[data->nb_token].token
+		= ft_calloc(data->lexed[data->nb_token].size + 1);
+	if (!data->lexed[data->nb_token].token)
 		return (-1);
 	y = 0;
 	while ((*temp)[y])
 	{
-		env->lexed[env->nb_token].token[y] = (*temp)[y];
+		data->lexed[data->nb_token].token[y] = (*temp)[y];
 		(*temp)[y] = 0;
 		y++;
 	}
-	env->nb_token++;
+	data->nb_token++;
 	return (0);
 }
 
@@ -55,29 +55,31 @@ void	add_temp(char *line, int *i, char **temp)
 	(*temp)[y] = line[*i];
 }
 
-int	lexer2(char *line, char **temp, int *i, t_env *env)
+int	lexer2(char *line, char **temp, int *i, t_env *data)
 {
 	if (line[*i] == '|')
-		return (handle_pipe(temp, env));
+		return (handle_pipe(temp, data));
 	else if (line[*i] == '>' || line[*i] == '<')
-		return (handle_redir(line, i, temp, env));
+		return (handle_redir(line, i, temp, data));
 	else if (line[*i] == '\'' || line[*i] == '"')
-		return (handle_quote(line, i, temp, env));
+		return (handle_quote(line, i, temp, data));
 	else if (line[*i] == ' ' || line[*i] == '\r' || line[*i] == '\t'
 		|| line[*i] == '\n' || line[*i] == '\v' || line[*i] == '\f')
-		return (handle_white_space(i, line, temp, env));
+		return (handle_white_space(i, line, temp, data));
+	else if (line[*i] == '$')
+		return (handle_env(temp, data));
 	else
 		add_temp(line, i, temp);
 	return (0);
 }
 
-int	lexer(char *line, t_env *env)
+int	lexer(char *line, t_env *data)
 {
 	char	*temp;
 	int		i;
 	int		ret;
 
-	if (init(env, &temp) == -1)
+	if (init(data, &temp) == -1)
 		return (-1);
 	i = 0;
 	ret = 0;
@@ -88,7 +90,7 @@ int	lexer(char *line, t_env *env)
 	i = 0;
 	while (line[i])
 	{
-		ret = lexer2(line, &temp, &i, env);
+		ret = lexer2(line, &temp, &i, data);
 		if (ret < 0)
 		{
 			free(temp);
@@ -97,42 +99,42 @@ int	lexer(char *line, t_env *env)
 		i++;
 	}
 	if (ft_strlen(temp) != 0)
-		get_lexed(&temp, env, STR);
+		get_lexed(&temp, data, STR);
 	free(temp);
 	return (0);
 }
 
-void	free_lexed(t_env *env)
+void	free_lexed(t_env *data)
 {
 	unsigned int	i;
 
 	i = 0;
-	while (i < env->nb_token)
+	while (i < data->nb_token)
 	{
-		if (env->lexed[i].token)
-			free(env->lexed[i].token);
+		if (data->lexed[i].token)
+			free(data->lexed[i].token);
 		i++;
 	}
-	if (env->lexed)
-		free(env->lexed);
+	if (data->lexed)
+		free(data->lexed);
 }
 
-void	free_parsed(t_env *env)
+void	free_parsed(t_env *data)
 {
 	unsigned int	i;
 
 	i = 0;
-	while (i < env->nb_parsed)
+	while (i < data->nb_parsed)
 	{
-		if (env->parsed[i].token)
-			free(env->parsed[i].token);
+		if (data->parsed[i].token)
+			free(data->parsed[i].token);
 		i++;
 	}
-	if (env->parsed)
-		free(env->parsed);
+	if (data->parsed)
+		free(data->parsed);
 }
 
-int	ft_return(int ret, t_env *env, char **buff)
+int	ft_return(int ret, t_env *data, char **buff)
 {
 	unsigned int	i;
 	
@@ -141,25 +143,25 @@ int	ft_return(int ret, t_env *env, char **buff)
 	if (ret == -2)
 		write(1, "Lone quote.\n", 12);
 	if (ret == -3)
-		printf("bash : syntax error near unexpected token `%s'\n", env->error);
+		printf("bash : syntax error near unexpected token `%s'\n", data->error);
 	if (ret == -5)
 		printf("bash : syntax error near unexpected token `newline'\n");
 
 	if (*buff)
 		free(*buff);
 	i = 0;
-	while (i < 11)
+	while (i < 12)
 	{
-		if (env->tab[i].token)
-			free(env->tab[i].token);
+		if (data->tab[i].token)
+			free(data->tab[i].token);
 		i++;
 	}
-	if (env->tab)
-		free(env->tab);
+	if (data->tab)
+		free(data->tab);
 	if (ret < -2)
-		free_parsed(env);
+		free_parsed(data);
 	if (ret < 0 && ret > -4)
-		free_lexed(env);
+		free_lexed(data);
 	return (-1);
 }
 
@@ -175,44 +177,46 @@ int	ft_cmp(char *s1, char *s2)
 	return (0);
 }
 
-int	main(void)
+int	main(int ac, char **av, char **env)
 {
 	unsigned int	i;
-	t_env	env;
+	t_env	data;
 	int	ret;
 	char 	*buff;
 	size_t	size;
 
-	if (token_init(&env) == -1)
-		return (ft_return(-1, &env, NULL));
+	(void)ac;
+	(void)av;
+	if (token_init(&data) == -1)
+		return (ft_return(-1, &data, NULL));
 	buff = ft_calloc(2048);
 	if (!buff)
-		return (ft_return(-1, &env, NULL));
+		return (ft_return(-1, &data, NULL));
 	size = 2048;
 	while (7)
 	{
 		getline(&buff, &size, stdin);
 		if (ft_cmp(buff, "exit\n") == 1)
-			return (ft_return(0, &env, &buff));
-		ret = lexer(buff, &env);
+			return (ft_return(0, &data, &buff));
+		ret = lexer(buff, &data);
 		if (ret != 0)
-			return (ft_return(ret, &env, &buff));
+			return (ft_return(ret, &data, &buff));
 		i = 0;
-		ret = init_parser(&env);
+		ret = init_parser(&data, env);
 		if (ret) //on peut free buffer ici
-			return (ft_return(ret, &env, &buff));
-		ret = check_parsing_errors(&env);
+			return (ft_return(ret, &data, &buff));
+		ret = check_parsing_errors(&data);
 		if (ret)
-			return (ft_return(ret, &env, &buff));
-		while (i < env.nb_parsed)
+			return (ft_return(ret, &data, &buff));
+		while (i < data.nb_parsed)
 		{
-			printf("%d = %d %d %s\n", i, env.parsed[i].type, env.parsed[i].size, env.parsed[i].token);
+			printf("%d = %d %d %s\n", i, data.parsed[i].type, data.parsed[i].size, data.parsed[i].token);
 			i++;
 		}
-		free_parsed(&env);
+		free_parsed(&data);
 	/*	while (i < 11)
 		{
-			printf("%d = %d %d %s\n", i, env.tab[i].type, env.tab[i].size, env.tab[i].token);
+			printf("%d = %d %d %s\n", i, data.tab[i].type, data.tab[i].size, data.tab[i].token);
 			i++;
 		}*/
 	}

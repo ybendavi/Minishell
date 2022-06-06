@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 15:34:10 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/02 23:17:19 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/06 17:26:13 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,20 +54,22 @@ int	set_token_list(int i, t_token *var)
 		return (set_tok("\f", 1, 5, var));
 	if (i == 10)
 		return (set_tok("\r", 1, 5, var));
+	if (i == 11)
+		return (set_tok("$", 1, 6, var));
 	return (0);
 }
 
-int	token_init(t_env *env)
+int	token_init(t_env *data)
 {
 	int	i;
 
-	env->tab = ft_calloc(sizeof(t_token) * 11 + 1);
-	if (!env->tab)
+	data->tab = ft_calloc(sizeof(t_token) * 12 + 1);
+	if (!data->tab)
 		return (-1);
 	i = 0;
-	while (i < 11)
+	while (i < 12)
 	{
-		if (set_token_list(i, &(env->tab[i])) == -1)
+		if (set_token_list(i, &(data->tab[i])) == -1)
 			return (-1);
 		i++;
 	}
