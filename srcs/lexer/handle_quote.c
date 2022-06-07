@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 23:10:03 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/06 15:23:15 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/07 18:15:38 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,12 @@ int	handle_quote(char *line, int *i, char **temp, t_env *data)
 	while (line[*i] && line[*i] != q)
 		*i = *i + 1;
 	if (*i == nb_q2 && nb_q % 2 == 0)
-		return (get_lexed(copy_quote(temp, line, *i, start), data, STR));
+		return (get_lexed(copy_quote(temp, line, *i, start), data, QUOTE));
 	count_q2(line, i, &nb_q2, nb_q);
 	*i = *i - 1;
 	if (nb_q == nb_q2)
 	{
-		if (get_lexed(copy_quote(temp, line, *i, start), data, STR))
+		if (get_lexed(copy_quote(temp, line, *i, start), data, QUOTE))
 			return (-1);
 		return (0);
 	}
@@ -79,12 +79,12 @@ int	handle_quote(char *line, int *i, char **temp, t_env *data)
 	{
 		while (nb_q)
 		{
-			if (get_lexed(copy_quote(temp, "\"\"", 2, 0), data, STR))
+			if (get_lexed(copy_quote(temp, "\"\"", 2, 0), data, QUOTE))
 				return (-1);
 			nb_q = nb_q - 2;
 			start = start + 2;
 		}
-		if (get_lexed(copy_quote(temp, line, *i, start), data, STR))
+		if (get_lexed(copy_quote(temp, line, *i, start), data, QUOTE))
 			return (-1);
 		return (0);
 	}
