@@ -70,7 +70,7 @@ void	free_lexed(t_env *data);
 
 /*********UTILS*************/
 
-char	*ft_strnstr(const char *big, const char *little, size_t len);
+char	*ft_env_strnstr(const char *big, const char *little, size_t len);
 void	*ft_calloc(size_t nmem);
 size_t	ft_strlen(const char *str);
 char	*ft_strchr(const char *s, int c);

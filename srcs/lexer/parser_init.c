@@ -112,7 +112,7 @@ int	get_env_var(char **env, char **var)
 	char	*str;
 
 	i = 0;
-	while (env[i] && ft_strnstr(env[i], *var, ft_strlen(*var)) == NULL)
+	while (env[i] && ft_env_strnstr(env[i], *var, ft_strlen(*var)) == NULL)
 		i++;
 	if (env[i] == NULL)
 	{
@@ -132,8 +132,6 @@ int	parse_str(t_env *data, char *str, int start, int end)
 	t_token	token;
 	int	i;
 
-	if (ft_cmp("\"", str))
-		return (0);
 	token.token = ft_calloc(end - start + 1);
 	if (!token.token)
 		return (-1);
@@ -239,10 +237,24 @@ int	is_str(unsigned int *i, t_env *data, char **env)
 	{
 		if (data->lexed[*i].token[0] == '"')
 		{
+			if (remove_quote(&(data->lexed[*i].token)))
+				return (-1);
 			if (check_var_env(&(data->lexed[*i]), env, data) == -1)
 				return (-1);
 		}
-	//+simplequote a handle
+		else
+		{
+			if (remove_quote(&(data->lexed[*i].token)))
+				return (-1);
+			if (get_parsed(data, data->lexed[*i]))
+				return (-1);
+		}
+
+	}
+	else
+	{
+		if (get_parsed(data, data->lexed[*i]))
+			return (-1);
 	}
 	return (0);
 }
@@ -298,8 +310,6 @@ int	is_whitespace(unsigned int *i, t_env *data)
 		return (-1);
 	return (0);
 }
-
-
 
 int	check_type(unsigned int *i, t_env *data, char **env)
 {

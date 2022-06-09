@@ -62,7 +62,7 @@ void	*ft_calloc(size_t nmem)
 	return ((void *)ret);
 }
 
-char	*ft_strnstr(const char *big, const char *little, size_t len)
+char	*ft_env_strnstr(const char *big, const char *little, size_t len)
 {
 	size_t	i;
 	size_t	y;
@@ -81,7 +81,7 @@ char	*ft_strnstr(const char *big, const char *little, size_t len)
 		{
 			n++;
 			y++;
-			if (little[y] == '\0')
+			if (little[y] == '\0' && big[n] == '=')
 				return (ret);
 		}
 		ret++;
