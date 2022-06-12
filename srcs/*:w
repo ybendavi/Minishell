@@ -125,20 +125,15 @@ int	child_process(t_cmds *cmd, char **env)
 	{
 		if (close(cmd->pfd_in[1]) != 0)
 			perror("i");
-		if (close(0) != 0)
-			perror("r");
 		if (dup2(cmd->pfd_in[0], 0) == -1)
 			perror("o");
 		if (close(cmd->pfd_in[0]))
 			perror("a");
-		printf("pfd:%d\n", cmd->pfd_in[0]);
 	}
 	if (cmd->pfd_out[0] != -1)
 	{
 		if (close(cmd->pfd_out[0]) != 0)
 			perror("e");
-		if (close(1) != 0)
-			perror("t");
 		if (dup2(cmd->pfd_out[1], 1) == -1)
 			perror("o");
 		if (close(cmd->pfd_out[1]))
@@ -146,79 +141,57 @@ int	child_process(t_cmds *cmd, char **env)
 	}
 	if (cmd->in != 0 && cmd->in != cmd->pfd_in[0])
 	{
-		close(0);
 		if (dup2(cmd->in, 0) == -1)
 			perror("coucou");
 	}
-	if (cmd->out != 1 && cmd->out != cmd->pfd_out[1])
+	if (cmd->out != 0 && cmd->out != cmd->pfd_out[1])
 	{
-		close(1);
 		if (dup2(cmd->out, 1) == -1)
 			perror("coucou");
 	}
 	execve(cmd->cmds[0], cmd->cmds, env);
-	write(1, "printfo", 6);
 	return (0);
 }
 
-int	launcher(t_cmds *cmds, t_env *envs)
+int	parent_process(int status, t_cmds *cmds)
 {
+
+	if (cmds->pfd_out[0] != -1 && cmds->out == cmds->pfd_out[1])
+		close(cmds->pfd_out[1]);
+	if (cmds->pfd_in[0] != -1 && cmds->in == cmds->pfd_in[0])
+		close(cmds->pfd_in[0]);
+	waitpid(cmds->fork, &status, 0);
+	return (0);
+}
+
+int	launcher(t_cmds *cmds, t_env **envs)
+{
+	int	status;
+
+	status = 0;
 	cmds->fork = fork();	
 	if (cmds->fork < 0)
 		perror(NULL);
 	if (cmds->fork == 0)
-	{
 		child_process(cmds, envs->env);
-	}
+	if (cmds->fork != 0)
+		parent_process(status, cmds);
 	return (0);
-}
-
-
-void	handler(int sig, siginfo_t *info, void *ucontext)
-{
-	(void)ucontext;
-
-	if (sig == SIGPIPE)
-	{
-		write(1, "hello\n", 6);
-		kill(info->si_pid, SIGINT);
-	}
-}
-
-void	init(struct sigaction *sig)
-{
-	sig->sa_sigaction = &handler;
-	if (sigemptyset(&(sig)->sa_mask) == -1)
-		return ;
-	sigaddset(&(sig)->sa_mask, SIGPIPE);
-	sig->sa_flags = SA_SIGINFO;
 }
 
 int	execution(t_env *envs)
 {
 	t_cmds	*cmds;
-//	struct sigaction	sig;
+	int	status;
 
-//	init(&sig);
+	status = 0;
 	if (set_paths(envs) == -1)
 		return (-1);
-	errno = 0;
 	//set_forks(envs);
 	cmds = envs->c_tbls;
 	while (cmds)
 	{
-		launcher(cmds, envs);
-		cmds = cmds->next;
-	}
-	cmds = envs->c_tbls;
-	while (cmds)
-	{
-		perror(NULL);
-		if (cmds->fork > 0)
-		{
-		//	sigaction(SIGPIPE, &sig, NULL);
-			waitpid(cmds->fork, NULL, 0);
-		}
+		launcher(cmds, env);
 		cmds = cmds->next;
 	}
 	return (0);
