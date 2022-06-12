@@ -58,7 +58,7 @@ int	new_table(t_env *envs)
 	return (0);
 }
 
-int	redir_parse(t_env *envs, char **strs)
+int	redir_parse(t_env *envs, t_token *token)
 {
 	int		i;
 	t_cmds	*tmp;
@@ -76,12 +76,12 @@ int	redir_parse(t_env *envs, char **strs)
 			return (-1);
 		tmp = envs->c_tbls;
 	}
-	set_fd(tmp, strs);
-	i = 1 + set_cmds(tmp, &strs[2]);
+	set_fd(tmp, token);
+	i = 1 + set_cmds(tmp, &token[1], envs->nb_parsed);
 	return (i);
 }
 
-int	pipe_parse(t_env *envs, char **strs)
+int	pipe_parse(t_env *envs, t_token *token)
 {
 	t_cmds	*tmp;
 	int		i;
@@ -101,63 +101,47 @@ int	pipe_parse(t_env *envs, char **strs)
 	tmp->next->pfd_in[1] = tmp->pfd_out[1];
 	tmp->next->in = tmp->next->pfd_in[0];
 	tmp = tmp->next;
-	i = set_cmds(tmp, &strs[1]);
+	i = set_cmds(tmp, &token[1], envs->nb_parsed);
 	return (i);
 }
 
-int	recu_parse(t_env *envs, char **strs)
+int	recu_parse(t_env *envs, t_token *tokens)
 {
 	int	i;
 
-	if (ft_strncmp(">", *strs, ft_strlen(*strs)) == 0
-		|| ft_strncmp("<", *strs, ft_strlen(*strs)) == 0
-		|| ft_strncmp(">>", *strs, ft_strlen(*strs)) == 0
-		|| ft_strncmp("<<", *strs, ft_strlen(*strs)) == 0)
+	if ((*tokens).type == REDIR_IN
+		|| (*tokens).type == REDIR_OUT
+		|| (*tokens).type == REDIR_ADD
+		|| (*tokens).type == REDIR_LIM)
 	{
-		i = redir_parse(envs, strs);
+		i = redir_parse(envs, tokens);
 		if (i == -1)
 			return (-1);
-		if (strs[i] && strs[i + 1])
+		if ((unsigned int)i + 1 < envs->nb_parsed)
 		{
-			if (recu_parse(envs, &strs[i + 1]) == -1)
+			if (recu_parse(envs, &tokens[i + 1]))
 				return (-1);
 		}
 	}
-	if (ft_strncmp("|", *strs, ft_strlen(*strs)) == 0)
+	if ((*tokens).type == PIPE)
 	{
-		i = pipe_parse(envs, strs);
+		i = pipe_parse(envs, tokens);
 		if (i == -1)
 			return (-1);
-		if (strs[i] && strs[i + 1])
+		if ((unsigned int)i + 1 < envs->nb_parsed)
 		{
-			if (recu_parse(envs, &strs[i + 1]) == -1)
+			if (recu_parse(envs, &tokens[i + 1]) == -1)
 				return (-1);
 		}
 	}
 	return (0);
 }
 
-int	parsing(t_env *envs, char *av)
+int	parsing(t_env *envs)
 {
-	int		i;
-	char	**strs;
-
-	strs = ft_split(av, ' ');
 	envs->c_tbls = NULL;
-	i = 0;
-	if (choose_tok(*strs) == 0)
-	{
-		new_table(envs);
-		i = set_cmds(envs->c_tbls, strs);
-	}
-	if (strs[i] && recu_parse(envs, &strs[i]) == -1)
+	if (recu_parse(envs, envs->parsed) == -1)
 		return (-1);
-	i = 0;
-	while (strs[i])
-	{
-		free(strs[i]);
-		i++;
-	}
-	free(strs);
+	free_parsed(envs);
 	return (0);
 }

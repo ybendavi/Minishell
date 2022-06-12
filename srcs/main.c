@@ -1,55 +1,99 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/01 19:03:51 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/06 15:59:17 by ybendavi         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
-int	main(int ac, char **argv, char **env)
+int	ft_cmp(char *s1, char *s2)
 {
-	t_env	envs;
-	//t_cmds	*tmp;
-	//int	i;
-	//(void)argv;
-	//if (ac > 1)
-	//	printf("This program doesn't take arguments.\n");
-	(void)ac;
-	envs.env = env;
-	parsing(&envs, argv[1]);
-	execution(&envs);
-	//i = 0;
-	//tmp = envs.c_tbls;
-	/*if (envs.c_tbls)
-	{
-		while (envs.c_tbls)
-		{
-			i = 0;
-			if (envs.c_tbls->cmds)
-			{
-				while (envs.c_tbls->cmds[i])
-				{
-					printf("cmds:%s\n", envs.c_tbls->cmds[i]);
-					i++;
-				}
-			}
-			if (envs.c_tbls->cmd)
-				printf("cmd:%s\n", envs.c_tbls->cmd);
-			printf("in:%d\nout:%d\n", envs.c_tbls->in, envs.c_tbls->out);
-			if (envs.c_tbls->in)
-				close(envs.c_tbls->in);
-			if (envs.c_tbls->out)
-				close(envs.c_tbls->out);
+	unsigned int	i;
 
-			envs.c_tbls = envs.c_tbls->next;
-		}
-	}*/
-	freeer(&envs);
+	i = 0;
+	while ((s1[i] || s2[i]) && s1[i] == s2[i])
+		i++;
+	if (ft_strlen(s1) == i && ft_strlen(s2) == i)
+		return (1);
 	return (0);
+}
+
+int	handle_buff(t_env *data, char **buff, char **env)
+{
+	int	ret;
+
+	if (ft_cmp(*buff, "exit"))
+		return (ft_return(0, data, buff));
+	ret = lexer(*buff, data);
+	if (ret)
+		ft_return(ret, data, buff);
+	free(*buff);
+	*buff = NULL;
+	ret = init_parser(data, env);
+	if (ret)
+		ft_return(ret, data, buff);
+	ret = check_parsing_errors(data);
+	if (ret)
+		ft_return(ret, data, buff);
+	return (0);
+}
+	
+int	main(int ac, char **av, char **env)
+{
+	t_env	data;
+	char	*buff;
+	int		ret;
+
+	(void)ac;
+	(void)av;
+	if (ft_init(&data))
+		return (ft_return(-1, &data, NULL)); //NULL creer une faute memoire
+	data.env = env;
+	while (7)
+	{
+		buff = readline(0);
+		if (!buff)
+			return (-1);
+		ret = handle_buff(&data, &buff, env);
+		if (ret)
+			ft_return(ret, &data, &buff);
+		unsigned int i = 0;
+		printf("/°\\_/°\\_/°\\_/°\\ Parser Output /°\\_/°\\_/°\\_/°\\\n\n");
+		while (i < data.nb_parsed)
+		{
+			printf("%d = %d %d %s\n", i, data.parsed[i].type, data.parsed[i].size, data.parsed[i].token);
+			i++;
+		}
+		printf("______________________________________________________\n");
+
+		ret = parsing(&data);
+		if (ret)
+			return (ret);
+		t_cmds	*tmp;
+		i = 0;
+		tmp = data.c_tbls;
+		if (tmp)
+		{
+			while (tmp)
+			{
+				i = 0;
+				if (tmp->cmds)
+				{
+					while (tmp->cmds[i])
+					{
+						printf("cmds:%s\n", tmp->cmds[i]);
+						i++;
+					}
+				}
+				if (tmp->cmd)
+					printf("cmd:%s\n", tmp->cmd);
+				printf("in:%d\nout:%d\n", tmp->in, tmp->out);
+				if (tmp->in)
+					close(tmp->in);
+				if (tmp->out)
+					close(tmp->out);
+	
+				tmp = tmp->next;
+			}
+		}	
+		ret = execution(&data);
+		if (ret)
+			return (ret);
+		freeer(&data);
+	}
+	return(0);
 }

@@ -21,42 +21,27 @@ int	new_fd(char *filename, t_token_type type)
 	return (0);
 }
 
-t_token_type	choose_tok(char *str)
+int	set_fd(t_cmds *c_tbls, t_token *token)
 {
-	if (ft_strncmp(">", str, ft_strlen(str)) == 0)
-		return (REDIR_IN);
-	if (ft_strncmp("<", str, ft_strlen(str)) == 0)
-		return (REDIR_OUT);
-	if (ft_strncmp(">>", str, ft_strlen(str)) == 0)
-		return (REDIR_ADD);
-	if (ft_strncmp("<<", str, ft_strlen(str)) == 0)
-		return (REDIR_LIM);
-	if (ft_strncmp("|", str, ft_strlen(str)) == 0)
-		return (PIPE);
-	return (0);
-}
-
-int	set_fd(t_cmds *c_tbls, char **strs)
-{
-	if (choose_tok(strs[0]) == REDIR_IN || choose_tok(strs[0]) == REDIR_ADD)
+	if ((*token).type == REDIR_IN || (*token).type == REDIR_ADD)
 	{
-		c_tbls->out = new_fd(strs[1], choose_tok(strs[0]));
-		c_tbls->file_out = ft_strdup(strs[1]);
+		c_tbls->out = new_fd(token[1].token, (*token).type);
+		c_tbls->file_out = ft_strdup(token[1].token);
 	}
 	else
 	{
-		c_tbls->in = new_fd(strs[1], choose_tok(strs[0]));
-		c_tbls->file_in = ft_strdup(strs[1]);
+		c_tbls->in = new_fd(token[1].token, (*token).type);
+		c_tbls->file_in = ft_strdup(token[1].token);
 	}
 	return (0);
 }
 
-int	cmds_len(t_cmds *c_tbls, char **strs)
+int	cmds_len(t_cmds *c_tbls, t_token *token, unsigned int size)
 {
-	int	i;
+	unsigned int	i;
 
 	i = 0;
-	while (strs[i] && choose_tok(strs[i]) == 0)
+	while (i < size && token[i].type == STR)
 		i++;
 	if (i == 0)
 		c_tbls->cmds = NULL;
@@ -69,7 +54,7 @@ int	cmds_len(t_cmds *c_tbls, char **strs)
 	return (i);
 }
 
-int	set_cmds(t_cmds *c_tbls, char **strs)
+int	set_cmds(t_cmds *c_tbls, t_token *token, unsigned int nb_parsed)
 {
 	int	size;
 	int	i;
@@ -77,17 +62,17 @@ int	set_cmds(t_cmds *c_tbls, char **strs)
 	i = 0;
 	if (c_tbls->cmds)
 		return (0);
-	size = cmds_len(c_tbls, strs);
+	size = cmds_len(c_tbls, token, nb_parsed);
 	if (size == 0)
 		return (0);
 	if (size == -1)
 		return (-1);
 	while (i < size)
 	{
-		c_tbls->cmds[i] = ft_strdup(strs[i]);
+		c_tbls->cmds[i] = ft_strdup(token[i].token);
 		i++;
 	}
 	c_tbls->cmds[i] = 0;
-	c_tbls->cmd = ft_strdup(strs[0]);
+	c_tbls->cmd = ft_strdup(c_tbls->cmds[0]);
 	return (i);
 }

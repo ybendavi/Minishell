@@ -41,20 +41,6 @@ typedef struct s_token {
 	t_token_type	type;
 }	t_token;
 
-typedef struct s_env {
-	t_token	*tab;
-	t_token	*lexed;
-	t_token	*parsed;
-	char	*error;
-	char	**temp;
-	uint32_t	nb_token;
-	uint32_t	nb_parsed;
-  t_cmds	*c_tbls;
-	char	**env;
-//	int	fd_size;
-//	int	pfd_size;
-}			t_env;
-
 typedef struct command_table_list
 {
 	char						**cmds;
@@ -70,19 +56,32 @@ typedef struct command_table_list
 	struct command_table_list	*prev;
 }					t_cmds;
 
+typedef struct s_env {
+	t_token	*tab;
+	t_token	*lexed;
+	t_token	*parsed;
+	char	*error;
+	char	**temp;
+	uint32_t	nb_token;
+	uint32_t	nb_parsed;
+  t_cmds	*c_tbls;
+	char	**env;
+//	int	fd_size;
+//	int	pfd_size;
+}			t_env;
+
 /****exec*****/
 char	**ft_split(char const *s, char c);
 char	*ft_strdup(const char *s);
 char	*ft_strnstr(const char *big, const char *little, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
 int	ft_strncmp(const char *s1, const char *s2, size_t n);
-void	*ft_calloc(size_t nmemb, size_t size);
-int	set_cmds(t_cmds *c_tbls, char **strs);
-int	cmds_len(t_cmds *c_tbls, char **strs);
-int	set_fd(t_cmds *c_tbls, char **strs);
+int	set_cmds(t_cmds *c_tbls, t_token *token, unsigned int nb_parsed);
+int	cmds_len(t_cmds *c_tbls, t_token *token, unsigned int size);
+int	set_fd(t_cmds *c_tbls, t_token *token);
 t_token_type	choose_tok(char *str);
 int	new_fd(char *filename, t_token_type type);
-int	parsing(t_env *envs, char *av);
+int	parsing(t_env *envs);
 int	execution(t_env *envs);
 void	free_cmds_table(t_cmds *tbls);
 void	free_pfds(t_cmds *cmds);

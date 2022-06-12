@@ -18,23 +18,6 @@ char	*ft_strdup(const char *s)
 	return (dest);
 }
 
-void	*ft_calloc(size_t nmemb, size_t size)
-{
-	unsigned char	*tab;
-	size_t			i;
-
-	tab = malloc(nmemb * size);
-	if (!(tab))
-		return (NULL);
-	i = 0;
-	while (i < nmemb * size)
-	{
-		tab[i] = 0;
-		i++;
-	}
-	return (tab);
-}
-
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	unsigned int	i;
@@ -109,7 +92,7 @@ char	**ft_split(char const *s, char c)
 		return (0);
 	len = ft_strslen(s, c);
 	i = 0;
-	strs = (char **)ft_calloc(len + 1, sizeof(char *));
+	strs = (char **)ft_calloc((len + 1) * sizeof(char *));
 	if (!(strs))
 		return (NULL);
 	if (len == 0)

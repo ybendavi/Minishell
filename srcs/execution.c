@@ -202,7 +202,6 @@ int	execution(t_env *envs)
 //	init(&sig);
 	if (set_paths(envs) == -1)
 		return (-1);
-	errno = 0;
 	//set_forks(envs);
 	cmds = envs->c_tbls;
 	while (cmds)
