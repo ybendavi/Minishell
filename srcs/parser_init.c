@@ -81,6 +81,7 @@ void	add_null_token(t_env *data)
 	token.type = STR;
 	token.size = 0;
 	data->parsed[data->nb_parsed] = token;
+	data->nb_parsed++;
 }
 
 int	init_parser(t_env *data, char **env)

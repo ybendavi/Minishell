@@ -157,7 +157,6 @@ int	child_process(t_cmds *cmd, char **env)
 			perror("coucou");
 	}
 	execve(cmd->cmds[0], cmd->cmds, env);
-	write(1, "printfo", 6);
 	return (0);
 }
 

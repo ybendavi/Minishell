@@ -82,10 +82,10 @@ int	main(int ac, char **av, char **env)
 				if (tmp->cmd)
 					printf("cmd:%s\n", tmp->cmd);
 				printf("in:%d\nout:%d\n", tmp->in, tmp->out);
-				if (tmp->in)
-					close(tmp->in);
-				if (tmp->out)
-					close(tmp->out);
+			//	if (tmp->in)
+			//		close(tmp->in);
+			//	if (tmp->out)
+			//		close(tmp->out);
 	
 				tmp = tmp->next;
 			}

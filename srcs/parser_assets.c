@@ -36,12 +36,12 @@ int	set_fd(t_cmds *c_tbls, t_token *token)
 	return (0);
 }
 
-int	cmds_len(t_cmds *c_tbls, t_token *token, unsigned int size)
+int	cmds_len(t_cmds *c_tbls, t_token *token)
 {
 	unsigned int	i;
 
 	i = 0;
-	while (i < size && token[i].type == STR)
+	while (token[i].type == STR &&  token[i].token != NULL)
 		i++;
 	if (i == 0)
 		c_tbls->cmds = NULL;
@@ -54,7 +54,7 @@ int	cmds_len(t_cmds *c_tbls, t_token *token, unsigned int size)
 	return (i);
 }
 
-int	set_cmds(t_cmds *c_tbls, t_token *token, unsigned int nb_parsed)
+int	set_cmds(t_cmds *c_tbls, t_token *token)
 {
 	int	size;
 	int	i;
@@ -62,12 +62,12 @@ int	set_cmds(t_cmds *c_tbls, t_token *token, unsigned int nb_parsed)
 	i = 0;
 	if (c_tbls->cmds)
 		return (0);
-	size = cmds_len(c_tbls, token, nb_parsed);
+	size = cmds_len(c_tbls, token);
 	if (size == 0)
 		return (0);
 	if (size == -1)
 		return (-1);
-	while (i < size)
+	while (i < size && token[i].token != NULL)
 	{
 		c_tbls->cmds[i] = ft_strdup(token[i].token);
 		i++;

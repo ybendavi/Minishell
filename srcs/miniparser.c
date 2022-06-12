@@ -64,6 +64,7 @@ int	redir_parse(t_env *envs, t_token *token)
 	t_cmds	*tmp;
 
 	i = 0;
+	printf("coucou\n");
 	tmp = envs->c_tbls;
 	if (tmp)
 	{
@@ -77,7 +78,7 @@ int	redir_parse(t_env *envs, t_token *token)
 		tmp = envs->c_tbls;
 	}
 	set_fd(tmp, token);
-	i = 1 + set_cmds(tmp, &token[1], envs->nb_parsed);
+	i = 1 + set_cmds(tmp, &token[1]);
 	return (i);
 }
 
@@ -101,7 +102,7 @@ int	pipe_parse(t_env *envs, t_token *token)
 	tmp->next->pfd_in[1] = tmp->pfd_out[1];
 	tmp->next->in = tmp->next->pfd_in[0];
 	tmp = tmp->next;
-	i = set_cmds(tmp, &token[1], envs->nb_parsed);
+	i = set_cmds(tmp, &token[1]);
 	return (i);
 }
 
@@ -109,6 +110,8 @@ int	recu_parse(t_env *envs, t_token *tokens)
 {
 	int	i;
 
+	if ((*tokens).token == NULL)
+		return (0);
 	if ((*tokens).type == REDIR_IN
 		|| (*tokens).type == REDIR_OUT
 		|| (*tokens).type == REDIR_ADD
@@ -117,7 +120,7 @@ int	recu_parse(t_env *envs, t_token *tokens)
 		i = redir_parse(envs, tokens);
 		if (i == -1)
 			return (-1);
-		if ((unsigned int)i + 1 < envs->nb_parsed)
+		if (tokens[i].token != NULL && tokens[i + 1].token != NULL)
 		{
 			if (recu_parse(envs, &tokens[i + 1]))
 				return (-1);
@@ -128,7 +131,7 @@ int	recu_parse(t_env *envs, t_token *tokens)
 		i = pipe_parse(envs, tokens);
 		if (i == -1)
 			return (-1);
-		if ((unsigned int)i + 1 < envs->nb_parsed)
+		if (tokens[i].token != NULL && tokens[i + 1].token != NULL)
 		{
 			if (recu_parse(envs, &tokens[i + 1]) == -1)
 				return (-1);
@@ -139,8 +142,16 @@ int	recu_parse(t_env *envs, t_token *tokens)
 
 int	parsing(t_env *envs)
 {
+	int	i;
+
+	i = 0;
 	envs->c_tbls = NULL;
-	if (recu_parse(envs, envs->parsed) == -1)
+	if ((*envs->parsed).type == STR)
+	{
+		new_table(envs);
+		i = set_cmds(envs->c_tbls, envs->parsed);
+	}
+	if (recu_parse(envs, &envs->parsed[i]) == -1)
 		return (-1);
 	free_parsed(envs);
 	return (0);
