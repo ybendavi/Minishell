@@ -14,8 +14,8 @@
 
 int	check_parsing_errors(t_env *data)
 {
-	if (data->nb_parsed == 0)
-		return (0);//on scomprend en gros c la fin
+	if (data->nb_parsed == 1)
+		return (2);//on scomprend en gros c la fin
 	else if (data->nb_parsed == 1)
 		{
 			if (ft_cmp(data->parsed[0].token, "!")
@@ -26,8 +26,8 @@ int	check_parsing_errors(t_env *data)
 		//		return (-4);
 			}
 		}
-	if (data->parsed[data->nb_parsed - 1].type != STR
-		&& data->parsed[data->nb_parsed - 1].type != PIPE)
+	if (data->parsed[data->nb_parsed - 2].type != STR
+		&& data->parsed[data->nb_parsed - 2].type != PIPE)
 		return (-5);
 	return (0);
 }
