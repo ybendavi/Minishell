@@ -17,6 +17,10 @@
 # include <stdlib.h>
 # include <stdint.h>
 # include <stdio.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <sys/stat.h>
+# include <fcntl.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -45,16 +49,45 @@ typedef struct s_env {
 	char	**temp;
 	uint32_t	nb_token;
 	uint32_t	nb_parsed;
+  t_cmds	*c_tbls;
+	char	**env;
+//	int	fd_size;
+//	int	pfd_size;
 }			t_env;
 
 typedef struct command_table_list
 {
-	char						**cmd;
+	char						**cmds;
+	char						*cmd;
+	char						*file_in;
+	char						*file_out;
 	int							in;
 	int							out;
+	int							*pfd_in;
+	int							*pfd_out;
+	pid_t							fork;
 	struct command_table_list	*next;
+	struct command_table_list	*prev;
 }					t_cmds;
 
+/****exec*****/
+char	**ft_split(char const *s, char c);
+char	*ft_strdup(const char *s);
+char	*ft_strnstr(const char *big, const char *little, size_t len);
+char	*ft_strjoin(char const *s1, char const *s2);
+int	ft_strncmp(const char *s1, const char *s2, size_t n);
+void	*ft_calloc(size_t nmemb, size_t size);
+int	set_cmds(t_cmds *c_tbls, char **strs);
+int	cmds_len(t_cmds *c_tbls, char **strs);
+int	set_fd(t_cmds *c_tbls, char **strs);
+t_token_type	choose_tok(char *str);
+int	new_fd(char *filename, t_token_type type);
+int	parsing(t_env *envs, char *av);
+int	execution(t_env *envs);
+void	free_cmds_table(t_cmds *tbls);
+void	free_pfds(t_cmds *cmds);
+void	freeer(t_env *envs);
+/****parser*****/
 char	**ft_cpy(char **temp, char *s1);
 int	get_lexed(char **temp, t_env *data, t_token_type type);
 int	token_init(t_env *data);

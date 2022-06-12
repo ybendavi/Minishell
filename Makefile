@@ -3,7 +3,7 @@ CC = gcc
 RM = rm -rf
 SRCSDIR = srcs
 OBJSDIR = objs
-SRCS = main.c 
+SRCS = main.c libfunc.c libfunc_2.c miniparser.c parser_assets.c execution.c freer.c 
 OBJS = ${SRCS:%.c=${OBJSDIR}/%.o}
 $(NAME): ${OBJS}
 	$(CC) $(OBJS) -Wall -Wextra -Werror -o ${NAME}
