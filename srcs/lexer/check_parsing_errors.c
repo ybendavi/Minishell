@@ -15,7 +15,7 @@
 int	check_parsing_errors(t_env *data)
 {
 	if (data->nb_parsed == 0)
-		write(1, "\n", 1);
+		return (0);//on scomprend en gros c la fin
 	else if (data->nb_parsed == 1)
 		{
 			if (ft_cmp(data->parsed[0].token, "!")
@@ -23,13 +23,12 @@ int	check_parsing_errors(t_env *data)
 			|| ft_cmp(data->parsed[0].token, "#"))
 			{
 				write(1, "\n", 1);
-				return (-4);
+		//		return (-4);
 			}
 		}
-//	if (data->parsed[data->nb_parsed - 1].type != STR
-//		&& data->parsed[data->nb_parsed - 1].type != QUOTE
-//		&& data->parsed[data->nb_parsed - 1].type != PIPE)
-//		return (-5);
+	if (data->parsed[data->nb_parsed - 1].type != STR
+		&& data->parsed[data->nb_parsed - 1].type != PIPE)
+		return (-5);
 	return (0);
 }
 

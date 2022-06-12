@@ -21,12 +21,21 @@ int	handle_pipe(char **temp, t_env *data)
 	return (0);
 }
 
-int	handle_env(char **temp, t_env *data)
+int	handle_env(char **temp, t_env *data, unsigned int *i, char *line)
 {
 	if (check_temp(temp, data))
 		return (-1);
 	if (get_lexed(ft_cpy(temp, "$"), data, ENV))
 		return (-1);
+	*i = *i + 1;
+	while (is_char_env(line[*i]))
+	{
+		add_temp(line, temp, *i);
+		*i = *i + 1;
+	}
+	if (check_temp(temp, data))
+		return (-1);
+	*i = *i - 1;
 	return (0);
 }
 
@@ -45,7 +54,7 @@ int	is_double_redir(char r, char **temp, t_env *data)
 	return (1);
 }
 
-int	handle_redir(char *line, int *i, char **temp, t_env *data)
+int	handle_redir(char *line, unsigned int *i, char **temp, t_env *data)
 {
 	char	r;
 
@@ -71,10 +80,10 @@ int	handle_redir(char *line, int *i, char **temp, t_env *data)
 }
 
 //si on en abesoin, ici rajouter une decoupe des whitespace char par char un peu comme le tableau de token
-int	handle_white_space(int *i, char *line, char **temp,
+int	handle_white_space(unsigned int *i, char *line, char **temp,
 		t_env *data)
 {
-	int	start;
+	unsigned int	start;
 	
 	if (check_temp(temp, data))
 		return (-1);
