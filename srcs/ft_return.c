@@ -44,22 +44,12 @@ void	free_parsed(t_env *data)
 	data->nb_parsed = 0;
 }
 
-int	ft_return(int ret, t_env *data, char **buff)
+void	free_all(t_env *data)
 {
 	unsigned int	i;
 	
-	if (ret == -1)
-		write(2, "Malloc error.\n", 14);
-	if (ret == -2)
-		write(1, "Lone quote.\n", 12);
-	if (ret == -3)
-		printf("bash : syntax error near unexpected token `%s'\n", data->error);
-	if (ret == -5)
-		printf("bash : syntax error near unexpected token `newline'\n");
-	if (*buff)
-		free(*buff);
 	i = 0;
-	while (ret == 0 && i < 12)
+	while(i < 12)
 	{
 		if (data->tab[i].token)
 			free(data->tab[i].token);
@@ -67,11 +57,27 @@ int	ft_return(int ret, t_env *data, char **buff)
 	}
 	if (data->tab)
 		free(data->tab);
+	exit(0);
+}
+
+int	ft_return(int ret, t_env *data)
+{
+	if (ret == 2)
+		return (2);	
+	if (ret == -1)
+		write(2, "Malloc error.\n", 14);
+	if (ret == -2)
+		write(1, "Lone quote.\n", 12);
+	if (ret == -3)
+		printf("bash : syntax error near unexpected token `%s'\n", data->error);
+	if (ret == -5)
+		printf("bash : syntax error near unexpected token `newline'\n");	
 	if (ret < -2)
 		free_parsed(data);
 	if (ret < 0 && ret > -4)
 		free_lexed(data);
-	if (ret == 0)
-		exit(0);
+	if (ret == 1)
+		free_all(data);
+	set_null(data);
 	return (0);
 }

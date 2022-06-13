@@ -106,10 +106,11 @@ int	check_parsing_errors(t_env *data);
 int	lexer(char *line, t_env *data);
 int	is_pipe(unsigned int i, t_env *data);
 int	get_parsed(t_env *data, t_token token);
-int	ft_return(int ret, t_env *data, char **buff);
+int	ft_return(int ret, t_env *data);
 void	add_temp(char *line, char **temp, unsigned int i);
 void	free_lexed(t_env *data);
 void	free_parsed(t_env *data);
+void	set_null(t_env *data);
 
 /*********UTILS*************/
 
