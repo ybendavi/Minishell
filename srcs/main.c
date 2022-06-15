@@ -46,7 +46,7 @@ int	main(int ac, char **av, char **env)
 {
 	t_env	data;
 	char	*buff;
-//	int		ret;
+	int		ret;
 
 	(void)ac;
 	(void)av;
@@ -68,8 +68,8 @@ int	main(int ac, char **av, char **env)
 				i++;
 			}
 			printf("______________________________________________________\n");
-			free_parsed(&data);
-		/*	ret = parsing(&data);
+			//free_parsed(&data);
+			ret = parsing(&data);
 			if (ret)
 				return (ret);
 			t_cmds	*tmp;
@@ -97,7 +97,7 @@ int	main(int ac, char **av, char **env)
 			ret = execution(&data);
 			if (ret)
 				return (ret);
-			freeer(&data);*/
+			freeer(&data);
 		}
 		reset(&data);
 	}

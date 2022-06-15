@@ -123,22 +123,19 @@ int	child_process(t_cmds *cmd, char **env)
 {
 	if (cmd->pfd_in[0] != -1)
 	{
-		if (close(cmd->pfd_in[1]) != 0)
-			perror("i");
-		if (close(0) != 0)
-			perror("r");
+		//if (close(cmd->pfd_in[1]) != 0)
+		//	perror("i");
 		if (dup2(cmd->pfd_in[0], 0) == -1)
 			perror("o");
 		if (close(cmd->pfd_in[0]))
 			perror("a");
-		printf("pfd:%d\n", cmd->pfd_in[0]);
+		//printf("pfd:%d\n", cmd->pfd_in[0]);
 	}
+	printf("cmd:%s,pfdo:%d\n", cmd->cmd, cmd->pfd_out[0]);
 	if (cmd->pfd_out[0] != -1)
 	{
 		if (close(cmd->pfd_out[0]) != 0)
 			perror("e");
-		if (close(1) != 0)
-			perror("t");
 		if (dup2(cmd->pfd_out[1], 1) == -1)
 			perror("o");
 		if (close(cmd->pfd_out[1]))
@@ -146,13 +143,12 @@ int	child_process(t_cmds *cmd, char **env)
 	}
 	if (cmd->in != 0 && cmd->in != cmd->pfd_in[0])
 	{
-		close(0);
 		if (dup2(cmd->in, 0) == -1)
 			perror("coucou");
 	}
 	if (cmd->out != 1 && cmd->out != cmd->pfd_out[1])
 	{
-		close(1);
+		write(1, "hello\n", 6);
 		if (dup2(cmd->out, 1) == -1)
 			perror("coucou");
 	}
@@ -162,12 +158,21 @@ int	child_process(t_cmds *cmd, char **env)
 
 int	launcher(t_cmds *cmds, t_env *envs)
 {
+	if (cmds->pfd_in[0] != 0)
+		close(cmds->pfd_in[1]);
 	cmds->fork = fork();	
 	if (cmds->fork < 0)
 		perror(NULL);
 	if (cmds->fork == 0)
 	{
 		child_process(cmds, envs->env);
+	}
+	else
+	{
+		if (cmds->pfd_in[0] != -1)
+		{
+			close(cmds->pfd_in[0]);
+		}
 	}
 	return (0);
 }
@@ -211,7 +216,7 @@ int	execution(t_env *envs)
 	cmds = envs->c_tbls;
 	while (cmds)
 	{
-		perror(NULL);
+		//perror(NULL);
 		if (cmds->fork > 0)
 		{
 		//	sigaction(SIGPIPE, &sig, NULL);
