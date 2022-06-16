@@ -11,7 +11,6 @@ void	set_null(t_env *data)
 	data->error = NULL;
 	data->temp = NULL;
 	data->c_tbls = NULL;
-	data->env = NULL;
 }
 
 int	ft_init(t_env *data)
