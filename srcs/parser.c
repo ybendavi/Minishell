@@ -47,7 +47,8 @@ char	*ft_concat(char *s1, char *s2)
 	y = 0;
 	while (s2[y])
 		ret[i++] = s2[y++];
-	free(s1);
+	if (s1)
+		free(s1);
 	return (ret);
 }
 
@@ -65,7 +66,6 @@ int	is_str(unsigned int *i, t_env *data)
 	}
 	*i = *i - 1;
 	token.type = STR;
-	token.size = ft_strlen(token.token);
 	if (get_parsed(data, token))
 	{
 		free(token.token);
@@ -75,11 +75,110 @@ int	is_str(unsigned int *i, t_env *data)
 	return (0);
 } 
 
+//	else if (data->lexed[*i + 1].token[0] == '?')(voir avec chef comment stocker ca et ou et garder si c simple quote)
+
+t_token	struct_env(char *str, int type)
+{
+	t_token	token;
+
+	token.token = str;
+	token.type = type;
+	return (token);
+}
+
+int	is_env(unsigned int *i, t_env *data, char **env)
+{
+	unsigned int	y;
+	char	*str;
+	
+	y = *i;
+	str = NULL;
+	while (data->lexed[y].type == ENV)
+	{
+		if (data->nb_token <= y + 1)
+		{
+			str = ft_concat(str, "$");
+			if (!str)
+				return (-1);
+			y++; //??
+		}
+		else if (data->lexed[y].token[1] == '"'
+			|| data->lexed[y].token[1] == '\'')
+		{
+			str = ft_concat(str, data->lexed[y + 1].token);
+			if (!str)
+				return (-1);
+		}
+		else if (is_char_env(data->lexed[y].token[1]))
+		{
+			if (get_env_var(env, &(data->lexed[y + 1].token)))
+				return (-1);
+			if (data->lexed[y + 1].token)
+			{
+				str = ft_concat(str, data->lexed[y + 1].token);
+				if (!str)
+					return (-1);
+			}
+		
+		}
+		else
+		{
+			if (data->lexed[y + 1].type != STR && data->lexed[y + 1].type != ENV)
+			{
+				str = ft_concat(str, "$");
+				if (!str)
+					return (-1);
+				str = ft_concat(str, data->lexed[y + 1].token);
+				if (!str)
+					return (-1);
+			}
+			if (data->lexed[y + 1].type == ENV)
+			{
+				str = ft_concat(str, "$$");
+				if (!str)
+					return (-1);
+			}
+
+		}
+		y = y + 2;
+	}
+	*i = y - 1;
+	if (data->nb_parsed > 0 && data->parsed[data->nb_parsed - 1].type == STR)
+	{
+		if (str)
+		{
+			data->parsed[data->nb_parsed - 1].token =
+			ft_concat(data->parsed[data->nb_parsed - 1].token, str);
+			if (!data->parsed[data->nb_parsed - 1].token)
+				return (-1);
+			data->parsed[data->nb_parsed - 1].size
+			= ft_strlen(data->parsed[data->nb_parsed - 1].token);
+		}
+		else
+		{
+			if (get_parsed(data, struct_env("", STR)))
+				return (-1);
+		}
+	}
+	else
+	{
+		if (str)
+		{
+			if (get_parsed(data, struct_env(str, STR)))
+				return (-1);
+		}
+	}
+	if (str)
+		free(str);
+	return (0);
+}
+/*
 int	is_env_2(unsigned int *i, t_env *data, char **env)
 {
-	int	y;
-
-	if (is_char_env(data->lexed[*i + 1].token[0]))
+	unsigned int	y;
+	
+	
+	if (is_char_env(data->lexed[*i].token[1]))
 	{
 		get_env_var(env, &(data->lexed[*i + 1].token));
 		if (data->lexed[*i + 1].token == NULL)
@@ -88,18 +187,26 @@ int	is_env_2(unsigned int *i, t_env *data, char **env)
 			return (1);
 		}
 	}
-	else if (ft_cmp(data->lexed[*i + 1].token, ""))
+	else if (data->lexed[*i].token[1] == '\''
+		|| data->lexed[*i].token[1] == '"')
 	{
-		*i = *i + 1;
-		return (1);
+			*i = *i + 1;
+			return (1);
 	}
-//	else if (data->lexed[*i + 1].token[0] == '?')(voir avec chef comment stocker ca et ou et garder si c simple quote)
 	else
 	{
-		data->lexed[*i].type = STR;
-		y = *i + 1;
-		while (data->lexed[*i + y].type == ENV)//reparer
-			data->lexed[*i + y++].type = STR;//reparer
+		data->lexed[*i].token[1] = 0;
+		y = *i;
+		while ((data->lexed[y + 1].type == STR || data->lexed[y + 1].type == ENV)
+			&& (data->lexed[y].type == STR || data->lexed[y].type == ENV)
+			&& y  < data->nb_token)
+		{
+			data->lexed[y].type = STR;
+			data->lexed[y + 1].type = STR;
+			if (data->lexed[y + 2].type == ENV)
+				is_env_2(&y + 2, data, env);
+			y = y + 2;
+		}
 		if (is_str(i, data))
 			return (-1);
 		return (1);
@@ -111,13 +218,6 @@ int	is_env(unsigned int *i, t_env *data, char **env)
 {
 	int	ret;
 
-	if (data->nb_token <= *i + 1)
-	{
-		data->lexed[*i].type = STR;
-		if (get_parsed(data, data->lexed[*i]))
-			return (-1);
-		return (0);
-	}
 	ret = is_env_2(i, data, env);
 	if (ret < 0)
 		return (ret);
@@ -128,4 +228,4 @@ int	is_env(unsigned int *i, t_env *data, char **env)
 		return (-1);
 	*i = *i + 1;
 	return (0);
-}
+}*/

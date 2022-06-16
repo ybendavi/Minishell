@@ -1,0 +1,4 @@
+"$"USER => le vrai shell affiche le $ sans quote et le notre pas
+$""USER => une chaine vide est pas concat avant le USER
+$''USER => le dollar doit disparaitre dans notre shell
+=> entre deux chaines entres quotes, il y a un caractère espace qui est recopié

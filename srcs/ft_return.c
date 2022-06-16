@@ -63,7 +63,10 @@ void	free_all(t_env *data)
 int	ft_return(int ret, t_env *data)
 {
 	if (ret == 2)
-		return (2);	
+	{
+		free_parsed(data);
+		return (2);
+	}
 	if (ret == -1)
 		write(2, "Malloc error.\n", 14);
 	if (ret == -2)

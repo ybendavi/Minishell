@@ -23,10 +23,21 @@ int	handle_pipe(char **temp, t_env *data)
 
 int	handle_env(char **temp, t_env *data, unsigned int *i, char *line)
 {
+	char	*str;
+
 	if (check_temp(temp, data))
 		return (-1);
-	if (get_lexed(ft_cpy(temp, "$"), data, ENV))
+	if (!is_char_env(line[*i + 1]) && line[*i + 1]
+		!= '"' && line[*i + 1] != '"')
+		return (get_lexed(ft_cpy(temp, "$"), data, STR));
+	str = ft_calloc(3);
+	if (!str)
 		return (-1);
+	str[0] = line[*i];
+	str[1] = line[*i + 1];
+	if (get_lexed(ft_cpy(temp, str), data, ENV))
+		return (-1);
+	free(str);
 	*i = *i + 1;
 	while (is_char_env(line[*i]))
 	{

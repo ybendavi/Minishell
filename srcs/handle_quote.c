@@ -42,7 +42,7 @@ int	handle_double(char *line, unsigned int *i, unsigned int start,
 					j - 1, start), data, STR))
 					return (-1);
 			}
-			if (get_lexed(ft_cpy(data->temp, "$"), data, ENV))
+			if (handle_env(data->temp, data, &j, line))
 				return (-1);
 			while (is_char_env(line[++j]))
 				add_temp(line, data->temp, j);
