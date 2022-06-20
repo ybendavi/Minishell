@@ -1,20 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execution.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
+/*   Updated: 2022/06/20 19:02:11 by ybendavi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-
-void	paths_free(char **paths)
-{
-	int	i;
-
-	i = 0;
-	if (paths)
-	{
-		while (paths[i])
-		{
-			free(paths[i]);
-			i++;
-		}
-		free(paths);
-	}
-}
 
 char	**set_env(char **env)
 {
@@ -44,67 +40,6 @@ char	**set_env(char **env)
 	return (paths);
 }
 
-int	set_path(t_cmds	*cmd, char **paths)
-{
-	char	*tmp;
-	char	*tmp2;
-	int	i;
-
-	tmp = NULL;
-	i  = 0;
-	if (access(cmd->cmds[0], X_OK) != -1)
-		return (0);
-	tmp = ft_strjoin(paths[i], cmd->cmd);
-	if (!tmp)
-	{
-		paths_free(paths);
-		return (-1);
-	}
-	i++;
-	while (paths[i] && access(tmp, X_OK) == -1)
-	{
-		free(tmp);
-		tmp = ft_strjoin(paths[i], cmd->cmd);
-		if (!tmp)
-		{
-			paths_free(paths);
-			return (-1);
-		}
-		i++;
-	}
-	if (access(tmp, X_OK) != -1)
-	{
-		tmp2 = cmd->cmds[0];
-		cmd->cmds[0] = tmp;
-		free(tmp2);
-	}
-	else
-	{
-		perror(cmd->cmds[0]);
-		free(tmp);
-	}
-	return (0);
-}
-
-int	set_paths(t_env *envs)
-{
-	char	**paths;
-	t_cmds	*tmp;
-
-	paths = set_env(envs->env);
-	if (!paths)
-		return (-1);
-	tmp = envs->c_tbls;
-	while (tmp)
-	{
-		if (set_path(tmp, paths) == -1)
-			return (-1);
-		tmp = tmp->next;
-	}
-	paths_free(paths);
-	return (0);
-}
-
 int	set_forks(t_env	*envs)
 {
 	t_cmds	*tmp;
@@ -119,10 +54,26 @@ int	set_forks(t_env	*envs)
 	return (0);
 }
 
+int	close_fds(t_cmds *cmd)
+{	
+	t_cmds	*tmp;
+
+	tmp = cmd;
+	while (tmp->prev)
+		tmp = tmp->prev;
+	while (tmp)
+	{
+		if (tmp->in != 0 && tmp != cmd)
+			close(tmp->in);
+		if (tmp->out != 1 && tmp != cmd && tmp != cmd->prev)
+			close(tmp->out);
+		tmp = tmp->next;
+	}
+	return (0);
+}
+
 int	child_process(t_cmds *cmd, char **env)
 {
-	t_cmds *tmp;
-
 	if (cmd->pfd_in[0] != -1)
 	{
 		close(cmd->pfd_in[1]);
@@ -143,17 +94,7 @@ int	child_process(t_cmds *cmd, char **env)
 	{
 		dup2(cmd->out, 1);
 	}
-	tmp = cmd;
-	while (tmp->prev)
-		tmp = tmp->prev;
-	while (tmp)
-	{
-		if (tmp->in != 0 && tmp != cmd)
-			close(tmp->in);
-		if (tmp->out != 1 && tmp != cmd && tmp != cmd->prev)
-			close(tmp->out);
-		tmp = tmp->next;
-	}
+	close_fds(cmd);
 	execve(cmd->cmds[0], cmd->cmds, env);
 	return (0);
 }
@@ -186,11 +127,9 @@ int	launcher(t_cmds *cmds, t_env *envs)
 	return (0);
 }
 
-
 void	handler(int sig, siginfo_t *info, void *ucontext)
 {
 	(void)ucontext;
-
 	if (sig == SIGPIPE)
 	{
 		write(1, "hello\n", 6);
@@ -210,9 +149,8 @@ void	init(struct sigaction *sig)
 int	execution(t_env *envs)
 {
 	t_cmds	*cmds;
+	int		status;
 //	struct sigaction	sig;
-	int	status;
-
 //	init(&sig);
 	if (set_paths(envs) == -1)
 		return (-1);

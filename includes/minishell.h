@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/06 19:30:54 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/20 18:59:56 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,9 @@ int	set_fd(t_cmds *c_tbls, t_token *token);
 t_token_type	choose_tok(char *str);
 int	new_fd(char *filename, t_token_type type);
 int	parsing(t_env *envs);
+int	set_paths(t_env *env);
+void	paths_free(char **paths);
+char	**set_env(char **env);
 int	execution(t_env *envs);
 void	free_cmds_table(t_cmds *tbls);
 void	free_pfds(t_cmds *cmds);
