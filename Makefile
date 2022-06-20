@@ -1,5 +1,5 @@
 NAME = minishell
-CC = gcc
+CC = clang
 RM = rm -rf
 SRCSDIR = srcs
 OBJSDIR = objs
@@ -9,7 +9,7 @@ lexer.c parser_init.c token_list_init.c\
 handle_quote.c utils_2.c is_pipe.c parser.c utils.c
 OBJS = ${SRCS:%.c=${OBJSDIR}/%.o}
 $(NAME): ${OBJS}
-	$(CC) $(OBJS) -Wall -Wextra -Werror -lreadline -o ${NAME}
+	$(CC) $(OBJS) -lreadline -o ${NAME}
 ${OBJS}: ${OBJSDIR}/%.o: ${SRCSDIR}/%.c
 	mkdir -p ${OBJSDIR}
 	$(CC) -Wall -Wextra -Werror -I./includes -g -c $< -o $@
