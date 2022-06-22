@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 23:13:31 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/06 17:29:37 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/21 17:51:35 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	handle_env(char **temp, t_env *data, unsigned int *i, char *line)
 	if (check_temp(temp, data))
 		return (-1);
 	if (!is_char_env(line[*i + 1]) && line[*i + 1]
-		!= '"' && line[*i + 1] != '"')
+		!= '"' && line[*i + 1] != '\'')
 		return (get_lexed(ft_cpy(temp, "$"), data, STR));
 	str = ft_calloc(3);
 	if (!str)
