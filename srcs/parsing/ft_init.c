@@ -15,9 +15,14 @@ void	set_null(t_env *data)
 
 int	ft_init(t_env *data)
 {
+	int	ret;
+
 	data->tab = NULL;
 	set_null(data);
 	if (token_init(data) == -1)
 		return (-1);
+	ret = signal_init();
+	if (ret)
+		printf("ret = %d\n", ret);;
 	return (0);
 }
