@@ -1,27 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/21 16:08:08 by ccottin           #+#    #+#             */
+/*   Updated: 2022/06/21 16:21:58 by ccottin          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-
-int	get_env_var(char **env, char **var)
-{
-	int		i;
-	char	*str;
-
-	i = 0;
-	while (env[i] && ft_env_strnstr(env[i], *var, ft_strlen(*var)) == NULL)
-		i++;
-	if (env[i] == NULL)
-	{
-		if (*var)
-			free(*var);
-		*var = NULL;
-		return (0);
-	}
-	str = ft_strchr(env[i], '=');
-	if (*var)
-		free(*var);
-	if (ft_mcpy(&str[1], var))
-		return (-1);
-	return (0);
-}
 
 char	*ft_concat(char *s1, char *s2)
 {
@@ -75,157 +64,36 @@ int	is_str(unsigned int *i, t_env *data)
 	return (0);
 } 
 
-//	else if (data->lexed[*i + 1].token[0] == '?')(voir avec chef comment stocker ca et ou et garder si c simple quote)
-
-t_token	struct_env(char *str, int type)
+int	is_redir(unsigned int i, t_env *data)
 {
-	t_token	token;
-
-	token.token = str;
-	token.type = type;
-	return (token);
-}
-
-int	is_env(unsigned int *i, t_env *data, char **env)
-{
-	unsigned int	y;
-	char	*str;
-	
-	y = *i;
-	str = NULL;
-	while (data->lexed[y].type == ENV)
+	if (i == 0)
 	{
-		if (data->nb_token <= y + 1)
-		{
-			str = ft_concat(str, "$");
-			if (!str)
-				return (-1);
-			y++; //??
-		}
-		else if (data->lexed[y].token[1] == '"'
-			|| data->lexed[y].token[1] == '\'')
-		{
-			str = ft_concat(str, data->lexed[y + 1].token);
-			if (!str)
-				return (-1);
-		}
-		else if (is_char_env(data->lexed[y].token[1]))
-		{
-			if (get_env_var(env, &(data->lexed[y + 1].token)))
-				return (-1);
-			if (data->lexed[y + 1].token)
-			{
-				str = ft_concat(str, data->lexed[y + 1].token);
-				if (!str)
-					return (-1);
-			}
-		
-		}
-		else
-		{
-			if (data->lexed[y + 1].type != STR && data->lexed[y + 1].type != ENV)
-			{
-				str = ft_concat(str, "$");
-				if (!str)
-					return (-1);
-				str = ft_concat(str, data->lexed[y + 1].token);
-				if (!str)
-					return (-1);
-			}
-			if (data->lexed[y + 1].type == ENV)
-			{
-				str = ft_concat(str, "$$");
-				if (!str)
-					return (-1);
-			}
-
-		}
-		y = y + 2;
-	}
-	*i = y - 1;
-	if (data->nb_parsed > 0 && data->parsed[data->nb_parsed - 1].type == STR)
-	{
-		if (str)
-		{
-			data->parsed[data->nb_parsed - 1].token =
-			ft_concat(data->parsed[data->nb_parsed - 1].token, str);
-			if (!data->parsed[data->nb_parsed - 1].token)
-				return (-1);
-			data->parsed[data->nb_parsed - 1].size
-			= ft_strlen(data->parsed[data->nb_parsed - 1].token);
-		}
-		else
-		{
-			if (get_parsed(data, struct_env("", STR)))
-				return (-1);
-		}
-	}
-	else
-	{
-		if (str)
-		{
-			if (get_parsed(data, struct_env(str, STR)))
-				return (-1);
-		}
-	}
-	if (str)
-		free(str);
-	return (0);
-}
-/*
-int	is_env_2(unsigned int *i, t_env *data, char **env)
-{
-	unsigned int	y;
-	
-	
-	if (is_char_env(data->lexed[*i].token[1]))
-	{
-		get_env_var(env, &(data->lexed[*i + 1].token));
-		if (data->lexed[*i + 1].token == NULL)
-		{
-			*i = *i + 1;
-			return (1);
-		}
-	}
-	else if (data->lexed[*i].token[1] == '\''
-		|| data->lexed[*i].token[1] == '"')
-	{
-			*i = *i + 1;
-			return (1);
-	}
-	else
-	{
-		data->lexed[*i].token[1] = 0;
-		y = *i;
-		while ((data->lexed[y + 1].type == STR || data->lexed[y + 1].type == ENV)
-			&& (data->lexed[y].type == STR || data->lexed[y].type == ENV)
-			&& y  < data->nb_token)
-		{
-			data->lexed[y].type = STR;
-			data->lexed[y + 1].type = STR;
-			if (data->lexed[y + 2].type == ENV)
-				is_env_2(&y + 2, data, env);
-			y = y + 2;
-		}
-		if (is_str(i, data))
+		if (get_parsed(data, data->lexed[i]))
 			return (-1);
-		return (1);
-	}	
+	}
+	else if (data->parsed[data->nb_parsed - 1].type != PIPE
+		&& data->parsed[data->nb_parsed - 1].type != STR
+		&& data->parsed[data->nb_parsed - 1].type != ENV)
+		return (-3);
+	else
+	{
+		if (get_parsed(data, data->lexed[i]))
+			return (-1);
+	}
 	return (0);
 }
 
-int	is_env(unsigned int *i, t_env *data, char **env)
+int	is_pipe(unsigned int i, t_env *data)
 {
-	int	ret;
-
-	ret = is_env_2(i, data, env);
-	if (ret < 0)
-		return (ret);
-	if (ret == 1)
-		return (0);
-	data->lexed[*i + 1].type = STR;
-	if (data->nb_token > 1 && get_parsed(data, data->lexed[*i + 1]))
-		return (-1);
-	*i = *i + 1;
+	if (i == 0)
+		return (-3);
+	if (data->parsed[data->nb_parsed - 1].type == PIPE
+		|| data->parsed[data->nb_parsed - 1].type == ENV)
+		return (-3);
+	else
+	{
+		if (get_parsed(data, data->lexed[i]))
+			return (-1);
+	}
 	return (0);
-}*/
+}

@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:49:03 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/07 20:54:04 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/21 16:05:46 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,25 +24,6 @@ int	get_parsed(t_env *data, t_token token)
 		ft_strlen(data->parsed[data->nb_parsed].token);
 	data->parsed[data->nb_parsed].type = token.type;
 	data->nb_parsed++;
-	return (0);
-}
-
-int	is_redir(unsigned int i, t_env *data)
-{
-	if (i == 0)
-	{
-		if (get_parsed(data, data->lexed[i]))
-			return (-1);
-	}
-	else if (data->parsed[data->nb_parsed - 1].type != PIPE
-		&& data->parsed[data->nb_parsed - 1].type != STR
-		&& data->parsed[data->nb_parsed - 1].type != ENV)
-		return (-3);
-	else
-	{
-		if (get_parsed(data, data->lexed[i]))
-			return (-1);
-	}
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 23:10:03 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/07 18:15:38 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/21 17:39:52 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,13 @@ int	handle_double(char *line, unsigned int *i, unsigned int start,
 	return (get_lexed(copy_quote(data->temp, line, j - 1, start), data, STR));
 }
 
+int	check_single_env(char *line, unsigned int i, unsigned int start)
+{
+	if (i - start == 2 && line[start + 1] == '$' && line[i - 1] == '$')
+			return (1);
+	return (0);
+}
+
 int	handle_quote(char *line, unsigned int *i, char **temp, t_env *data)
 {
 	unsigned int		start;
@@ -73,6 +80,8 @@ int	handle_quote(char *line, unsigned int *i, char **temp, t_env *data)
 		return (-2);
 	if (q == '"')
 	{
+		if (check_single_env(line, *i, start))
+			return (get_lexed(copy_quote(temp, "$", 1, 0), data, STR));
 		data->temp = temp;
 		if (handle_double(line, i, start + 1, data))
 			return (-1);

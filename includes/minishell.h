@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/20 18:59:56 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/21 18:04:13 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void	free_pfds(t_cmds *cmds);
 void	freeer(t_env *envs);
 /****parser*****/
 char	**ft_cpy(char **temp, char *s1);
+char	*ft_concat(char *s1, char *s2);
 int	get_lexed(char **temp, t_env *data, t_token_type type);
 int	token_init(t_env *data);
 int	check_temp(char **temp, t_env *data);
@@ -102,6 +103,7 @@ int	handle_white_space(unsigned int *i, char *line, char **temp,
 		t_env *data);
 int	init_parser(t_env *data, char **env);
 int	is_env(unsigned int *i, t_env *data, char **env);
+int	is_redir(unsigned int i, t_env *data);
 int	is_str(unsigned int *i, t_env *data);
 int	ft_cmp(char *s1, char *s2);
 int	ft_init(t_env *data);
@@ -124,5 +126,6 @@ char	*ft_strchr(const char *s, int c);
 size_t	ft_strlen(const char *str);
 int	is_char_env(char c);
 int	ft_mcpy(char *s1, char **s2);
+int	ft_cmp(char *s1, char *s2);
 
 #endif
