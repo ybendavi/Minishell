@@ -1,5 +1,3 @@
-"$"USER => le vrai shell affiche le $ sans quote et le notre pas
-$""USER => une chaine vide est pas concat avant le USER
-$''USER => le dollar doit disparaitre dans notre shell
+$""USER et $''USER => une chaine vide est pas concat avant le USER
 => entre deux chaines entres quotes, il y a un caractère espace qui est recopié
 S'il n'y a qu'un '\n' le shell doit sauter une ligne.
