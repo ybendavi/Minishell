@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/22 18:57:44 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/24 21:50:25 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,17 +100,13 @@ int	child_process(t_cmds *cmd, char **env)
 		dup2(cmd->out, 1);
 	}
 	close_fds(cmd);
-	execve(cmd->cmds[0], cmd->cmds, env);
+	execve(cmd->path, cmd->cmds, env);
 //	close(0);
 //	close(1);
 	dup2(in, 0);
 	dup2(out, 1);
-	if (errno == 2)
-		exit(127);
-	else if (errno == 8)
-		exit(126);
-	else
-		exit(EXIT_FAILURE);
+	write(2, "op\n", 3);
+	exit(exec_errors(0, cmd->cmd));
 }
 
 int	launcher(t_cmds *cmds, t_env *envs)

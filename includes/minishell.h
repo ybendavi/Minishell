@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/22 18:34:52 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/24 21:45:28 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct command_table_list
 {
 	char						**cmds;
 	char						*cmd;
+	char						*path;
 	char						*file_in;
 	char						*file_out;
 	int							in;
