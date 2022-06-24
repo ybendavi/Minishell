@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 char	*ft_env_strnstr(const char *big, const char *little, size_t len)
 {
