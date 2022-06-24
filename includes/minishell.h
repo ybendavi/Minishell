@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/22 18:34:52 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/24 15:54:00 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,9 @@ void	add_temp(char *line, char **temp, unsigned int i);
 void	free_lexed(t_env *data);
 void	free_parsed(t_env *data);
 void	set_null(t_env *data);
+
+/*********SIG***********/
+int	signal_init(void);
 
 /*********UTILS*************/
 
