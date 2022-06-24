@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/20 19:02:11 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/22 18:57:44 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,11 @@ int	close_fds(t_cmds *cmd)
 
 int	child_process(t_cmds *cmd, char **env)
 {
+	int	in;
+	int	out;
+
+	in = dup(0);
+	out = dup(1);
 	if (cmd->pfd_in[0] != -1)
 	{
 		close(cmd->pfd_in[1]);
@@ -96,19 +101,31 @@ int	child_process(t_cmds *cmd, char **env)
 	}
 	close_fds(cmd);
 	execve(cmd->cmds[0], cmd->cmds, env);
-	return (0);
+//	close(0);
+//	close(1);
+	dup2(in, 0);
+	dup2(out, 1);
+	if (errno == 2)
+		exit(127);
+	else if (errno == 8)
+		exit(126);
+	else
+		exit(EXIT_FAILURE);
 }
 
 int	launcher(t_cmds *cmds, t_env *envs)
 {
-	int	status;
+	int	ret;
 
+	ret = 0;
 	cmds->fork = fork();
 	if (cmds->fork < 0)
 		perror(NULL);
 	if (cmds->fork == 0)
 	{
-		child_process(cmds, envs->env);
+		printf("slt\n");
+		ret = child_process(cmds, envs->env);
+		return (ret);
 	}
 	else if (cmds->fork > 0)
 	{
@@ -122,9 +139,8 @@ int	launcher(t_cmds *cmds, t_env *envs)
 		}
 		if (cmds->next)
 			launcher(cmds->next, envs);
-		waitpid(cmds->fork, &status, 0);
 	}
-	return (0);
+	return (ret);
 }
 
 void	handler(int sig, siginfo_t *info, void *ucontext)
@@ -150,13 +166,30 @@ int	execution(t_env *envs)
 {
 	t_cmds	*cmds;
 	int		status;
+	int		status_code;
 //	struct sigaction	sig;
 //	init(&sig);
 	if (set_paths(envs) == -1)
+	{
+		perror(NULL);
 		return (-1);
+	}
 	//set_forks(envs);
 	cmds = envs->c_tbls;
 	status = 0;
-	launcher(cmds, envs);
-	return (0);
+	status_code = launcher(cmds, envs);
+	while (cmds)
+	{
+		if (cmds->fork > 0)
+		{
+			waitpid(cmds->fork, &status, 0);
+			if (WIFEXITED(status) != 0)
+				status_code = WEXITSTATUS(status);
+			else
+				status_code = -4;
+			printf("status code:%d\n", status_code);
+			cmds = cmds->next;
+		}
+	}
+	return (status_code);
 }

@@ -9,14 +9,14 @@ int	new_fd(char *filename, t_token_type type)
 		fd = open(filename, O_RDWR | O_TRUNC | O_CREAT, 0666 | O_TRUNC);
 		if (fd == -1)
 			perror(filename);
-		return (fd);
+		return (-2);
 	}
 	else
 	{
 		fd = open(filename, O_RDWR | O_APPEND);
 		if (fd == -1)
 			perror(filename);
-		return (fd);
+		return (-2);
 	}
 	return (0);
 }
@@ -26,12 +26,26 @@ int	set_fd(t_cmds *c_tbls, t_token *token)
 	if ((*token).type == REDIR_IN || (*token).type == REDIR_ADD)
 	{
 		c_tbls->out = new_fd(token[1].token, (*token).type);
+		if (c_tbls->out == -2)
+			return (-2);
 		c_tbls->file_out = ft_strdup(token[1].token);
+		if (c_tbls->file_out == NULL)
+		{
+			perror(NULL);
+			return (-1);
+		}
 	}
 	else
 	{
 		c_tbls->in = new_fd(token[1].token, (*token).type);
+		if (c_tbls->in == -2)
+			return (-2);
 		c_tbls->file_in = ft_strdup(token[1].token);
+		if (c_tbls->file_in == NULL)
+		{
+			perror(NULL);
+			return (-1);
+		}
 	}
 	return (0);
 }

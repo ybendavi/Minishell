@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 12:32:13 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/06 20:10:47 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/21 17:06:32 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,6 @@ int	redir_parse(t_env *envs, t_token *token)
 	int		i;
 	t_cmds	*tmp;
 
-	i = 0;
-	printf("coucou\n");
 	tmp = envs->c_tbls;
 	if (tmp)
 	{
@@ -77,7 +75,10 @@ int	redir_parse(t_env *envs, t_token *token)
 			return (-1);
 		tmp = envs->c_tbls;
 	}
-	set_fd(tmp, token);
+	i = set_fd(tmp, token);
+	if (i != 0)
+		return (i);
+	i = 0;
 	i = 1 + set_cmds(tmp, &token[1]);
 	return (i);
 }
@@ -91,11 +92,12 @@ int	pipe_parse(t_env *envs, t_token *token)
 	tmp = envs->c_tbls;
 	while (tmp->next)
 		tmp = tmp->next;
-	new_table(envs);
+	if (new_table(envs) == -1)
+		return (-1);
 	if (pipe(tmp->pfd_out) == -1)
 	{
 		perror(NULL);
-		return (-1);
+		return (-3);
 	}
 	tmp->out = tmp->pfd_out[1];
 	tmp->next->pfd_in[0] = tmp->pfd_out[0];
@@ -118,8 +120,8 @@ int	recu_parse(t_env *envs, t_token *tokens)
 		|| (*tokens).type == REDIR_LIM)
 	{
 		i = redir_parse(envs, tokens);
-		if (i == -1)
-			return (-1);
+		if (i == -1 || i == -2 || i == -3)
+			return (i);
 		if (tokens[i].token != NULL && tokens[i + 1].token != NULL)
 		{
 			if (recu_parse(envs, &tokens[i + 1]))
@@ -129,8 +131,8 @@ int	recu_parse(t_env *envs, t_token *tokens)
 	if ((*tokens).type == PIPE)
 	{
 		i = pipe_parse(envs, tokens);
-		if (i == -1)
-			return (-1);
+		if (i == -1 || i == -2 || i == -3)
+			return (i);
 		if (tokens[i].token != NULL && tokens[i + 1].token != NULL)
 		{
 			if (recu_parse(envs, &tokens[i + 1]) == -1)
@@ -143,6 +145,7 @@ int	recu_parse(t_env *envs, t_token *tokens)
 int	parsing(t_env *envs)
 {
 	int	i;
+	int	ret;
 
 	i = 0;
 	envs->c_tbls = NULL;
@@ -151,7 +154,8 @@ int	parsing(t_env *envs)
 		new_table(envs);
 		i = set_cmds(envs->c_tbls, envs->parsed);
 	}
-	if (recu_parse(envs, &envs->parsed[i]) == -1)
+	ret = recu_parse(envs, &envs->parsed[i]);
+	if (ret != 0)
 		return (-1);
 	free_parsed(envs);
 	return (0);

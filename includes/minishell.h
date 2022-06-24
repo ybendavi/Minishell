@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/22 19:17:39 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/22 18:34:52 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <fcntl.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <errno.h>
 
 typedef enum e_token_type {
 	REDIR_ADD,
@@ -83,6 +84,7 @@ t_token_type	choose_tok(char *str);
 int	new_fd(char *filename, t_token_type type);
 int	parsing(t_env *envs);
 int	set_paths(t_env *env);
+int	exec_errors(int status_code, const char *cmd);
 void	paths_free(char **paths);
 char	**set_env(char **env);
 int	execution(t_env *envs);
@@ -91,7 +93,6 @@ void	free_pfds(t_cmds *cmds);
 void	freeer(t_env *envs);
 /****parser*****/
 char	**ft_cpy(char **temp, char *s1);
-char	*ft_concat(char *s1, char *s2);
 int	get_lexed(char **temp, t_env *data, t_token_type type);
 int	token_init(t_env *data);
 int	check_temp(char **temp, t_env *data);
@@ -103,7 +104,6 @@ int	handle_white_space(unsigned int *i, char *line, char **temp,
 		t_env *data);
 int	init_parser(t_env *data, char **env);
 int	is_env(unsigned int *i, t_env *data, char **env);
-int	is_redir(unsigned int i, t_env *data);
 int	is_str(unsigned int *i, t_env *data);
 int	ft_cmp(char *s1, char *s2);
 int	ft_init(t_env *data);
@@ -116,8 +116,6 @@ void	add_temp(char *line, char **temp, unsigned int i);
 void	free_lexed(t_env *data);
 void	free_parsed(t_env *data);
 void	set_null(t_env *data);
-/*********SIG***********/
-int	signal_init(void);
 
 /*********UTILS*************/
 
@@ -128,6 +126,5 @@ char	*ft_strchr(const char *s, int c);
 size_t	ft_strlen(const char *str);
 int	is_char_env(char c);
 int	ft_mcpy(char *s1, char **s2);
-int	ft_cmp(char *s1, char *s2);
 
 #endif

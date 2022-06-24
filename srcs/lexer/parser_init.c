@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 int	get_parsed(t_env *data, t_token token)
 {
@@ -20,8 +20,7 @@ int	get_parsed(t_env *data, t_token token)
 		data->parsed[data->nb_parsed].token = ft_cpy2(token.token);
 	if (!data->parsed[data->nb_parsed].token)
 		return (-1);
-	data->parsed[data->nb_parsed].size =
-		ft_strlen(data->parsed[data->nb_parsed].token);
+	data->parsed[data->nb_parsed].size = token.size;
 	data->parsed[data->nb_parsed].type = token.type;
 	data->nb_parsed++;
 	return (0);
@@ -74,17 +73,6 @@ int	check_type(unsigned int *i, t_env *data, char **env)
 	return (0);
 }
 
-void	add_null_token(t_env *data)
-{
-	t_token	token;
-
-	token.token = NULL;
-	token.type = STR;
-	token.size = 0;
-	data->parsed[data->nb_parsed] = token;
-	data->nb_parsed++;
-}
-
 int	init_parser(t_env *data, char **env)
 {
 	unsigned int	i;
@@ -104,10 +92,6 @@ int	init_parser(t_env *data, char **env)
 		}
 		i++;
 	}
-	add_null_token(data);
 	free_lexed(data);
-	ret = check_parsing_errors(data);
-	if (ret)
-		return (ret);
 	return (0);
 }

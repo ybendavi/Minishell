@@ -95,8 +95,6 @@ int	main(int ac, char **av, char **env)
 				}
 			}	
 			ret = execution(&data);
-			if (ret)
-				return (ret);
 			freeer(&data);
 		}
 		reset(&data);
