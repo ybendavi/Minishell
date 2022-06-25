@@ -82,5 +82,5 @@ int	ft_return(int ret, t_env *data)
 	if (ret == 1)
 		free_all(data);
 	set_null(data);
-	return (0);
+	return (ret);
 }
