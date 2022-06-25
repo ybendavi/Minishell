@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/25 18:25:45 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/25 21:39:24 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,10 @@ void	set_null(t_env *data);
 
 char	*sig_error(int sig);
 int	signal_init(void);
+
+/********BUILT-IN*********/
+
+void	ft_exit(t_env *data);
 
 /*********UTILS*************/
 

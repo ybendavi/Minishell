@@ -18,9 +18,6 @@ int	handle_buff(t_env *data, char **buff, char **env)
 {
 	int	ret;
 
-	ret = ft_cmp(*buff, "exit");
-	if (ret == -1)
-
 	if (ret == 1)
 	{
 		free(*buff);
@@ -63,7 +60,7 @@ int	main(int ac, char **av, char **env)
 	{
 		buff = readline(0);
 		if (!buff)
-			data.status_code = ft_return(-1, &data);
+			data.status_code = ft_return(1, &data);
 		data.status_code = handle_buff(&data, &buff, env);
 		if (!data.status_code)
 		{

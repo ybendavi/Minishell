@@ -13,12 +13,15 @@ void	set_null(t_env *data)
 	data->c_tbls = NULL;
 }
 
+int	env_init(
+
 int	ft_init(t_env *data)
 {
 	int	ret;
 
 	data->tab = NULL;
 	set_null(data);
+	env_init(data);
 	if (token_init(data) == -1)
 		return (-1);
 	ret = signal_init();
