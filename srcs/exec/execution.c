@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/24 21:50:25 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/25 16:00:41 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	close_fds(t_cmds *cmd)
 	return (0);
 }
 
-int	child_process(t_cmds *cmd, char **env)
+int	child_process(t_cmds *cmd, char **env, t_env *envs)
 {
 	int	in;
 	int	out;
@@ -105,8 +105,7 @@ int	child_process(t_cmds *cmd, char **env)
 //	close(1);
 	dup2(in, 0);
 	dup2(out, 1);
-	write(2, "op\n", 3);
-	exit(exec_errors(0, cmd->cmd));
+	exit(exec_errors(0, cmd->cmd, envs));
 }
 
 int	launcher(t_cmds *cmds, t_env *envs)
@@ -119,8 +118,7 @@ int	launcher(t_cmds *cmds, t_env *envs)
 		perror(NULL);
 	if (cmds->fork == 0)
 	{
-		printf("slt\n");
-		ret = child_process(cmds, envs->env);
+		ret = child_process(cmds, envs->env, envs);
 		return (ret);
 	}
 	else if (cmds->fork > 0)
@@ -183,7 +181,7 @@ int	execution(t_env *envs)
 				status_code = WEXITSTATUS(status);
 			else
 				status_code = -4;
-			printf("status code:%d\n", status_code);
+			//printf("status code:%d\n", status_code);
 			cmds = cmds->next;
 		}
 	}

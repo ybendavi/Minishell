@@ -29,6 +29,8 @@ void	free_cmds_table(t_cmds *tbls)
 	}
 	if (tbls->cmd)
 		free(tbls->cmd);
+	if (tbls->path)
+		free(tbls->path);
 	tmp = tbls->next;
 	if (tmp)
 		free_cmds_table(tmp);

@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/24 21:45:28 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/25 16:45:04 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_env {
 	t_token	*tab;
 	t_token	*lexed;
 	t_token	*parsed;
+	int	status_code;
 	char	*error;
 	char	**temp;
 	uint32_t	nb_token;
@@ -85,7 +86,7 @@ t_token_type	choose_tok(char *str);
 int	new_fd(char *filename, t_token_type type);
 int	parsing(t_env *envs);
 int	set_paths(t_env *env);
-int	exec_errors(int status_code, const char *cmd);
+int	exec_errors(int status_code, const char *cmd, t_env *envs);
 void	paths_free(char **paths);
 char	**set_env(char **env);
 int	execution(t_env *envs);
@@ -123,6 +124,8 @@ void	set_null(t_env *data);
 char	*ft_env_strnstr(const char *big, const char *little, size_t len);
 char	*ft_cpy2(char *s1);
 void	*ft_calloc(size_t nmem);
+void	free_all(t_env *data);
+void	free_parsed(t_env *data);
 char	*ft_strchr(const char *s, int c);
 size_t	ft_strlen(const char *str);
 int	is_char_env(char c);
