@@ -6,7 +6,7 @@ OBJSDIR = objs
 SRCS = parsing/main.c parsing/libfunc.c parsing/libfunc_2.c exec/print_exec_error.c exec/miniparser.c exec/parser_assets.c exec/execution.c exec/freer.c\
 parsing/check_parsing_errors.c parsing/ft_init.c parsing/ft_return.c parsing/handle_else.c\
 parsing/lexer.c parsing/parser_init.c parsing/token_list_init.c signal_init.c signal_errors.c\
-parsing/handle_quote.c parsing/utils_2.c parsing/is_pipe.c parsing/parser.c parsing/utils.c exec/path_handler.c
+parsing/handle_quote.c parsing/utils_2.c parsing/is_pipe.c parsing/parser.c parsing/utils.c exec/path_handler.c exec/builtin.c
 OBJS = ${SRCS:%.c=${OBJSDIR}/%.o}
 $(NAME): ${OBJS}
 	$(CC) $(OBJS) -lreadline -o ${NAME}

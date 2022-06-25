@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/25 16:00:41 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/25 19:56:55 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,10 @@ int	child_process(t_cmds *cmd, char **env, t_env *envs)
 		dup2(cmd->out, 1);
 	}
 	close_fds(cmd);
-	execve(cmd->path, cmd->cmds, env);
+	if (is_builtin(cmd) == 0)
+		builtins(cmd, envs->env, envs);
+	else
+		execve(cmd->path, cmd->cmds, env);
 //	close(0);
 //	close(1);
 	dup2(in, 0);
@@ -176,7 +179,6 @@ int	execution(t_env *envs)
 				status_code = WEXITSTATUS(status);
 			else
 				status_code = check_sig(status);
-			printf("status code:%d\n", status_code);
 			cmds = cmds->next;
 		}
 	}

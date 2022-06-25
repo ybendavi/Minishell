@@ -56,14 +56,14 @@ int	main(int ac, char **av, char **env)
 	(void)ac;
 	(void)av;
 	if (ft_init(&data))
-		ft_return(-1, &data);
+		ft_return(1, &data);
 	data.env = env;
 	data.status_code = 0;
 	while (7)
 	{
 		buff = readline(0);
 		if (!buff)
-			data.status_code = ft_return(-1, &data);
+			data.status_code = ft_return(1, &data);
 		data.status_code = handle_buff(&data, &buff, env);
 		if (!data.status_code)
 		{
