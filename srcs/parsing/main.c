@@ -4,6 +4,8 @@ int	ft_cmp(char *s1, char *s2)
 {
 	unsigned int	i;
 
+	if (!s1 || !s2)
+		return (-1);
 	i = 0;
 	while ((s1[i] || s2[i]) && s1[i] == s2[i])
 		i++;
@@ -16,7 +18,10 @@ int	handle_buff(t_env *data, char **buff, char **env)
 {
 	int	ret;
 
-	if (ft_cmp(*buff, "exit"))
+	ret = ft_cmp(*buff, "exit");
+	if (ret == -1)
+
+	if (ret == 1)
 	{
 		free(*buff);
 		*buff = NULL;
@@ -62,6 +67,7 @@ int	main(int ac, char **av, char **env)
 		data.status_code = handle_buff(&data, &buff, env);
 		if (!data.status_code)
 		{
+		//test
 			unsigned int i = 0;
 			printf("/°\\_/°\\_/°\\_/°\\ Parser Output /°\\_/°\\_/°\\_/°\\\n\n");
 			while (i < data.nb_parsed)
@@ -70,9 +76,11 @@ int	main(int ac, char **av, char **env)
 				i++;
 			}
 			printf("______________________________________________________\n");
+		//end-test
 			ret = parsing(&data);
 		//	if (ret)
 		//		return (ret);
+		//test	
 			t_cmds	*tmp;
 			i = 0;
 			tmp = data.c_tbls;
@@ -94,7 +102,8 @@ int	main(int ac, char **av, char **env)
 				printf("in:%d\nout:%d\n", tmp->in, tmp->out);
 					tmp = tmp->next;
 				}
-			}	
+			}
+		//end-test
 			data.status_code = execution(&data);
 			freeer(&data);
 		}

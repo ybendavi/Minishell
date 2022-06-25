@@ -137,23 +137,20 @@ int	launcher(t_cmds *cmds, t_env *envs)
 	return (ret);
 }
 
-void	handler(int sig, siginfo_t *info, void *ucontext)
+int	check_sig(int status)
 {
-	(void)ucontext;
-	if (sig == SIGPIPE)
-	{
-		write(1, "hello\n", 6);
-		kill(info->si_pid, SIGINT);
-	}
-}
+	char	*str;
+	int	sig;
 
-void	init(struct sigaction *sig)
-{
-	sig->sa_sigaction = &handler;
-	if (sigemptyset(&(sig)->sa_mask) == -1)
-		return ;
-	sigaddset(&(sig)->sa_mask, SIGPIPE);
-	sig->sa_flags = SA_SIGINFO;
+	if (WIFSIGNALED(status))
+	{
+		sig = WTERMSIG(status);
+		str = sig_error(sig);
+		write(2, str, ft_strlen(str));
+		write(2, "\n", 1);
+		return (128 + sig);
+	}
+	return (0);
 }
 
 int	execution(t_env *envs)
@@ -161,14 +158,12 @@ int	execution(t_env *envs)
 	t_cmds	*cmds;
 	int		status;
 	int		status_code;
-//	struct sigaction	sig;
-//	init(&sig);
+	
 	if (set_paths(envs) == -1)
 	{
 		perror(NULL);
 		return (-1);
 	}
-	//set_forks(envs);
 	cmds = envs->c_tbls;
 	status = 0;
 	status_code = launcher(cmds, envs);
@@ -180,8 +175,8 @@ int	execution(t_env *envs)
 			if (WIFEXITED(status) != 0)
 				status_code = WEXITSTATUS(status);
 			else
-				status_code = -4;
-			//printf("status code:%d\n", status_code);
+				status_code = check_sig(status);
+			printf("status code:%d\n", status_code);
 			cmds = cmds->next;
 		}
 	}
