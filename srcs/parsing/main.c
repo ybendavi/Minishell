@@ -58,12 +58,14 @@ int	main(int ac, char **av, char **env)
 	if (ft_init(&data))
 		ft_return(-1, &data);
 	data.env = env;
+	data.status_code = 0;
 	while (7)
 	{
 		buff = readline(0);
 		if (!buff)
-			ft_return(-1, &data);
-		if (!handle_buff(&data, &buff, env))
+			data.status_code = ft_return(-1, &data);
+		data.status_code = handle_buff(&data, &buff, env);
+		if (!data.status_code)
 		{
 		//test
 			unsigned int i = 0;
@@ -102,9 +104,17 @@ int	main(int ac, char **av, char **env)
 				}
 			}
 		//end-test
-			ret = execution(&data);
+			data.status_code = execution(&data);
 			freeer(&data);
 		}
+		else
+		{
+			freeer(&data);
+			free_lexed(&data);
+			free_parsed(&data);
+		}
+		printf("status_code:%d\n", data.status_code);
+		
 		reset(&data);
 	}
 	return(0);

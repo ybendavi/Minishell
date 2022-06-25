@@ -57,7 +57,6 @@ void	free_all(t_env *data)
 	}
 	if (data->tab)
 		free(data->tab);
-	exit(0);
 }
 
 int	ft_return(int ret, t_env *data)
@@ -74,13 +73,18 @@ int	ft_return(int ret, t_env *data)
 	if (ret == -3)
 		printf("bash : syntax error near unexpected token `%s'\n", data->error);
 	if (ret == -5)
-		printf("bash : syntax error near unexpected token `newline'\n");	
+		printf("bash : syntax error near unexpected token `newline'\n");
 	if (ret < -2)
 		free_parsed(data);
 	if (ret < 0 && ret > -4)
 		free_lexed(data);
 	if (ret == 1)
+	{
 		free_all(data);
+		exit(0);
+	}
+	if (ret == -3 || ret == -5)
+		ret = 2;
 	set_null(data);
 	return (ret);
 }

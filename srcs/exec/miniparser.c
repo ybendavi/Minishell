@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 12:32:13 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/21 17:06:32 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/25 14:06:04 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	new_table(t_env *envs)
 	tmp->file_out = NULL;
 	tmp->cmds = NULL;
 	tmp->cmd = NULL;
+	tmp->path =NULL;
 	tmp->in = 0;
 	tmp->out = 1;
 	tmp->next = NULL;
