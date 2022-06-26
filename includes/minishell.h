@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/26 16:20:45 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/25 19:57:18 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ int	new_fd(char *filename, t_token_type type);
 int	parsing(t_env *envs);
 int	set_paths(t_env *env);
 int	exec_errors(int status_code, const char *cmd, t_env *envs);
+int	is_builtin(t_cmds *cmds);
+int	builtins(t_cmds *cmds, char **env, t_env *envs);
 void	paths_free(char **paths);
 char	**set_env(char **env);
 int	execution(t_env *envs);
