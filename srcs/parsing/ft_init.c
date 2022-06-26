@@ -19,6 +19,7 @@ int	ft_init(t_env *data)
 
 	data->tab = NULL;
 	set_null(data);
+//	env_init(data);
 	if (token_init(data) == -1)
 		return (-1);
 	ret = signal_init();

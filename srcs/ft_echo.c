@@ -1,38 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal_init.c                                      :+:      :+:    :+:   */
+/*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/24 15:51:36 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/25 19:23:13 by ccottin          ###   ########.fr       */
+/*   Created: 2022/06/25 19:44:25 by ccottin           #+#    #+#             */
+/*   Updated: 2022/06/25 21:03:59 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handler_sig(int sig, siginfo_t *info, void *context)
+int	ft_echo(char **strs)
 {
-	(void) info;
-	(void) context;
-	if (sig == SIGINT)
-		write(1, "\n", 1);
-}
-
-int	signal_init(void)
-{
-	struct sigaction	sig;
+	char	mark;
+	int	i;
 	int	ret;
 
-	sig.sa_sigaction = &handler_sig;
-	sigemptyset(&(sig.sa_mask));
-	sigaddset(&(sig.sa_mask), SIGQUIT);
-	sigaddset(&(sig.sa_mask), SIGINT);
-	sig.sa_flags = SA_SIGINFO;
-	ret = sigaction(SIGINT, &sig, NULL);
-	ret = sigaction(SIGQUIT, &sig, NULL);
-	if (ret)	
-		return (ret);
+	mark = 0;
+	if (ft_cmp(strs[1], "-n"))
+		mark = 1;
+	i = 1 + mark;
+	while (strs[i])
+	{
+		ret = write(1, strs[i], ft_strlen(strs[i]));
+		if (ret)
+			return (ret);//? + rajouter un espace entre chaqu
+		i++;
+	}
+	if (mark)
+		write(1, "\n", 1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/25 18:25:45 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/26 16:20:45 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ void	free_pfds(t_cmds *cmds);
 void	freeer(t_env *envs);
 /****parser*****/
 char	**ft_cpy(char **temp, char *s1);
+char	*ft_concat(char *s1, char *s2);
 int	get_lexed(char **temp, t_env *data, t_token_type type);
 int	token_init(t_env *data);
 int	check_temp(char **temp, t_env *data);
@@ -114,6 +115,8 @@ int	lexer(char *line, t_env *data);
 int	is_pipe(unsigned int i, t_env *data);
 int	get_parsed(t_env *data, t_token token);
 int	ft_return(int ret, t_env *data);
+int	is_whitespace(unsigned int *i, t_env *data);
+int	is_redir(unsigned int i, t_env *data);
 void	add_temp(char *line, char **temp, unsigned int i);
 void	free_lexed(t_env *data);
 void	free_parsed(t_env *data);
@@ -124,16 +127,23 @@ void	set_null(t_env *data);
 char	*sig_error(int sig);
 int	signal_init(void);
 
+/********BUILT-IN*********/
+
+void	ft_exit(t_env *data, char **strs);
+
 /*********UTILS*************/
 
 char	*ft_env_strnstr(const char *big, const char *little, size_t len);
 char	*ft_cpy2(char *s1);
 void	*ft_calloc(size_t nmem);
-void	free_all(t_env *data);
-void	free_parsed(t_env *data);
+char	*ft_itoa(int n);
 char	*ft_strchr(const char *s, int c);
 size_t	ft_strlen(const char *str);
+int	ft_isdigit(int c);
+int	is_str_env(char c);
 int	is_char_env(char c);
 int	ft_mcpy(char *s1, char **s2);
+void	free_all(t_env *data);
+void	free_parsed(t_env *data);
 
 #endif

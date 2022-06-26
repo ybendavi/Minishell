@@ -18,15 +18,6 @@ int	handle_buff(t_env *data, char **buff, char **env)
 {
 	int	ret;
 
-	ret = ft_cmp(*buff, "exit");
-	if (ret == -1)
-
-	if (ret == 1)
-	{
-		free(*buff);
-		*buff = NULL;
-		return (ft_return(1, data));
-	}
 	ret = lexer(*buff, data);
 	if (ret)
 	{
@@ -34,11 +25,20 @@ int	handle_buff(t_env *data, char **buff, char **env)
 		*buff = NULL;
 		return (ft_return(ret, data));
 	}
-	free(*buff);
-	*buff = NULL;
+	printf("/°\\_/°\\_/°\\_/°\\ Lexer Output /°\\_/°\\_/°\\_/°\\\n\n");
+		unsigned int	i = 0;
+		while (i < data->nb_token)
+		{
+			printf("%d = %d %d %s\n", i, data->lexed[i].type, data->lexed[i].size, data->lexed[i].token);
+			i++;
+		}
+
 	ret = init_parser(data, env);
 	if (ret)
 		return (ft_return(ret, data));
+	add_history(*buff);
+	free(*buff);
+	*buff = NULL;
 	return (0);
 }
 
@@ -63,7 +63,7 @@ int	main(int ac, char **av, char **env)
 	{
 		buff = readline(0);
 		if (!buff)
-			data.status_code = ft_return(-1, &data);
+			data.status_code = ft_return(1, &data);
 		data.status_code = handle_buff(&data, &buff, env);
 		if (!data.status_code)
 		{
@@ -102,6 +102,7 @@ int	main(int ac, char **av, char **env)
 				printf("in:%d\nout:%d\n", tmp->in, tmp->out);
 					tmp = tmp->next;
 				}
+				printf("\n======= OUTPUT =======\n");
 			}
 		//end-test
 			data.status_code = execution(&data);
