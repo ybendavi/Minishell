@@ -81,6 +81,8 @@ int	ft_return(int ret, t_env *data)
 	if (ret == 1)
 	{
 		free_all(data);
+		rl_clear_history();
+		write(1, "exit\n", 5);
 		exit(0);
 	}
 	if (ret == -3 || ret == -5)

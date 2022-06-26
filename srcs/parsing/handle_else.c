@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 23:13:31 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/06 17:29:37 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/26 16:27:38 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,33 +21,53 @@ int	handle_pipe(char **temp, t_env *data)
 	return (0);
 }
 
+int	env_var(char **temp, t_env *data, unsigned int *i, char *line)
+{
+	int	ret;
+	
+	ret = get_lexed(ft_cpy(temp, "$"), data, ENV);
+	if (ret)
+		return (ret);
+	while (is_str_env(line[++(*i)]))
+		add_temp(line, temp, *i);
+	(*i)--;
+	return (get_lexed(temp, data, ENV));
+}
+
+int	digit_var(char **temp, t_env *data, unsigned int *i, char *line)
+{
+	(*i)++;
+	if (line[*i] == '0')
+		return (get_lexed(ft_cpy(temp, "bash"), data, STR));
+	else
+		return (get_lexed(temp, data, STR));
+}
+
 int	handle_env(char **temp, t_env *data, unsigned int *i, char *line)
 {
-	char	*str;
-
 	if (check_temp(temp, data))
 		return (-1);
-	if (!is_char_env(line[*i + 1]) && line[*i + 1]
-		!= '"' && line[*i + 1] != '"')
-		return (get_lexed(ft_cpy(temp, "$"), data, STR));
-	str = ft_calloc(3);
-	if (!str)
-		return (-1);
-	str[0] = line[*i];
-	str[1] = line[*i + 1];
-	if (get_lexed(ft_cpy(temp, str), data, ENV))
-		return (-1);
-	free(str);
-	*i = *i + 1;
-	while (is_char_env(line[*i]))
+	if (is_char_env(line[(*i) + 1]))
+		return (env_var(temp, data, i, line));
+	else if (ft_isdigit(line[*i + 1]))
+		return (digit_var(temp, data, i, line));
+	else if (line[*i + 1] == '$')
 	{
-		add_temp(line, temp, *i);
-		*i = *i + 1;
+		(*temp)[0] = '$';
+		(*temp)[1] = '$';
+		(*i)++;
+		return (get_lexed(temp, data, STR));
 	}
-	if (check_temp(temp, data))
-		return (-1);
-	*i = *i - 1;
-	return (0);
+	else if (line[*i + 1] == '?')
+	{
+		(*temp)[0] = '$';
+		(*temp)[1] = '?';
+		(*i)++;
+		return (get_lexed(temp, data, ENV));
+	}
+	else if (line[*i + 1] == '"' || line[*i + 1] == '\'')
+		return (get_lexed(temp, data, STR));
+	return (get_lexed(ft_cpy(temp, "$"), data, STR));
 }
 
 int	is_double_redir(char r, char **temp, t_env *data)
