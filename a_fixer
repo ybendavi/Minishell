@@ -1,5 +1,7 @@
-"$"USER => le vrai shell affiche le $ sans quote et le notre pas
-$""USER => une chaine vide est pas concat avant le USER
-$''USER => le dollar doit disparaitre dans notre shell
 => entre deux chaines entres quotes, il y a un caractère espace qui est recopié
 S'il n'y a qu'un '\n' le shell doit sauter une ligne.
+
+64. >minishell export A=1 B=2 C=3 D=4 E=5 F=6 G=7 H=8    OK
+>minishell echo "$A'$B"'$C"$D'$E'"$F"'"'$G'$H"
+1'2$C   5"$F"'7'8
+
