@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:18 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/24 21:54:50 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/26 21:07:04 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,13 @@ int	set_paths(t_env *envs)
 	tmp = envs->c_tbls;
 	while (tmp)
 	{
-		tmp->path = ft_strdup(tmp->cmd);
-		ret = set_path(tmp, paths);
-		if (ret == -1)
-			return (-1);
+		if (tmp->cmd)
+		{
+			tmp->path = ft_strdup(tmp->cmd);
+			ret = set_path(tmp, paths);
+			if (ret == -1)
+				return (-1);
+		}
 		tmp = tmp->next;
 	}
 	paths_free(paths);

@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 23:13:31 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/26 16:27:38 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/26 22:22:13 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	handle_redir(char *line, unsigned int *i, char **temp, t_env *data)
 	}
 	else if (line[*i] == '<')
 	{
-		if (get_lexed(ft_cpy(temp, "<"), data, REDIR_IN))
+		if (get_lexed(ft_cpy(temp, "<"), data, REDIR_OUT))
 			return (-1);
 	}
 	return (0);

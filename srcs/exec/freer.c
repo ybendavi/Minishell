@@ -31,6 +31,10 @@ void	free_cmds_table(t_cmds *tbls)
 		free(tbls->cmd);
 	if (tbls->path)
 		free(tbls->path);
+	if (tbls->file_in)
+		free(tbls->file_in);
+	if (tbls->file_out)
+		free(tbls->file_out);
 	tmp = tbls->next;
 	if (tmp)
 		free_cmds_table(tmp);
