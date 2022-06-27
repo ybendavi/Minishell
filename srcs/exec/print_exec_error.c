@@ -9,6 +9,7 @@ int	path_error(const char *cmd, t_env *envs, int fd)
 		free_lexed(envs);
 		free_parsed(envs);
 		free_all(envs);
+		rl_clear_history();
 		return (127);
 	}
 	if (access(cmd, X_OK) == -1)
@@ -18,6 +19,7 @@ int	path_error(const char *cmd, t_env *envs, int fd)
 		free_lexed(envs);
 		free_parsed(envs);
 		free_all(envs);
+		rl_clear_history();
 		return (126);
 	}
 	fd = open(cmd, O_DIRECTORY);
@@ -31,6 +33,7 @@ int	path_error(const char *cmd, t_env *envs, int fd)
 		free_lexed(envs);
 		free_parsed(envs);
 		free_all(envs);
+		rl_clear_history();
 		return (126);
 	}
 	return (0);
@@ -45,6 +48,7 @@ int	errno_two(const char *cmd, t_env *envs)
 	free_lexed(envs);
 	free_parsed(envs);
 	free_all(envs);
+	rl_clear_history();
 	return (127);
 }
 

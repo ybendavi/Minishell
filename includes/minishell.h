@@ -64,6 +64,7 @@ typedef struct s_env {
 	t_token	*parsed;
 	int	status_code;
 	char	*error;
+	char	*cupath;
 	char	**temp;
 	uint32_t	nb_token;
 	uint32_t	nb_parsed;
@@ -130,6 +131,7 @@ int	signal_init(void);
 
 void	ft_exit(t_env *data, char **strs);
 int	ft_export(char **strs, t_env *data);
+int	cd_main(char **av, t_env *envs);
 
 /*********UTILS*************/
 
@@ -140,6 +142,7 @@ char	*ft_itoa(int n);
 char	*ft_strchr(const char *s, int c);
 size_t	ft_strlen(const char *str);
 int	ft_isdigit(int c);
+int	ft_strcmp(char *s1, char *s2);
 int	is_str_env(char c);
 int	is_char_env(char c);
 int	ft_mcpy(char *s1, char **s2);

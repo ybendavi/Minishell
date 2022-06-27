@@ -29,17 +29,11 @@ int	is_builtin(t_cmds *cmds)
 
 int    builtins(t_cmds *cmds, char **env, t_env *envs)
 {
-    int    ret;
+	int	ret;
 
-    (void)env;
-    ret = 0;
-    if (ft_strcmp(cmds->cmd, "export") == 0)
-        ret = ft_export(cmds->cmds, envs);
-    freeer(envs);
-    free_lexed(envs);
-    free_parsed(envs);
-    free_all(envs);
-    rl_clear_history();
-    exit(ret);
-    return (0);
+	(void)env;
+	ret = 0;
+	if (ft_strcmp(cmds->cmd, "export") == 0)
+		ret = ft_export(cmds->cmds, envs);
+	return (ret);
 }
