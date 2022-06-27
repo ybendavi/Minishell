@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/26 22:54:36 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/27 20:55:54 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void	quit_proc(t_cmds *tmp, t_env *envs)
 	free_lexed(envs);
 	free_parsed(envs);
 	free_all(envs);
+	rl_clear_history();
 	exit(EXIT_FAILURE);
 }
 
@@ -116,11 +117,11 @@ int	child_process(t_cmds *cmd, char **env, t_env *envs)
 	{
 		dup2(cmd->out, 1);
 	}
-	close_fds(cmd);
 	if (is_builtin(cmd) == 0)
-		builtins(cmd, envs->env, envs);
+		return (builtins(cmd, envs->env, envs));
 	else
 	{
+		close_fds(cmd);
 		if (cmd->cmd)
 			execve(cmd->path, cmd->cmds, env);
 		else
@@ -129,6 +130,7 @@ int	child_process(t_cmds *cmd, char **env, t_env *envs)
 			free_lexed(envs);
 			free_parsed(envs);
 			free_all(envs);
+			rl_clear_history();
 			exit(0);
 		}
 	}
@@ -144,6 +146,12 @@ int	launcher(t_cmds *cmds, t_env *envs)
 	int	ret;
 
 	ret = 0;
+	if (is_builtin(cmds) == 0)
+	{
+		if (cmds->next)
+			launcher(cmds->next, envs);
+		return (0);
+	}
 	cmds->fork = fork();
 	if (cmds->fork < 0)
 		perror(NULL);
@@ -200,13 +208,21 @@ int	execution(t_env *envs)
 	status_code = launcher(cmds, envs);
 	while (cmds)
 	{
-		if (cmds->fork > 0)
+		if (is_builtin(cmds))
 		{
-			waitpid(cmds->fork, &status, 0);
-			if (WIFEXITED(status) != 0)
-				status_code = WEXITSTATUS(status);
-			else
-				status_code = check_sig(status);
+			if (cmds->fork > 0)
+			{
+				waitpid(cmds->fork, &status, 0);
+				if (WIFEXITED(status) != 0)
+					status_code = WEXITSTATUS(status);
+				else
+					status_code = check_sig(status);
+				cmds = cmds->next;
+			}
+		}
+		else
+		{
+			status_code = child_process(cmds, envs->env, envs);
 			cmds = cmds->next;
 		}
 	}

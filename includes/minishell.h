@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/25 19:57:18 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/27 20:13:39 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef struct s_env {
 	t_token	*parsed;
 	int	status_code;
 	char	*error;
+	char	*cupath;
 	char	**temp;
 	uint32_t	nb_token;
 	uint32_t	nb_parsed;
@@ -132,6 +133,7 @@ int	signal_init(void);
 /********BUILT-IN*********/
 
 void	ft_exit(t_env *data, char **strs);
+int	cd_main(char **av, t_env *envs);
 
 /*********UTILS*************/
 
@@ -142,6 +144,7 @@ char	*ft_itoa(int n);
 char	*ft_strchr(const char *s, int c);
 size_t	ft_strlen(const char *str);
 int	ft_isdigit(int c);
+int	ft_strcmp(char *s1, char *s2);
 int	is_str_env(char c);
 int	is_char_env(char c);
 int	ft_mcpy(char *s1, char **s2);
