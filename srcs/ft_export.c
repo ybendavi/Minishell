@@ -6,11 +6,11 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 19:58:50 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/27 20:57:38 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/28 00:10:41 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 int	print_env_w_export(t_env *data)
 {
@@ -23,6 +23,8 @@ int	print_env_w_export(t_env *data)
 		strs=ft_split(data->env[i], '=');
 		if (!strs)
 			return (-1);
+		if (strs[1] == NULL)
+			strs[1] = ft_strdup("");
 		printf("export %s=\"%s\"\n", strs[0], strs[1]);
 		free(strs[0]);
 		free(strs[1]);
@@ -66,7 +68,7 @@ int	realloc_env(t_env *data, int add)
 	i = 0;
 	while (data->env[i])
 		i++;
-	new = ft_calloc((sizeof(char *) * i + add + 1));
+	new = ft_calloc(sizeof(char *) * (i + add + 1));
 	if (!new)
 		return (-1);
 	i = 0;
@@ -102,6 +104,53 @@ int	fill_new_env(t_env *data, char **strs)
 	return (0);
 }
 
+int	cmp_var_env(char **env, char *str, int y)
+{
+	int	i;
+
+	i = 0;
+	while (env[y][i] && str[i] && env[y][i] != '=' && str[i] != '=')
+	{
+		if (env[y][i] != str[i])
+			return (0);
+		i++;
+	}
+	if (env[y][i] == 0 || str[i] == 0)
+		return (0);
+	if (env[y][i] != str[i])
+		return (0);
+	free(env[y]);
+	env[y] = ft_strdup(str);
+	if (!env[y])
+		return (-1);
+	return (1);
+}
+
+int	check_already_exist(char **env, char **strs)
+{
+	int	i;
+	int	y;
+	int	count;
+	int	ret;
+
+	i = 1;
+	count = 0;
+	while (strs[i])
+	{
+		y = 0;
+		while (env[y])
+		{
+			ret = cmp_var_env(env, strs[i], y);
+			if (ret == -1)
+				return (-1);
+			count += ret; 
+			y++;
+		}
+		i++;
+	}
+	return (count);
+}
+
 int	ft_export(char **strs, t_env *data)
 {
 	int	i;
@@ -119,10 +168,16 @@ int	ft_export(char **strs, t_env *data)
 			return (not_valid(strs[i]));
 		i++;
 	}
+	ret = check_already_exist(data->env, strs);
+	if (ret == -1)
+		return (-1);
+	i -= ret;
+	if (i == 1)
+		return (0);
 	if (realloc_env(data, i - 1))
 		return (-1);
 	if (fill_new_env(data, strs))
 		return (-1);
-	return (0);
+	return (mark);
 }
 
