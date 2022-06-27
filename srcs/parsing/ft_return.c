@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_return.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/27 19:48:19 by ccottin           #+#    #+#             */
+/*   Updated: 2022/06/27 20:13:41 by ccottin          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	free_lexed(t_env *data)
@@ -44,6 +56,21 @@ void	free_parsed(t_env *data)
 	data->nb_parsed = 0;
 }
 
+void	free_env(t_env *data)
+{
+	int	i;
+
+	i = 0;
+	while (data->env[i])
+	{
+		if (data->env[i])
+			free(data->env[i]);
+		i++;
+	}
+	if (data->env)
+		free(data->env);
+}
+
 void	free_all(t_env *data)
 {
 	unsigned int	i;
@@ -57,6 +84,7 @@ void	free_all(t_env *data)
 	}
 	if (data->tab)
 		free(data->tab);
+	free_env(data);
 }
 
 int	ft_return(int ret, t_env *data)
@@ -80,8 +108,8 @@ int	ft_return(int ret, t_env *data)
 		free_lexed(data);
 	if (ret == 1)
 	{
-		free_all(data);
 		rl_clear_history();
+		free_all(data);
 		write(1, "exit\n", 5);
 		exit(0);
 	}

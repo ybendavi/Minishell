@@ -1,19 +1,5 @@
 #include "minishell.h"
 
-int	ft_cmp(char *s1, char *s2)
-{
-	unsigned int	i;
-
-	if (!s1 || !s2)
-		return (-1);
-	i = 0;
-	while ((s1[i] || s2[i]) && s1[i] == s2[i])
-		i++;
-	if (ft_strlen(s1) == i && ft_strlen(s2) == i)
-		return (1);
-	return (0);
-}
-
 int	handle_buff(t_env *data, char **buff, char **env)
 {
 	int	ret;
@@ -55,9 +41,8 @@ int	main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
-	if (ft_init(&data))
+	if (ft_init(&data, env))
 		ft_return(1, &data);
-	data.env = env;
 	data.status_code = 0;
 	while (7)
 	{
