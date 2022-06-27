@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 19:58:50 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/27 19:42:33 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/27 20:57:38 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,18 @@
 int	print_env_w_export(t_env *data)
 {
 	int	i;
+	char	**strs;
 
 	i = 0;
 	while (data->env[i])
 	{
-		printf("export %s\n", data->env[i]);
+		strs=ft_split(data->env[i], '=');
+		if (!strs)
+			return (-1);
+		printf("export %s=\"%s\"\n", strs[0], strs[1]);
+		free(strs[0]);
+		free(strs[1]);
+		free(strs);
 		i++;
 	}
 	return (0);
@@ -35,7 +42,7 @@ int	is_good_str(char *str)
 	i++;
 	while (str[i] && is_str_env(str[i]))
 		i++;
-	if (str[i] == '=')
+	if (str[i] == '=' && i != 0)
 		return (0);
 	else if (str[i] == 0)
 		return (2);
@@ -70,8 +77,8 @@ int	realloc_env(t_env *data, int add)
 			return (-1);
 		i++;
 	}
-	data->env = new;
 	free_env(data);	
+	data->env = new;
 	return (0);
 }
 
@@ -119,12 +126,3 @@ int	ft_export(char **strs, t_env *data)
 	return (0);
 }
 
-int	env_init(t_env *data, char **env);
-
-int	main(int ac, char **av, char **env)
-{
-	t_env *data;
-
-	env_init(data, env);
-	ft_export(av, data);
-}

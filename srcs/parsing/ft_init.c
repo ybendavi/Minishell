@@ -17,7 +17,6 @@ int	set_env_i(t_env *data)
 {
 	char	**ret;
 	int	i;
-
 	ret = ft_calloc((sizeof(char *) * 4));
 	if (!ret)
 		return (-1);
@@ -59,24 +58,18 @@ int	env_init(t_env *data, char **env)
 	return (0);
 }
 
-int	ft_init(t_env *data, char **env)
+int	ft_init(t_env *data)
 {
 	int	ret;
 
 	data->tab = NULL;
 	set_null(data);
-	if (env_init(data, env))
+	if (env_init(data->env))
 		return (-1);
 	if (token_init(data) == -1)
 		return (-1);
 	ret = signal_init();
 	if (ret)
 		printf("sigerror, ret = %d\n", ret);
-	int i = 0;
-	while (data->env[i])
-	{
-		printf("%s\n", data->env[i]);
-		i++;
-	}
 	return (0);
 }

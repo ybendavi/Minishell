@@ -6,11 +6,11 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 19:48:19 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/27 19:48:39 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/27 20:13:41 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 void	free_lexed(t_env *data)
 {
@@ -108,6 +108,7 @@ int	ft_return(int ret, t_env *data)
 		free_lexed(data);
 	if (ret == 1)
 	{
+		rl_clear_history();
 		free_all(data);
 		write(1, "exit\n", 5);
 		exit(0);

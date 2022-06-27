@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/27 19:41:34 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/27 20:58:56 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ int	signal_init(void);
 /********BUILT-IN*********/
 
 void	ft_exit(t_env *data, char **strs);
+int	ft_export(char **strs, t_env *data);
 
 /*********UTILS*************/
 
