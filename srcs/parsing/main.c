@@ -37,6 +37,7 @@ int	handle_buff(t_env *data, char **buff, char **env)
 	if (ret)
 		return (ft_return(ret, data));
 	add_history(*buff);
+	rl_clear_history();
 	free(*buff);
 	*buff = NULL;
 	return (0);
@@ -55,9 +56,8 @@ int	main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
-	if (ft_init(&data))
+	if (ft_init(&data, env))
 		ft_return(1, &data);
-	data.env = env;
 	data.status_code = 0;
 	while (7)
 	{
