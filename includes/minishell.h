@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/27 20:13:39 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/27 22:21:58 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ int	signal_init(void);
 
 void	ft_exit(t_env *data, char **strs);
 int	cd_main(char **av, t_env *envs);
+int	pwd_main(t_env *envs);
 
 /*********UTILS*************/
 

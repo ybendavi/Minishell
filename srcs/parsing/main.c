@@ -61,9 +61,12 @@ int	main(int ac, char **av, char **env)
 	data.status_code = 0;
 	while (7)
 	{
-		buff = readline(0);
+		buff = readline("minishell$ ");
 		if (!buff)
+		{
 			data.status_code = ft_return(1, &data);
+			write(1, "\n", 1);
+		}
 		data.status_code = handle_buff(&data, &buff, env);
 		if (!data.status_code)
 		{

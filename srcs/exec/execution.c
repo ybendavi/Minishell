@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/27 20:55:54 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/27 21:32:49 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,13 @@ char	**set_env(char **env)
 	int		i;
 
 	i = 0;
+	paths = NULL;
+	if (env == NULL)
+		return (NULL);
 	while (env[i] && ft_strnstr(env[i], "PATH=", 6) == NULL)
 		i++;
-	paths = ft_split(ft_strchr(env[i], '=') + 1, ':');
+	if (env[i])
+		paths = ft_split(ft_strchr(env[i], '=') + 1, ':');
 	if (!paths)
 		return (NULL);
 	i = 0;
