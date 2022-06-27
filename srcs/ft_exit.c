@@ -6,19 +6,11 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 19:26:46 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/26 12:19:33 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/27 22:02:19 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include "minishell.h"
-
-int	ft_strlen(char *str)
-{
-	int i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}
+#include "minishell.h"
 
 int	ft_mini_atoi(char *str)
 {
@@ -39,8 +31,7 @@ int	ft_mini_atoi(char *str)
 
 int	ft_get_status(char *str)
 {
-	int	ret;
-	int	i;
+	unsigned int	i;
 	char	mark;
 
 	i = 0;
@@ -68,8 +59,11 @@ void	ft_exit(t_env *data, char **strs)
 	int	nb;
 
 	nb = 0;
-	if (strs[1])
-		nb = ft_get_status(strs[1]);	
+	if (strs)
+	{
+		if (strs[1])
+			nb = ft_get_status(strs[1]);
+	}
 	free_parsed(data);
 	free_lexed(data);
 	freeer(data);
