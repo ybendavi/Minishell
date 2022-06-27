@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/25 19:56:55 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/26 22:54:36 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,28 @@ int	close_fds(t_cmds *cmd)
 		tmp = tmp->prev;
 	while (tmp)
 	{
-		if (tmp->in != 0 && tmp != cmd)
+		if (tmp->in != 0 && tmp != cmd && tmp->in != -1)
 			close(tmp->in);
-		if (tmp->out != 1 && tmp != cmd && tmp != cmd->prev)
+		if (tmp->out != 1 && tmp != cmd && tmp != cmd->prev && tmp->out != -1)
 			close(tmp->out);
 		tmp = tmp->next;
 	}
 	return (0);
+}
+void	quit_proc(t_cmds *tmp, t_env *envs)
+{
+	close_fds(tmp);
+	if (tmp->in != 0 && tmp->in != -1)
+	{
+		close(tmp->in);
+	}
+	if (tmp->out != 1 && tmp->out != -1)
+		close(tmp->out);
+	freeer(envs);
+	free_lexed(envs);
+	free_parsed(envs);
+	free_all(envs);
+	exit(EXIT_FAILURE);
 }
 
 int	child_process(t_cmds *cmd, char **env, t_env *envs)
@@ -79,6 +94,8 @@ int	child_process(t_cmds *cmd, char **env, t_env *envs)
 
 	in = dup(0);
 	out = dup(1);
+	if (cmd->in == -1 || cmd->out == -1)
+		quit_proc(cmd, envs);
 	if (cmd->pfd_in[0] != -1)
 	{
 		close(cmd->pfd_in[1]);
@@ -103,7 +120,18 @@ int	child_process(t_cmds *cmd, char **env, t_env *envs)
 	if (is_builtin(cmd) == 0)
 		builtins(cmd, envs->env, envs);
 	else
-		execve(cmd->path, cmd->cmds, env);
+	{
+		if (cmd->cmd)
+			execve(cmd->path, cmd->cmds, env);
+		else
+		{		
+			freeer(envs);
+			free_lexed(envs);
+			free_parsed(envs);
+			free_all(envs);
+			exit(0);
+		}
+	}
 //	close(0);
 //	close(1);
 	dup2(in, 0);
@@ -126,11 +154,11 @@ int	launcher(t_cmds *cmds, t_env *envs)
 	}
 	else if (cmds->fork > 0)
 	{
-		if (cmds->in != 0)
+		if (cmds->in != 0 && cmds->in != -1)
 		{
 			close(cmds->in);
 		}
-		if (cmds->prev && cmds->prev->out != 1)
+		if (cmds->prev && cmds->prev->out != 1 && cmds->prev->out != -1)
 		{
 			close(cmds->prev->out);
 		}
