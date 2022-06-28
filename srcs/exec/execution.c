@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/28 19:37:48 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/28 20:37:36 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,9 @@ int	child_process(t_cmds *cmd, char **env, t_env *envs)
 		if (cmd->cmd && is_builtin(cmd) == 0)
 			exit(builtins(cmd, envs->env, envs));
 		else if (cmd->cmd && is_builtin(cmd))
+		{
 			execve(cmd->path, cmd->cmds, env);
+		}
 		else
 		{		
 			freeer(envs);
@@ -142,8 +144,8 @@ int	child_process(t_cmds *cmd, char **env, t_env *envs)
 	}
 //	close(0);
 //	close(1);
-	dup2(in, 0);
-	dup2(out, 1);
+	//dup2(in, 0);
+	//dup2(out, 1);
 	exit(exec_errors(0, cmd->cmd, envs));
 }
 
@@ -191,8 +193,11 @@ int	check_sig(int status)
 	{
 		sig = WTERMSIG(status);
 		str = sig_error(sig);
-		write(2, str, ft_strlen(str));
-		write(2, "\n", 1);
+		if (str)
+		{
+			write(2, str, ft_strlen(str));
+			write(2, "\n", 1);
+		}
 		return (128 + sig);
 	}
 	return (0);
