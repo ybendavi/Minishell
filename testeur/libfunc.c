@@ -1,23 +1,5 @@
 #include "tester.h"
 
-char	*ft_strdup(const char *s)
-{
-	char	*dest;
-	int		i;
-
-	i = 0;
-	dest = (char *)malloc(sizeof(char) * (ft_strlen(s) + 1));
-	if (!dest)
-		return (0);
-	while (s[i])
-	{
-		dest[i] = s[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
-
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	unsigned int	i;
@@ -96,7 +78,7 @@ char	**ft_split(char const *s, char c)
 		return (0);
 	len = ft_strslen(s, c);
 	i = 0;
-	strs = (char **)ft_calloc((len + 1) * sizeof(char *));
+	strs = (char **)ft_calloc((len + 1), sizeof(char *));
 	if (!(strs))
 		return (NULL);
 	if (len == 0)

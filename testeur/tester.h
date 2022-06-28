@@ -16,11 +16,8 @@
 
 char	**ft_split(char const *s, char c);
 int	ft_strncmp(const char *s1, const char *s2, size_t n);
-char	*ft_strdup(const char *s);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strnstr(const char *big, const char *little, size_t len);
-char	*ft_strchr(const char *s, int c);
-size_t	ft_strlen(const char *s);
 int		get_next_line(int fd, char **line);
 
 #endif

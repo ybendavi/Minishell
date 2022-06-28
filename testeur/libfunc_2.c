@@ -1,33 +1,5 @@
 #include "tester.h"
 
-size_t	ft_strlen(const char *s)
-{
-	int	i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
-
-char	*ft_strchr(const char *s, int c)
-{
-	int		i;
-	char	*s1;
-
-	i = 0;
-	s1 = (char *)s;
-	while (s1[i])
-	{
-		if (s1[i] == (unsigned char)c)
-			return (&s1[i]);
-		i++;
-	}
-	if (s1[i] == c)
-		return (&s1[i]);
-	return (NULL);
-}
-
 char	*ft_strnstr(const char *big, const char *little, size_t len)
 {
 	size_t	i;
@@ -64,7 +36,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 	if (s1 == NULL || s2 == NULL)
 		return (0);
-	dest = (char *)ft_calloc(sizeof(char) *
+	dest = (char *)ft_calloc(sizeof(char),
 			(ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!(dest))
 		return (NULL);
