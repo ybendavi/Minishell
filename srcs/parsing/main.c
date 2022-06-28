@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	handle_buff(t_env *data, char **buff, char **env)
+int	handle_buff(t_env *data, char **buff)
 {
 	int	ret;
 
@@ -19,7 +19,7 @@ int	handle_buff(t_env *data, char **buff, char **env)
 			i++;
 		}
 
-	ret = init_parser(data, env);
+	ret = init_parser(data, data->env);
 	if (ret)
 		return (ft_return(ret, data));
 	add_history(*buff);

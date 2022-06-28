@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 23:00:42 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/28 00:02:50 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/28 13:42:16 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ int	ft_unset(char **strs, t_env *data)
 
 	mark = 0;
 	i = 1;
+	if (!strs)
+		return (0);
 	if (!strs[1])
 		return (0);
 	while (strs[i])

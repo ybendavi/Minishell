@@ -1,0 +1,75 @@
+                 
+			
+>
+<
+>>
+<<
+<>
+><
+>>>>>
+>>>>>>>>>>>>
+<<<<<<<<<<<<
+<<<<<
+> > >
+>> >> >>
+>>>> >> >>
+< < <
+<< << <<
+<<<< << <<
+/
+//
+/.
+/./../../../../..
+//////
+-
+|
+| hola
+| | |
+||
+|||||||
+>>|><
+"hola"
+'hola'
+''
+ABC=hola
+hola
+Makefile
+echo
+echo -n
+echo Hola
+echoHola
+echo-nHola
+echo -n hOla
+echo "-n" HOla
+echo -nHolai
+""''echo hola""'''' que""'' tal""'' | cat -e
+echo Hola -n
+echo salut ca va
+echo			salut
+echo       bg
+echo \n hola
+echo "               " | cat -e
+echo -n -n
+echo -n -n HOLA
+echo                 | cat -e
+echo -nnnnnnn
+echo -n -nnnn 
+echo -n -nnnn hola -nnnnn
+echo -------------n
+echo -nnn ---------n
+echo -n -nnnn-nnn
+echo $
+echo $?
+echo $?$
+echo $? | echo $? | echo $?
+echo "     $     " | cat -e
+echo '     $     ' | cat -e
+echo $HOME
+echo $UID
+echo $HOME9
+echo $9HOME
+echo $HOME%
+echo $UID$HOME
+echo Le path de mon HOME est $HOME
+echo $USER$var\$USER$USER\$USERtest$USER
+echo $hola*
