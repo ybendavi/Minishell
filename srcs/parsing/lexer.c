@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 22:24:47 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/06 21:01:25 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/28 16:47:59 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,19 @@
 
 int	init_lexer(t_env *data, char **temp, char *line)
 {
+	int	token_count;
+
 	data->nb_token = 0;
-	data->lexed = ft_calloc(sizeof(t_token) * 100);//DYMANIQUE
-	if (!data->lexed)
-		return (-1);
 	*temp = ft_calloc(ft_strlen(line) + 2);
 	if (!temp)
 		return (-1);
+	token_count = count_lexer_token(line, temp);
+	printf("token_count = %d\n", token_count);
+	if (token_count < 0)
+		return (token_count);
+	data->lexed = ft_calloc(sizeof(t_token) * (token_count + 7));
+	if (!data->lexed)
+		return (-1);	
 	return (0);
 }
 
@@ -81,10 +87,10 @@ int	lexer(char *line, t_env *data)
 
 	if (ft_cmp(line, "") == 1)
 		return (0);
-	if (init_lexer(data, &temp, line) == -1)
-		return (-1);
+	ret = init_lexer(data, &temp, line);
+	if (ret)
+		return (ret);
 	i = 0;
-	ret = 0;
 	while (line[i])
 	{
 		ret = lexer2(line, &temp, &i, data);
@@ -98,5 +104,6 @@ int	lexer(char *line, t_env *data)
 	if (ft_strlen(temp) != 0)
 		get_lexed(&temp, data, STR);
 	free(temp);
+	printf("real nb of token = %d\n", data->nb_token);
 	return (0);
 }

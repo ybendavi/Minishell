@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/27 23:59:04 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/28 17:26:40 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ typedef struct s_env {
 
 /****exec*****/
 char	**ft_split(char const *s, char c);
+char	**set_env(char **env);
 char	*ft_strdup(const char *s);
 char	*ft_strnstr(const char *big, const char *little, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
@@ -90,9 +91,8 @@ int	set_paths(t_env *env);
 int	exec_errors(int status_code, const char *cmd, t_env *envs);
 int	is_builtin(t_cmds *cmds);
 int	builtins(t_cmds *cmds, char **env, t_env *envs);
-void	paths_free(char **paths);
-char	**set_env(char **env);
 int	execution(t_env *envs);
+void	paths_free(char **paths);
 void	free_cmds_table(t_cmds *tbls);
 void	free_pfds(t_cmds *cmds);
 void	freeer(t_env *envs);
@@ -108,6 +108,11 @@ int	handle_redir(char *line, unsigned int *i, char **temp, t_env *data);
 int	handle_quote(char *line, unsigned int *i, char **temp, t_env *data);
 int	handle_white_space(unsigned int *i, char *line, char **temp,
 		t_env *data);
+int	count_lexer_token(char *line, char **temp);
+int	count_env(char **temp, unsigned int *i, char *line);
+int	count_quote(char *line, unsigned int *i, char **temp);
+int	count_parser_token(t_env *data);
+int	count_temp(char **temp);
 int	init_parser(t_env *data, char **env);
 int	is_env(unsigned int *i, t_env *data, char **env);
 int	is_str(unsigned int *i, t_env *data);

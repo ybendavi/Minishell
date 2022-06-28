@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	handle_buff(t_env *data, char **buff, char **env)
+int	handle_buff(t_env *data, char **buff)
 {
 	int	ret;
 
@@ -20,7 +20,10 @@ int	handle_buff(t_env *data, char **buff, char **env)
 			i++;
 		}
 
-	ret = init_parser(data, env);
+	ret = init_parser(data, data->env);
+	if (ret)
+		return (ft_return(ret, data));
+	add_history(*buff);
 	free(*buff);
 	*buff = NULL;
 	if (ret)
@@ -52,7 +55,7 @@ int	main(int ac, char **av, char **env)
 			data.status_code = ft_return(1, &data);
 			write(1, "\n", 1);
 		}
-		data.status_code = handle_buff(&data, &buff, env);
+		data.status_code = handle_buff(&data, &buff);
 		if (!data.status_code)
 		{
 		//test
