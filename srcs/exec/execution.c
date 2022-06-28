@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/27 21:32:49 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/28 20:32:03 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,8 +189,11 @@ int	check_sig(int status)
 	{
 		sig = WTERMSIG(status);
 		str = sig_error(sig);
-		write(2, str, ft_strlen(str));
-		write(2, "\n", 1);
+		if (str)
+		{
+			write(2, str, ft_strlen(str));
+			write(2, "\n", 1);
+		}
 		return (128 + sig);
 	}
 	return (0);

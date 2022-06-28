@@ -32,7 +32,6 @@ int    builtins(t_cmds *cmds, char **env, t_env *envs)
 	int	ret;
 
 	(void)env;
-	ret = 0;
 	if (ft_strcmp(cmds->cmd, "cd") == 0)
 		ret = cd_main(cmds->cmds, envs);
 	if (ft_strcmp(cmds->cmd, "pwd") == 0)
@@ -44,7 +43,7 @@ int    builtins(t_cmds *cmds, char **env, t_env *envs)
 	if (ft_strcmp(cmds->cmd, "env") == 0)
 		ret = ft_env(envs, cmds->cmds);
 	if (ft_strcmp(cmds->cmd, "exit") == 0)
-		ft_exit(envs, cmds->cmds);
+		ret = ft_exit(envs, cmds->cmds);
 	if (ft_strcmp(cmds->cmd, "echo") == 0)
 		ret = ft_echo(cmds->cmds);
 	return (ret);

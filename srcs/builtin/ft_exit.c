@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 19:26:46 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/28 14:00:22 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/28 19:27:13 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,22 +54,31 @@ int	ft_get_status(char *str)
 	return (ft_mini_atoi(str) * mark);
 }
 
-void	ft_exit(t_env *data, char **strs)
+int	too_many(void)
+{
+	write(2, "bash: exit: too many arguments\n", 32);
+	return (127);
+}
+
+int	ft_exit(t_env *data, char **strs)
 {
 	int	nb;
 
 	if (!strs)
-		return ;
+		return (0);
 	nb = 0;
 	if (strs)
 	{
 		if (strs[1])
 			nb = ft_get_status(strs[1]);
 	}
+	if (strs[1] && strs[2])
+		return (too_many());
 	free_parsed(data);
 	free_lexed(data);
 	freeer(data);
 	free_all(data);
 	write(1, "exit\n", 5);
 	exit(nb);
+	return (0);
 }
