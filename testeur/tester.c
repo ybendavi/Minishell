@@ -7,20 +7,22 @@ int	main(int ac, char **av, char **env)
 	char	*buff;
 	pid_t	minishell;
 	pid_t	posix;
+	pid_t	read_f;
 	char	**bash_args;
 	char 	**min_args;
 	int	pfd[2];
 	int	pfd1[2];
-	int	pfd2[2];
-	int	pfd3[2];
+	int	fd_min;
+	int	fd_pos;
 	char	*buffer;
 	int	ret;
 	int	i;
+	int	status;
 
 	pipe(pfd);
 	pipe(pfd1);
-	pipe(pfd2);
-	pipe(pfd3);
+	fd_min = open("minishell_out", O_RDWR | O_CREAT, 0666 | O_APPEND);
+	fd_pos = open("pos_out", O_RDWR | O_CREAT, 0666 | O_APPEND);
 	line = NULL;
 	bash_args = malloc(sizeof(char **) * 3);
 	bash_args[0] = ft_strdup("bash");
@@ -29,34 +31,28 @@ int	main(int ac, char **av, char **env)
 	min_args = malloc(sizeof(char **) * 2);
 	min_args[0] = ft_strdup("minishell");
 	min_args[1] = NULL;
-	buffer = ft_calloc(sizeof(char) * 10000);
+	buffer = ft_calloc(sizeof(char),  1000000);
 	minishell = fork();
 	if (minishell == 0)
 	{
-		close(pfd3[0]);
-		close(pfd3[1]);
-		close(pfd2[0]);
 		close(pfd[1]);
 		close(pfd1[0]);
 		close(pfd1[1]);
 		dup2(pfd[0], 0);
-		dup2(pfd2[1], 1);
-		close(pfd2[1]);
+		dup2(fd_min, 1);
+		dup2(fd_min, 2);
 		close(pfd[0]);
 		execve("../minishell", min_args, env);
 	}
 	posix = fork();
 	if (posix == 0)
 	{
-		close(pfd2[0]);
-		close(pfd2[1]);
-		close(pfd3[0]);
 		close(pfd[1]);
 		close(pfd[0]);
 		close(pfd1[1]);
 		dup2(pfd1[0], 0);
-		dup2(pfd3[1], 1);
-		close(pfd3[1]);
+		dup2(fd_pos, 1);
+		dup2(fd_pos, 2);
 		close(pfd1[0]);
 		execve("/bin/bash", bash_args, env);
 	}
@@ -65,29 +61,18 @@ int	main(int ac, char **av, char **env)
 		fd = open("test.sh", O_RDONLY);
 		close(pfd[0]);
 		close(pfd1[0]);
-		close(pfd2[1]);
-		close(pfd3[1]);
 		while (get_next_line(fd, &line))
 		{
 			write(pfd[1], line, ft_strlen(line));
 			write(pfd[1], "\n", 1);
 			write(pfd1[1], line, ft_strlen(line));
 			write(pfd1[1], "\n", 1);
-			i = 0;
-			while (read(pfd2[0], &buffer[i], 1) > 0)
-				i++;
-			printf("minishell_out:%s\n", buffer);
-			ft_bzero(buffer, i);
-			i  = 0;
-			while (read(pfd3[0], &buffer[i], 1) > 0)
-				i++;
-			printf("posix_out:%s\n", buffer);
-			ft_bzero(buffer, i);
-			readline("ENTER");
 			free(line);
 		}
-		wait(0);
+		wait(&status);
 		close(fd);
+		close(fd_min);
+		close(fd_pos);
 		fd = 0;
 		while (bash_args[fd])
 		{
