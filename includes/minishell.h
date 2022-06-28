@@ -136,6 +136,7 @@ int	signal_init(void);
 
 int	ft_export(char **strs, t_env *data);
 int	cd_main(char **av, t_env *envs);
+int	pwd_main(t_env *envs);
 int	ft_env(t_env *data, char **strs);
 int	ft_unset(char **strs, t_env *data);
 int	ft_echo(char **strs);

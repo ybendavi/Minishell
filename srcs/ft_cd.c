@@ -11,6 +11,8 @@ int	ft_cd_no_args(t_env *envs)
 			i++;
 		if (ft_strnstr(envs->env[i], "HOME=", 5) != NULL)
 		{
+			if (envs->cupath)
+				free(envs->cupath);
 			envs->cupath = ft_strdup(&(ft_strchr(envs->env[i], '=')[1]));
 			if (chdir(envs->cupath) == -1)
 				perror(envs->cupath);
@@ -46,6 +48,15 @@ int	cd_main(char **av, t_env *envs)
 		}
 		if (i == 1)
 			return (ft_cd_no_args(envs));
+		if (i == 2)
+		{
+			if (chdir(av[1]) == -1)
+			{
+				perror(av[1]);
+				return (1);
+			}
+			return (0);
+		}
 	}
 	return (0);
 	//return (ft_cd(av, envs));
