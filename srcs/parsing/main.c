@@ -4,6 +4,7 @@ int	handle_buff(t_env *data, char **buff, char **env)
 {
 	int	ret;
 
+	add_history(*buff);
 	ret = lexer(*buff, data);
 	if (ret)
 	{
@@ -11,20 +12,19 @@ int	handle_buff(t_env *data, char **buff, char **env)
 		*buff = NULL;
 		return (ft_return(ret, data));
 	}
-	printf("/°\\_/°\\_/°\\_/°\\ Lexer Output /°\\_/°\\_/°\\_/°\\\n\n");
+//	printf("/°\\_/°\\_/°\\_/°\\ Lexer Output /°\\_/°\\_/°\\_/°\\\n\n");
 		unsigned int	i = 0;
 		while (i < data->nb_token)
 		{
-			printf("%d = %d %d %s\n", i, data->lexed[i].type, data->lexed[i].size, data->lexed[i].token);
+		//	printf("%d = %d %d %s\n", i, data->lexed[i].type, data->lexed[i].size, data->lexed[i].token);
 			i++;
 		}
 
 	ret = init_parser(data, env);
-	if (ret)
-		return (ft_return(ret, data));
-	add_history(*buff);
 	free(*buff);
 	*buff = NULL;
+	if (ret)
+		return (ft_return(ret, data));
 	return (0);
 }
 
@@ -57,13 +57,13 @@ int	main(int ac, char **av, char **env)
 		{
 		//test
 			unsigned int i = 0;
-			printf("/°\\_/°\\_/°\\_/°\\ Parser Output /°\\_/°\\_/°\\_/°\\\n\n");
+			//printf("/°\\_/°\\_/°\\_/°\\ Parser Output /°\\_/°\\_/°\\_/°\\\n\n");
 			while (i < data.nb_parsed)
 			{
-				printf("%d = %d %d %s\n", i, data.parsed[i].type, data.parsed[i].size, data.parsed[i].token);
+			//	printf("%d = %d %d %s\n", i, data.parsed[i].type, data.parsed[i].size, data.parsed[i].token);
 				i++;
 			}
-			printf("______________________________________________________\n");
+			//printf("______________________________________________________\n");
 		//end-test
 			ret = parsing(&data);
 		//	if (ret)
@@ -81,16 +81,16 @@ int	main(int ac, char **av, char **env)
 					{
 						while (tmp->cmds[i])
 						{
-							printf("cmds:%s\n", tmp->cmds[i]);
+						//	printf("cmds:%s\n", tmp->cmds[i]);
 							i++;
 						}
 					}
-				if (tmp->cmd)
-					printf("cmd:%s\n", tmp->cmd);
-				printf("in:%d\nout:%d\n", tmp->in, tmp->out);
+				//if (tmp->cmd)
+				//	printf("cmd:%s\n", tmp->cmd);
+				//printf("in:%d\nout:%d\n", tmp->in, tmp->out);
 					tmp = tmp->next;
 				}
-				printf("\n======= OUTPUT =======\n");
+				//printf("\n======= OUTPUT =======\n");
 			}
 		//end-test
 			data.status_code = execution(&data);
@@ -102,7 +102,7 @@ int	main(int ac, char **av, char **env)
 			free_lexed(&data);
 			free_parsed(&data);
 		}
-		printf("status_code:%d\n", data.status_code);
+		//printf("status_code:%d\n", data.status_code);
 		
 		reset(&data);
 	}

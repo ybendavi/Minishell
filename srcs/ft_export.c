@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 19:58:50 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/28 00:10:41 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/28 17:16:33 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,6 @@ int	ft_export(char **strs, t_env *data)
 		return (-1);
 	if (fill_new_env(data, strs))
 		return (-1);
-	return (mark);
+	return (0);
 }
 
