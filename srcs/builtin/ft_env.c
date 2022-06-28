@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 21:12:05 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/27 22:46:37 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/28 13:43:31 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	ft_env(t_env *data, char **strs)
 {
 	int	i;
 
+	if (!strs)
+		return (0);
 	if (strs[1])
 	{
 		write(2, "env: ", 5);

@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 23:13:31 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/26 22:22:13 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/28 16:44:38 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,7 @@ int	digit_var(char **temp, t_env *data, unsigned int *i, char *line)
 	(*i)++;
 	if (line[*i] == '0')
 		return (get_lexed(ft_cpy(temp, "bash"), data, STR));
-	else
-		return (get_lexed(temp, data, STR));
+	return (0);
 }
 
 int	handle_env(char **temp, t_env *data, unsigned int *i, char *line)
@@ -73,7 +72,7 @@ int	handle_env(char **temp, t_env *data, unsigned int *i, char *line)
 int	is_double_redir(char r, char **temp, t_env *data)
 {
 	if (r == '>')
-	{
+	 {
 		if (get_lexed(ft_cpy(temp, ">>"), data, REDIR_ADD))
 			return (-1);
 	}
@@ -110,7 +109,6 @@ int	handle_redir(char *line, unsigned int *i, char **temp, t_env *data)
 	return (0);
 }
 
-//si on en abesoin, ici rajouter une decoupe des whitespace char par char un peu comme le tableau de token
 int	handle_white_space(unsigned int *i, char *line, char **temp,
 		t_env *data)
 {

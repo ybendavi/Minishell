@@ -6,13 +6,12 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 12:21:56 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/27 19:53:48 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/28 17:33:46 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//	else if (data->lexed[*i + 1].token[0] == '?')(voir avec chef comment stocker ca et ou et garder si c simple quote)
 int	get_env_var(char **env, char **var)
 {
 	int		i;

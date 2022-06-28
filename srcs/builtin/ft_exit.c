@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 19:26:46 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/27 22:02:19 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/28 14:00:22 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ void	ft_exit(t_env *data, char **strs)
 {
 	int	nb;
 
+	if (!strs)
+		return ;
 	nb = 0;
 	if (strs)
 	{

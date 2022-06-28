@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 19:44:25 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/25 21:03:59 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/28 13:43:07 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@ int	ft_echo(char **strs)
 	int	i;
 	int	ret;
 
+	if (!strs)
+		return (0);
 	mark = 0;
-	if (ft_cmp(strs[1], "-n"))
+	if (ft_strncmp(strs[1], "-n", 2))
 		mark = 1;
 	i = 1 + mark;
 	while (strs[i])
