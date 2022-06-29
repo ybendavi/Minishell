@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/29 22:44:37 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/29 22:57:18 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,17 +59,17 @@ typedef struct command_table_list
 }					t_cmds;
 
 typedef struct s_env {
-	t_token	*tab;
-	t_token	*lexed;
-	t_token	*parsed;
-	char	*error;
-	char	*cupath;
-	char	**temp;
-	t_cmds	*c_tbls;
-	char	**env;
-	int		status_code;
-	int		nb_token;
-	int		nb_parsed;
+	t_token			*tab;
+	t_token			*lexed;
+	t_token			*parsed;
+	char			*error;
+	char			*cupath;
+	char			**temp;
+	t_cmds			*c_tbls;
+	char			**env;
+	int				status_code;
+	unsigned int	nb_token;
+	unsigned int	nb_parsed;
 }			t_env;
 
 /****exec*****/

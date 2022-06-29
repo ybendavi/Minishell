@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 19:48:19 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/29 22:16:36 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/29 22:58:03 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	free_parsed(t_env *data)
 
 void	free_env(t_env *data)
 {
-	int	i;
+	unsigned int	i;
 
 	i = 0;
 	while (data->env[i])
