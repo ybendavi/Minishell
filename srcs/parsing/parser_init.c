@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:49:03 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/29 19:49:11 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/29 22:28:52 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	get_parsed(t_env *data, t_token token)
 	return (0);
 }
 
-int	check_type(unsigned int *i, t_env *data, char **env)
+int	check_type(unsigned int *i, t_env *data)
 {
 	char	*str;
 
@@ -42,7 +42,7 @@ int	check_type(unsigned int *i, t_env *data, char **env)
 	else if (data->lexed[*i].type == PIPE)
 		return (is_pipe(*i, data));
 	else if (data->lexed[*i].type == ENV)
-		return (is_env(i, data, env, str));
+		return (is_env(i, data, str));
 	else if (data->lexed[*i].type == STR)
 		return (is_str(i, data));
 	return (0);
@@ -73,7 +73,7 @@ int	set_parser(t_env *data)
 	return (0);
 }
 
-int	init_parser(t_env *data, char **env)
+int	init_parser(t_env *data)
 {
 	unsigned int	i;
 	int				ret;
@@ -84,7 +84,7 @@ int	init_parser(t_env *data, char **env)
 		return (ret);
 	while (i < data->nb_token)
 	{
-		ret = check_type(&i, data, env);
+		ret = check_type(&i, data);
 		if (ret)
 		{
 			data->error = data->lexed[i].token;

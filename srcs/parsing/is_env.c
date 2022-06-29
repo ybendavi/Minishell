@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 12:21:56 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/29 21:04:44 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/29 22:25:20 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	is_status_code(t_env *data, char **str)
 	return (0);
 }
 
-int	add_to_prev_token(t_env *data)
+int	add_to_prev_token(t_env *data, char **str)
 {
 	data->parsed[data->nb_parsed - 1].token
 		= ft_concat(data->parsed[data->nb_parsed - 1].token, *str);
@@ -50,7 +50,7 @@ int	parse_env(unsigned int *i, t_env *data, int y, char **str)
 	}
 	if (data->nb_parsed > 0 && data->lexed[*i - 1].type != WHITE_SPACE)
 	{
-		if (add_to_prev_token(data))
+		if (add_to_prev_token(data, str))
 			return (-1);
 	}
 	else
@@ -76,7 +76,7 @@ int	is_env_2(t_env *data, char **str, unsigned int y)
 	return (0);
 }
 
-int	is_env(unsigned int *i, t_env *data, char **env, char *str)
+int	is_env(unsigned int *i, t_env *data, char *str)
 {
 	unsigned int	y;
 

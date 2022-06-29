@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 21:17:23 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/29 22:06:24 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/29 22:29:56 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	handle_buff(t_env *data, char **buff)
 		*buff = NULL;
 		return (ft_return(ret, data));
 	}
-	ret = init_parser(data, data->env);
+	ret = init_parser(data);
 	if (ret)
 		return (ft_return(ret, data));
 	add_history(*buff);
@@ -39,22 +39,22 @@ void	reset(t_env *data)
 
 void	main_error(t_env *data)
 {
-	freeer(&data);
-	free_lexed(&data);
-	free_parsed(&data);
+	freeer(data);
+	free_lexed(data);
+	free_parsed(data);
 }
 
 int	handle_exec(t_env *data)
 {
 	int	ret;
 
-	ret = parsing(&data);
+	ret = parsing(data);
 	if (ret == -1)
 		return (ft_return(-1, data));
-	data.status_code = execution(&data);
-	if (data.status_code == -1)
+	data->status_code = execution(data);
+	if (data->status_code == -1)
 		return (ft_return(-1, data));
-	freeer(&data);
+	freeer(data);
 	return (0);
 }
 
@@ -74,9 +74,9 @@ int	main(int ac, char **av, char **env)
 			ft_return(1, &data);
 		data.status_code = handle_buff(&data, &buff);
 		if (!data.status_code)
-			handle_exec(data);
+			handle_exec(&data);
 		else
-			main_error(data);
+			main_error(&data);
 		reset(&data);
 	}
 	return (0);

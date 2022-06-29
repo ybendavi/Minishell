@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 19:48:19 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/29 22:06:50 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/29 22:16:36 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	free_env(t_env *data)
 		free(data->env);
 }
 
-void	cases_neg_ret(int ret)
+void	cases_neg_ret(int ret, t_env *data)
 {	
 	if (ret == -1)
 		write(2, "Malloc error.\n", 14);
@@ -91,7 +91,7 @@ int	ft_return(int ret, t_env *data)
 		return (2);
 	}
 	if (ret < 0)
-		cases_neg_ret(ret);
+		cases_neg_ret(ret, data);
 	if (ret < -2)
 		free_parsed(data);
 	if (ret < 0 && ret > -4)
