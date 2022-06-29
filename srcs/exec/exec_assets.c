@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:42:15 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/29 18:50:41 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/29 21:11:01 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,17 @@ char	**path_selector(char **paths)
 	return (paths);
 }
 
+char	**error_env(void)
+{
+	char	*tmp;
+	char	**paths;
+
+	tmp = ft_strdup("command not found");
+	paths = ft_split(tmp, 0);
+	free(tmp);
+	return (paths);
+}
+
 char	**set_env(char **env)
 {
 	char	**paths;
@@ -42,9 +53,11 @@ char	**set_env(char **env)
 	i = 0;
 	paths = NULL;
 	if (env == NULL)
-		return (NULL);
-	while (env[i] && ft_strnstr(env[i], "PATH=", 6) == NULL)
+		return (error_env());
+	while (env[i] && ft_strncmp(env[i], "PATH=", 5) != 0)
 		i++;
+	if (!env[i])
+		return (error_env());
 	if (env[i])
 		paths = ft_split(ft_strchr(env[i], '=') + 1, ':');
 	if (!paths)

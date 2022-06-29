@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:38:51 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/29 18:40:25 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/29 21:16:16 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,18 @@ void	quit_proc(t_cmds *tmp, t_env *envs)
 	exit(EXIT_FAILURE);
 }
 
-int	no_builtin(t_cmds *cmd, char **env, t_env *envs)
+int	no_builtin(t_cmds *cmd, char **env, t_env *envs, int ret)
 {
 	close_fds(cmd);
+	if (ret == 127)
+	{
+		errno = 2;
+		exec_errors(127, cmd->cmd, envs);
+		exit(127);
+	}
 	if (cmd->cmd && is_builtin(cmd) == 0)
 		exit(builtins(cmd, envs->env, envs));
-	else if (cmd->cmd && is_builtin(cmd))
+	else if (cmd && cmd->cmd && is_builtin(cmd))
 	{
 		execve(cmd->path, cmd->cmds, env);
 	}
@@ -68,7 +74,7 @@ int	no_builtin(t_cmds *cmd, char **env, t_env *envs)
 	return (0);
 }
 
-int	child_process(t_cmds *cmd, char **env, t_env *envs)
+int	child_process(t_cmds *cmd, char **env, t_env *envs, int ret)
 {
 	if (cmd->in == -1 || cmd->out == -1)
 		quit_proc(cmd, envs);
@@ -91,6 +97,6 @@ int	child_process(t_cmds *cmd, char **env, t_env *envs)
 	if (is_builtin(cmd) == 0)
 		exit(builtins(cmd, envs->env, envs));
 	else
-		no_builtin(cmd, env, envs);
+		no_builtin(cmd, env, envs, ret);
 	exit(exec_errors(0, cmd->cmd, envs));
 }
