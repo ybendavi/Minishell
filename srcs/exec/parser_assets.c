@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:28:03 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/29 18:28:05 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/29 20:01:00 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,20 @@ int	new_fd(char *filename, t_token_type type)
 	{
 		fd = open(filename, O_RDWR | O_TRUNC | O_CREAT, 0666 | O_TRUNC);
 		if (fd == -1)
+		{
+			write(2, "bash: ", 6);
 			perror(filename);
+		}
 		return (fd);
 	}
 	else if (type == REDIR_OUT)
 	{
 		fd = open(filename, O_RDONLY);
 		if (fd == -1)
+		{
+			write(2, "bash: ", 6);
 			perror(filename);
+		}
 		return (fd);
 	}
 	return (0);

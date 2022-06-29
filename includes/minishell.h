@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/29 18:43:38 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/29 21:11:52 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,11 @@ int	is_redir_rec(t_token *tokens);
 int	redir_parse(t_env *envs, t_token *token);
 int	new_table(t_env *envs);
 int	set_paths(t_env *env);
-int	child_process(t_cmds *cmd, char **env, t_env *envs);
+int	set_path_error(char **paths);
+int	child_process(t_cmds *cmd, char **env, t_env *envs, int ret);
 void	parent_process(t_cmds *cmds);
 int	exec_errors(int status_code, const char *cmd, t_env *envs);
+int	errno_two(const char *cmd, t_env *envs);
 int	is_builtin(t_cmds *cmds);
 int	builtins(t_cmds *cmds, char **env, t_env *envs);
 int	execution(t_env *envs);

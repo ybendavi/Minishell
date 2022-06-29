@@ -54,9 +54,17 @@ echo < | test
 
 echo >bla
 
+cat bla
+
+rm bla
+
 echo >
 
 > test
+
+cat test
+
+rm test
 
 echo $
 
