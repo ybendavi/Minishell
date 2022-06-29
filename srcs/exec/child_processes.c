@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:38:51 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/29 21:16:16 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 01:52:34 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,8 @@ int	no_builtin(t_cmds *cmd, char **env, t_env *envs, int ret)
 	return (0);
 }
 
-int	child_process(t_cmds *cmd, char **env, t_env *envs, int ret)
-{
-	if (cmd->in == -1 || cmd->out == -1)
-		quit_proc(cmd, envs);
+void	fork_handler(t_cmds *cmd)
+{	
 	if (cmd->pfd_in[0] != -1)
 	{
 		close(cmd->pfd_in[1]);
@@ -90,10 +88,14 @@ int	child_process(t_cmds *cmd, char **env, t_env *envs, int ret)
 		dup2(cmd->pfd_out[1], 1);
 		close(cmd->pfd_out[1]);
 	}
-	if (cmd->in != 0 && cmd->in != cmd->pfd_in[0])
-		dup2(cmd->in, 0);
-	if (cmd->out != 1 && cmd->out != cmd->pfd_out[1])
-		dup2(cmd->out, 1);
+}
+
+int	child_process(t_cmds *cmd, char **env, t_env *envs, int ret)
+{
+	fork_handler(cmd);
+	if (cmd->in == -1 || cmd->out == -1)
+		quit_proc(cmd, envs);
+	redir_handler(cmd);
 	if (is_builtin(cmd) == 0)
 		exit(builtins(cmd, envs->env, envs));
 	else

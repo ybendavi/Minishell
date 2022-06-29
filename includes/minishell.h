@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/29 22:57:18 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/30 01:18:14 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,10 @@ int				exec_errors(int status_code, const char *cmd, t_env *envs);
 int				errno_two(const char *cmd, t_env *envs);
 int				is_builtin(t_cmds *cmds);
 int				builtins(t_cmds *cmds, char **env, t_env *envs);
+int				exec_no_pipe(t_cmds *cmd, t_env *envs);
 int				execution(t_env *envs);
 void			parent_process(t_cmds *cmds);
+void			redir_handler(t_cmds *cmd);
 void			free_all_env(t_env *env);
 void			paths_free(char **paths);
 void			free_cmds_table(t_cmds *tbls);
