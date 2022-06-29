@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 23:09:26 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/28 00:10:37 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/28 20:33:50 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	set_null(t_env *data)
 	data->temp = NULL;
 	data->c_tbls = NULL;
 }
-/*
+
 int	set_env_i(t_env *data)
 {
 	char	**ret;
@@ -33,23 +33,26 @@ int	set_env_i(t_env *data)
 	if (!ret)
 		return (-1);
 	i = 0;
-	ret[i] = PWD;
-	i++;
-	ret[i] = ft_cpy2("SHLVL=1");
+	getcwd(ret[i], 1000);
 	if (!ret[i])
 		return (-1);
 	i++;
-	ret[i] = _ {chemin absolu pour l env};
+	ret[i] = ft_cpy2("SHLVL=1\n");
+	if (!ret[i])
+		return (-1);
+	i++;
+	ret[i] = ft_cpy2("_=/usr/bin/env\n");
+	data->env = ret;
 	return (0);
-}*/
+}
 
 int	env_init(t_env *data, char **env)
 {
 	int	i;
 
 	i = 0;
-//	if (!data->env[i])
-//		return (set_env_i(data));
+	if (!env)
+		return (set_env_i(data));
 	while (env[i])
 		i++;
 	data->env = ft_calloc((sizeof(char *) * (i + 1)));

@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 15:51:36 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/25 19:23:13 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/28 20:12:27 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@ void	handler_sig(int sig, siginfo_t *info, void *context)
 	(void) info;
 	(void) context;
 	if (sig == SIGINT)
-		write(1, "\n", 1);
+		write(1, "\nminishell$ ", 12);
+//	if (sig == SIGQUIT)
+		
 }
 
 int	signal_init(void)

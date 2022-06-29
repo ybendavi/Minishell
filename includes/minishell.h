@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/28 17:26:40 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/28 19:24:07 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ int	pwd_main(t_env *envs);
 int	ft_env(t_env *data, char **strs);
 int	ft_unset(char **strs, t_env *data);
 int	ft_echo(char **strs);
-void	ft_exit(t_env *data, char **strs);
+int	ft_exit(t_env *data, char **strs);
 
 /*********UTILS*************/
 

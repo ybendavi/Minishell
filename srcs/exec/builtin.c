@@ -44,7 +44,7 @@ int    builtins(t_cmds *cmds, char **env, t_env *envs)
 	if (ft_strcmp(cmds->cmd, "env") == 0)
 		ret = ft_env(envs, cmds->cmds);
 	if (ft_strcmp(cmds->cmd, "exit") == 0 && cmds->pfd_in[0] == -1 && cmds->pfd_out[0] == -1)
-		ft_exit(envs, cmds->cmds);
+		ret = ft_exit(envs, cmds->cmds);
 	if (ft_strcmp(cmds->cmd, "echo") == 0)
 		ret = ft_echo(cmds->cmds);
 	if (ft_strcmp(cmds->cmd, "cd") && ft_strcmp(cmds->cmd, "exit"))
