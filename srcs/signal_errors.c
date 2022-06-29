@@ -14,8 +14,9 @@ char	*sig_error_2(int sig)
 		return ("Power failure");
 	else if (sig == 31)
 		return ("Bad system call (core dumped)");
-	else
+	else if (sig > 31)
 		return ("Signal unknown");
+	return (NULL);
 }
 
 char	*sig_error_1(int sig)

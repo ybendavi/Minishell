@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/27 21:32:49 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/28 20:37:36 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,12 +122,16 @@ int	child_process(t_cmds *cmd, char **env, t_env *envs)
 		dup2(cmd->out, 1);
 	}
 	if (is_builtin(cmd) == 0)
-		return (builtins(cmd, envs->env, envs));
+		exit(builtins(cmd, envs->env, envs));
 	else
 	{
 		close_fds(cmd);
-		if (cmd->cmd)
+		if (cmd->cmd && is_builtin(cmd) == 0)
+			exit(builtins(cmd, envs->env, envs));
+		else if (cmd->cmd && is_builtin(cmd))
+		{
 			execve(cmd->path, cmd->cmds, env);
+		}
 		else
 		{		
 			freeer(envs);
@@ -140,8 +144,8 @@ int	child_process(t_cmds *cmd, char **env, t_env *envs)
 	}
 //	close(0);
 //	close(1);
-	dup2(in, 0);
-	dup2(out, 1);
+	//dup2(in, 0);
+	//dup2(out, 1);
 	exit(exec_errors(0, cmd->cmd, envs));
 }
 
@@ -150,7 +154,7 @@ int	launcher(t_cmds *cmds, t_env *envs)
 	int	ret;
 
 	ret = 0;
-	if (is_builtin(cmds) == 0)
+	if (ft_strcmp(cmds->cmd, "cd") == 0 || ft_strcmp(cmds->cmd, "exit") == 0)
 	{
 		if (cmds->next)
 			launcher(cmds->next, envs);
@@ -189,8 +193,11 @@ int	check_sig(int status)
 	{
 		sig = WTERMSIG(status);
 		str = sig_error(sig);
-		write(2, str, ft_strlen(str));
-		write(2, "\n", 1);
+		if (str)
+		{
+			write(2, str, ft_strlen(str));
+			write(2, "\n", 1);
+		}
 		return (128 + sig);
 	}
 	return (0);
@@ -212,7 +219,7 @@ int	execution(t_env *envs)
 	status_code = launcher(cmds, envs);
 	while (cmds)
 	{
-		if (is_builtin(cmds))
+		if (ft_strcmp(cmds->cmd, "cd") && ft_strcmp(cmds->cmd, "exit"))
 		{
 			if (cmds->fork > 0)
 			{
@@ -226,7 +233,7 @@ int	execution(t_env *envs)
 		}
 		else
 		{
-			status_code = child_process(cmds, envs->env, envs);
+			status_code = builtins(cmds, envs->env, envs);
 			cmds = cmds->next;
 		}
 	}
