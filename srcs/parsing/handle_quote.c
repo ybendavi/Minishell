@@ -6,13 +6,13 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 23:10:03 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/29 21:14:52 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/29 22:23:36 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**copy_quote(char **temp, char *line, unsigned int i
+char	**copy_quote(char **temp, char *line, unsigned int i,
 		unsigned int start)
 {
 	int	y;
