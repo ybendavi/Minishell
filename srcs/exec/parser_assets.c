@@ -4,7 +4,6 @@ int	new_fd(char *filename, t_token_type type)
 {
 	int	fd;
 
-	printf("token:%d\ntoken:%d\n", REDIR_OUT, type);
 	if (type == REDIR_IN || type == REDIR_ADD)
 	{
 		fd = open(filename, O_RDWR | O_TRUNC | O_CREAT, 0666 | O_TRUNC);

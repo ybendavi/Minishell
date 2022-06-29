@@ -20,11 +20,8 @@ ls >> coucou
 cat coucou
 
 rm coucou
-ls << coucou
 
-cat | cat | cat | ls
 
-cat | > ls
 echo ".." | cd
 
 ls | cat | cat |
@@ -41,8 +38,6 @@ rm coucou
 
 rm coucou
 
-<< coucou
-
 ls | > coucou
 
 ls | < coucou
@@ -51,19 +46,9 @@ ls | >> coucou
 
 rm coucou
 
-ls | << coucou | cat
-
-<< coucou ls | << coucou cat | ls
-
 echo test < | echo test ou echo test <| echo test
 
 cmd_inexistante
-
-\n
-
-cat 'Makefile
-
-cat "Makefile
 
 echo < | test
 
