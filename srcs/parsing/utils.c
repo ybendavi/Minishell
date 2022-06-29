@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 23:07:36 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/26 14:24:50 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/29 19:52:56 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,9 @@ int	check_temp(char **temp, t_env *data)
 int	is_str_env(char c)
 {
 	if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')
-	|| c == '_' || (c >= '0' && c <= '9'))
+		|| c == '_' || (c >= '0' && c <= '9'))
 		return (1);
 	return (0);
-
 }
 
 int	is_char_env(char c)

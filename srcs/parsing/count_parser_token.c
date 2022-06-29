@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 16:50:11 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/28 17:30:57 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/29 19:38:36 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	count_type(unsigned int *i, t_env *data)
 		return (0);
 	if (data->lexed[*i].type == REDIR_ADD
 		|| data->lexed[*i].type == REDIR_LIM
-		|| data->lexed[*i].type == REDIR_IN 
+		|| data->lexed[*i].type == REDIR_IN
 		|| data->lexed[*i].type == REDIR_OUT)
 		return (1);
 	else if (data->lexed[*i].type == PIPE)
@@ -44,8 +44,8 @@ int	count_type(unsigned int *i, t_env *data)
 
 int	count_parser_token(t_env *data)
 {
-	int	count;
-	int	ret;
+	int				count;
+	int				ret;
 	unsigned int	i;
 
 	i = 0;
@@ -60,7 +60,6 @@ int	count_parser_token(t_env *data)
 		}
 		count += ret;
 		i++;
-
 	}
 	count++;
 	return (count);

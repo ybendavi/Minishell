@@ -6,13 +6,14 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 23:10:03 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/07 18:15:38 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/29 21:14:52 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**copy_quote(char **temp, char *line, unsigned int i, unsigned int start)
+char	**copy_quote(char **temp, char *line, unsigned int i
+		unsigned int start)
 {
 	int	y;
 
@@ -26,8 +27,19 @@ char	**copy_quote(char **temp, char *line, unsigned int i, unsigned int start)
 	return (temp);
 }
 
+int	handle_double_2(t_env *data, unsigned int *j, char *line)
+{
+	if (handle_env(data->temp, data, j, line))
+		return (-1);
+	while (is_char_env(line[++(*j)]))
+		add_temp(line, data->temp, *j);
+	if (check_temp(data->temp, data))
+		return (-1);
+	return (0);
+}
+
 int	handle_double(char *line, unsigned int *i, unsigned int start,
-		t_env *data)
+			t_env *data)
 {
 	unsigned int	j;
 
@@ -39,14 +51,10 @@ int	handle_double(char *line, unsigned int *i, unsigned int start,
 			if (j != start)
 			{
 				if (get_lexed(copy_quote(data->temp, line,
-					j - 1, start), data, STR))
+							j - 1, start), data, STR))
 					return (-1);
 			}
-			if (handle_env(data->temp, data, &j, line))
-				return (-1);
-			while (is_char_env(line[++j]))
-				add_temp(line, data->temp, j);
-			if (check_temp(data->temp, data))
+			if (handle_double_2(data, &j, line))
 				return (-1);
 			if (j == *i)
 				return (0);
@@ -59,8 +67,8 @@ int	handle_double(char *line, unsigned int *i, unsigned int start,
 
 int	handle_quote(char *line, unsigned int *i, char **temp, t_env *data)
 {
-	unsigned int		start;
-	char	q;
+	unsigned int	start;
+	char			q;
 
 	if (check_temp(temp, data))
 		return (-1);

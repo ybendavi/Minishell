@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 19:48:19 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/27 20:13:41 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/29 22:06:50 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,20 +71,16 @@ void	free_env(t_env *data)
 		free(data->env);
 }
 
-void	free_all(t_env *data)
-{
-	unsigned int	i;
-	
-	i = 0;
-	while(i < 12)
-	{
-		if (data->tab[i].token)
-			free(data->tab[i].token);
-		i++;
-	}
-	if (data->tab)
-		free(data->tab);
-	free_env(data);
+void	cases_neg_ret(int ret)
+{	
+	if (ret == -1)
+		write(2, "Malloc error.\n", 14);
+	if (ret == -2)
+		write(1, "Lone quote.\n", 12);
+	if (ret == -3)
+		printf("bash : syntax error near unexpected token `%s'\n", data->error);
+	if (ret == -5)
+		printf("bash : syntax error near unexpected token `newline'\n");
 }
 
 int	ft_return(int ret, t_env *data)
@@ -94,14 +90,8 @@ int	ft_return(int ret, t_env *data)
 		free_parsed(data);
 		return (2);
 	}
-	if (ret == -1)
-		write(2, "Malloc error.\n", 14);
-	if (ret == -2)
-		write(1, "Lone quote.\n", 12);
-	if (ret == -3)
-		printf("bash : syntax error near unexpected token `%s'\n", data->error);
-	if (ret == -5)
-		printf("bash : syntax error near unexpected token `newline'\n");
+	if (ret < 0)
+		cases_neg_ret(ret);
 	if (ret < -2)
 		free_parsed(data);
 	if (ret < 0 && ret > -4)
@@ -113,7 +103,7 @@ int	ft_return(int ret, t_env *data)
 		write(1, "exit\n", 5);
 		exit(0);
 	}
-	if (ret == -3 || ret == -5)
+	if (ret == -2 || ret == -3 || ret == -5)
 		ret = 2;
 	set_null(data);
 	return (ret);

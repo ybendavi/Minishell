@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 16:20:24 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/27 19:58:55 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/29 19:53:10 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*ft_env_strnstr(const char *big, const char *little, size_t len)
 char	*ft_cpy2(char *s1)
 {
 	char	*s2;
-	int	i;
+	int		i;
 
 	i = 0;
 	s2 = ft_calloc(ft_strlen(s1) + 1);

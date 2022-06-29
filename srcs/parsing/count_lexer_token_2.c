@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 16:42:52 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/28 16:44:00 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/29 19:35:51 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int	count_env(char **temp, unsigned int *i, char *line)
 {
-
 	int	count;
 
 	count = count_temp(temp);
@@ -32,7 +31,6 @@ int	count_env(char **temp, unsigned int *i, char *line)
 			return (count + 1);
 		else
 			return (count);
-			
 	}
 	return (count + 1);
 }
@@ -41,7 +39,7 @@ int	count_double(char *line, unsigned int *i, unsigned int start,
 		char **temp)
 {
 	unsigned int	j;
-	int	count;
+	int				count;
 
 	j = start;
 	count = 1;
@@ -66,9 +64,9 @@ int	count_double(char *line, unsigned int *i, unsigned int start,
 
 int	count_quote(char *line, unsigned int *i, char **temp)
 {
-	unsigned int		start;
-	int	count;
-	char	q;
+	unsigned int	start;
+	int				count;
+	char			q;
 
 	count = count_temp(temp);
 	q = line[*i];
