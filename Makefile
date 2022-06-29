@@ -10,7 +10,7 @@ parsing/handle_quote.c parsing/utils_2.c parsing/is_env.c parsing/parser.c parsi
 builtin/ft_echo.c builtin/ft_unset.c parsing/count_lexer_token.c parsing/count_lexer_token_2.c parsing/count_parser_token.c builtin/ft_pwd.c
 OBJS = ${SRCS:%.c=${OBJSDIR}/%.o}
 $(NAME): ${OBJS}
-	$(CC) $(OBJS) -lreadline -o ${NAME}
+	$(CC) $(OBJS) -Wall -Wextra -Werror -lreadline -o ${NAME}
 ${OBJS}: ${OBJSDIR}/%.o: ${SRCSDIR}/%.c
 	mkdir -p ${OBJSDIR}/parsing
 	mkdir -p ${OBJSDIR}/builtin
