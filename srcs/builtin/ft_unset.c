@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 23:00:42 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/28 13:42:16 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/29 16:33:22 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	is_existing_var(char *str, char **env)
 {
-	int	unsigned i;
-	int	y;
+	int unsigned	i;
+	int		y;
 
 	i = 0;
 	if (!is_char_env(str[i]))
@@ -73,7 +73,6 @@ void	not_valid_2(char *str)
 	write(2, "bash: unset: `", 14);
 	write(2, str, ft_strlen(str));
 	write(2, "': not a valid identifier\n", 27);
-
 }
 
 int	ft_unset(char **strs, t_env *data)
@@ -101,7 +100,7 @@ int	ft_unset(char **strs, t_env *data)
 			if (delete_var(data, ret))
 				return (-1);
 		}
-		i++;	
+		i++;
 	}
 	return (mark);
 }

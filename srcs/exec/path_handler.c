@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:18 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/26 21:07:04 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/29 18:28:43 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ int	test_path(char *tmp, t_cmds *cmd)
 
 	tmp2 = cmd->path;
 	cmd->path = tmp;
-	free(tmp2);	
+	free(tmp2);
 	if (access(tmp, X_OK) == -1)
 	{
-		return(0);
+		return (0);
 	}
 	return (0);
 }

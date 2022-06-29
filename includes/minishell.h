@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/28 19:24:07 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/29 18:43:38 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,17 @@ int	set_fd(t_cmds *c_tbls, t_token *token);
 t_token_type	choose_tok(char *str);
 int	new_fd(char *filename, t_token_type type);
 int	parsing(t_env *envs);
+int	is_redir_rec(t_token *tokens);
+int	redir_parse(t_env *envs, t_token *token);
+int	new_table(t_env *envs);
 int	set_paths(t_env *env);
+int	child_process(t_cmds *cmd, char **env, t_env *envs);
+void	parent_process(t_cmds *cmds);
 int	exec_errors(int status_code, const char *cmd, t_env *envs);
 int	is_builtin(t_cmds *cmds);
 int	builtins(t_cmds *cmds, char **env, t_env *envs);
 int	execution(t_env *envs);
+void	free_all_env(t_env *env);
 void	paths_free(char **paths);
 void	free_cmds_table(t_cmds *tbls);
 void	free_pfds(t_cmds *cmds);

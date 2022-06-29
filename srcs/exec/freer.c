@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   freer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/29 17:26:57 by ybendavi          #+#    #+#             */
+/*   Updated: 2022/06/29 17:27:06 by ybendavi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	free_pfds(t_cmds *cmds)
@@ -8,6 +20,18 @@ void	free_pfds(t_cmds *cmds)
 		free(cmds->pfd_out);
 		cmds = cmds->next;
 	}
+}
+
+void	free_strs_cmds(t_cmds *tbls)
+{
+	if (tbls->cmd)
+		free(tbls->cmd);
+	if (tbls->path)
+		free(tbls->path);
+	if (tbls->file_in)
+		free(tbls->file_in);
+	if (tbls->file_out)
+		free(tbls->file_out);
 }
 
 void	free_cmds_table(t_cmds *tbls)
@@ -27,14 +51,7 @@ void	free_cmds_table(t_cmds *tbls)
 		}
 		free(tbls->cmds);
 	}
-	if (tbls->cmd)
-		free(tbls->cmd);
-	if (tbls->path)
-		free(tbls->path);
-	if (tbls->file_in)
-		free(tbls->file_in);
-	if (tbls->file_out)
-		free(tbls->file_out);
+	free_strs_cmds(tbls);
 	tmp = tbls->next;
 	if (tmp)
 		free_cmds_table(tmp);

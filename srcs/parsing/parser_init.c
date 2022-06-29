@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:49:03 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/28 20:06:55 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/29 17:00:52 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	init_parser(t_env *data, char **env)
 	if (count < 0)
 		return (count);
 //	printf("nb parsed = %d\n", count);
-	data->parsed = ft_calloc(100 * sizeof(t_token));//dynamique
+	data->parsed = ft_calloc(count * sizeof(t_token) + 8);//dynamique
 	if (!data->parsed)
 		return (-1);
 	while (i < data->nb_token)

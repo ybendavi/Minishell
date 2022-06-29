@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 19:44:25 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/28 18:10:35 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/29 16:32:12 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 int	ft_echo(char **strs)
 {
 	char	mark;
-	int	i;
-	int	ret;
+	int		i;
+	int		ret;
 
 	if (!strs)
 		return (0);

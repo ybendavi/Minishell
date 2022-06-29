@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_assets.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/29 18:28:03 by ybendavi          #+#    #+#             */
+/*   Updated: 2022/06/29 18:28:05 by ybendavi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	new_fd(char *filename, t_token_type type)
@@ -55,7 +67,7 @@ int	cmds_len(t_cmds *c_tbls, t_token *token)
 	unsigned int	i;
 
 	i = 0;
-	while (token[i].type == STR &&  token[i].token != NULL)
+	while (token[i].type == STR && token[i].token != NULL)
 		i++;
 	if (i == 0)
 		c_tbls->cmds = NULL;
