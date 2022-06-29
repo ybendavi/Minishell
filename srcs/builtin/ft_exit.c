@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 19:26:46 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/28 19:27:13 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/29 16:45:48 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,13 @@ int	ft_mini_atoi(char *str)
 
 int	ft_get_status(char *str)
 {
-	unsigned int	i;
-	char	mark;
+	unsigned int			i;
+	char					mark;
 
 	i = 0;
 	mark = 1;
-	if ((str[i] == '-' || str[i] == '+') && (str[i + 1] >= 48 && str[i + 1] <= 67))
+	if ((str[i] == '-' || str[i] == '+')
+		&& (str[i + 1] >= 48 && str[i + 1] <= 67))
 	{
 		if (str[i] == '-')
 			mark = -1;

@@ -1,5 +1,23 @@
 #include "tester.h"
 
+int	ft_strcmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	if ((!s1 && s2) || (!s2 && s1))
+		return (1);
+	if (!s1 && !s2)
+		return (0);
+	while (s1[i] || s2[i])
+	{
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
+		i++;
+	}
+	return (0);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	int	fd;
@@ -24,7 +42,7 @@ int	main(int ac, char **av, char **env)
 	fd_min = open("minishell_out", O_RDWR | O_CREAT, 0666 | O_APPEND);
 	fd_pos = open("pos_out", O_RDWR | O_CREAT, 0666 | O_APPEND);
 	line = NULL;
-	bash_args = malloc(sizeof(char **) * 3);
+	bash_args = malloc(sizeof(char **) * 6);
 	bash_args[0] = ft_strdup("bash");
 	bash_args[1] = ft_strdup("--posix");
 	bash_args[2] = NULL;

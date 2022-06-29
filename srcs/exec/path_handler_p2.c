@@ -1,28 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   path_handler_p2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/29 16:34:36 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/29 16:34:38 by ybendavi         ###   ########.fr       */
+/*   Created: 2022/06/29 21:08:49 by ybendavi          #+#    #+#             */
+/*   Updated: 2022/06/29 21:08:51 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	pwd_main(t_env *envs)
+int	set_path_error(char **paths)
 {
-	int	i;
-
-	i = 0;
-	if (envs->env)
+	if (!paths)
+		return (-1);
+	if (strcmp(*paths, "command not found") == 0)
 	{
-		while (envs->env[i] && ft_strnstr(envs->env[i], "PWD=", 4) == NULL)
-			i++;
-		if (ft_strnstr(envs->env[i], "PWD=", 4) != NULL)
-			printf("%s\n", &ft_strchr(envs->env[i], '=')[1]);
+		paths_free(paths);
+		return (127);
 	}
 	return (0);
 }

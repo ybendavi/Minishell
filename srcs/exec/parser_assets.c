@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_assets.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/29 18:28:03 by ybendavi          #+#    #+#             */
+/*   Updated: 2022/06/29 20:01:00 by ybendavi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	new_fd(char *filename, t_token_type type)
@@ -8,14 +20,20 @@ int	new_fd(char *filename, t_token_type type)
 	{
 		fd = open(filename, O_RDWR | O_TRUNC | O_CREAT, 0666 | O_TRUNC);
 		if (fd == -1)
+		{
+			write(2, "bash: ", 6);
 			perror(filename);
+		}
 		return (fd);
 	}
 	else if (type == REDIR_OUT)
 	{
 		fd = open(filename, O_RDONLY);
 		if (fd == -1)
+		{
+			write(2, "bash: ", 6);
 			perror(filename);
+		}
 		return (fd);
 	}
 	return (0);
@@ -55,7 +73,7 @@ int	cmds_len(t_cmds *c_tbls, t_token *token)
 	unsigned int	i;
 
 	i = 0;
-	while (token[i].type == STR &&  token[i].token != NULL)
+	while (token[i].type == STR && token[i].token != NULL)
 		i++;
 	if (i == 0)
 		c_tbls->cmds = NULL;

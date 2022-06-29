@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:18 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/29 14:57:47 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/29 21:10:33 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ int	test_path(char *tmp, t_cmds *cmd)
 
 	tmp2 = cmd->path;
 	cmd->path = tmp;
-	free(tmp2);	
+	free(tmp2);
 	if (access(tmp, X_OK) == -1)
 	{
-		return(0);
+		return (0);
 	}
 	return (0);
 }
@@ -89,10 +89,10 @@ int	set_paths(t_env *envs)
 	t_cmds	*tmp;
 	int		ret;
 
-	ret = 0;
 	paths = set_env(envs->env);
-	if (!paths)
-		return (-1);
+	ret = set_path_error(paths);
+	if (ret)
+		return (ret);
 	tmp = envs->c_tbls;
 	while (tmp)
 	{
