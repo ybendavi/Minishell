@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 15:51:36 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/29 22:23:01 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/29 23:00:32 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	signal_init(void)
 	sigemptyset(&(sig_q.sa_mask));
 	sigaddset(&(sig_q.sa_mask), SIGQUIT);
 	sig_q.sa_handler = SIG_IGN;
+	sig_q.sa_flags = 0;
 	ret = sigaction(SIGINT, &sig_i, NULL);
 	ret = sigaction(SIGQUIT, &sig_q, NULL);
 	if (ret)
