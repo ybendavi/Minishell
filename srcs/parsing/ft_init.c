@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 23:09:26 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/28 20:33:50 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/29 21:26:55 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ void	set_null(t_env *data)
 int	set_env_i(t_env *data)
 {
 	char	**ret;
-	int	i;
+	int		i;
+
 	ret = ft_calloc((sizeof(char *) * 4));
 	if (!ret)
 		return (-1);
@@ -76,6 +77,7 @@ int	ft_init(t_env *data, char **env)
 	int	ret;
 
 	data->tab = NULL;
+	data.status_code = 0;
 	set_null(data);
 	if (env_init(data, env))
 		return (-1);

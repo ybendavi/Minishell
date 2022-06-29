@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   libfunc_2.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/29 19:51:05 by ccottin           #+#    #+#             */
+/*   Updated: 2022/06/29 19:51:59 by ccottin          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 size_t	ft_strlen(const char *s)
@@ -64,8 +76,8 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 	if (s1 == NULL || s2 == NULL)
 		return (0);
-	dest = (char *)ft_calloc(sizeof(char) *
-			(ft_strlen(s1) + ft_strlen(s2) + 1));
+	dest = (char *)ft_calloc(sizeof(char)
+			* (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!(dest))
 		return (NULL);
 	i = 0;

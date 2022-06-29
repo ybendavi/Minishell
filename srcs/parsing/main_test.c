@@ -4,7 +4,6 @@ int	handle_buff(t_env *data, char **buff)
 {
 	int	ret;
 
-	add_history(*buff);
 	ret = lexer(*buff, data);
 	if (ret)
 	{
@@ -26,8 +25,6 @@ int	handle_buff(t_env *data, char **buff)
 	add_history(*buff);
 	free(*buff);
 	*buff = NULL;
-	if (ret)
-		return (ft_return(ret, data));
 	return (0);
 }
 

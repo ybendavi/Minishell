@@ -74,3 +74,9 @@ echo Le path de mon HOME est $HOME
 echo $USER$var\$USER$USER\$USERtest$USER
 echo $hola*
 echo | cat -e
+echo $""
+echo "$"""
+echo '$'''
+echo '$'''
+echo '$HO''ME'
+echo "'$HO''ME'"

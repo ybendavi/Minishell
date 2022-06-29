@@ -6,11 +6,31 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/28 20:37:36 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/29 16:44:57 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	non_path(char **env)
+{
+	char	*str;
+
+	str = ft_calloc(100);
+	if (!str)
+		return (NULL);
+	str = getenv(PATH);
+	if (str)
+	{
+		free(str);
+		return (0);
+	}
+	else
+	{
+		free(str);
+		return (127);
+	}
+}
 
 char	**set_env(char **env)
 {

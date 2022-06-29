@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/28 19:24:07 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/29 17:46:49 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ void	free_cmds_table(t_cmds *tbls);
 void	free_pfds(t_cmds *cmds);
 void	freeer(t_env *envs);
 /****parser*****/
+t_token	struct_env(char *str, int type);
 char	**ft_cpy(char **temp, char *s1);
 char	*ft_concat(char *s1, char *s2);
 int	get_lexed(char **temp, t_env *data, t_token_type type);

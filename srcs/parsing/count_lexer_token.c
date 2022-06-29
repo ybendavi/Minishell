@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 14:39:24 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/28 16:44:34 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/29 19:37:23 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	count_temp(char **temp)
 
 int	count_redir(char *line, unsigned int *i, char **temp)
 {
-	int	count;
+	int		count;
 	char	r;
 
 	count = count_temp(temp);
@@ -42,7 +42,7 @@ int	count_redir(char *line, unsigned int *i, char **temp)
 		count++;
 	}
 	else
-		count++;	
+		count++;
 	return (count);
 }
 
@@ -58,8 +58,8 @@ int	count_pipe(char **temp)
 int	count_white_space(unsigned int *i, char *line, char **temp)
 {
 	unsigned int	start;
-	int	count;
-	
+	int				count;
+
 	count = count_temp(temp);
 	start = *i;
 	while (line[*i] == ' ' || line[*i] == '\r' || line[*i] == '\t'
@@ -71,19 +71,15 @@ int	count_white_space(unsigned int *i, char *line, char **temp)
 	return (count);
 }
 
-int	count_lexer_token(char *line, char **temp)
+int	count_lexer_token(char *line, char **temp, unsigned int i, int count)
 {
-	unsigned int	i;
-	int	ret;
-	int	count;
+	int			ret;
 
-	i = 0;
-	count = 0;
 	while (line[i])
 	{
 		ret = 0;
 		if (line[i] == '|')
-			 ret = count_pipe(temp);
+			ret = count_pipe(temp);
 		else if (line[i] == '>' || line[i] == '<')
 			ret = count_redir(line, &i, temp);
 		else if (line[i] == '\'' || line[i] == '"')
