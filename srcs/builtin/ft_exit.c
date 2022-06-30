@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 19:26:46 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/29 16:45:48 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 20:37:07 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	ft_mini_atoi(char *str)
 	return (ret);
 }
 
-int	ft_get_status(char *str)
+int	ft_get_status(char *str, t_env *data)
 {
 	unsigned int			i;
 	char					mark;
@@ -50,6 +50,7 @@ int	ft_get_status(char *str)
 		write(2, "bash: exit: ", 13);
 		write(2, str, ft_strlen(str));
 		write(2, ": numeric argument required\n", 29);
+		free_all_env(data);
 		exit(2);
 	}
 	return (ft_mini_atoi(str) * mark);
@@ -71,15 +72,12 @@ int	ft_exit(t_env *data, char **strs)
 	if (strs)
 	{
 		if (strs[1])
-			nb = ft_get_status(strs[1]);
+			nb = ft_get_status(strs[1], data);
 	}
 	if (strs[1] && strs[2])
 		return (too_many());
-	free_parsed(data);
-	free_lexed(data);
-	freeer(data);
-	free_all(data);
 	write(1, "exit\n", 5);
+	free_all_env(data);
 	exit(nb);
 	return (0);
 }
