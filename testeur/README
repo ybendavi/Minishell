@@ -1,1 +1,0 @@
-gcc get_next_line.c get_next_line_utils.c libfunc_2.c libfunc.c tester.c -g -D BUFFER_SIZE=10

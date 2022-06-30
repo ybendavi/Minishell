@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:08:00 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/01 00:59:29 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 23:15:40 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,31 +16,21 @@ void	redir_process(t_token *token, t_cmds *cmd, t_env *envs)
 {
 	char	*buff;
 
-	close(cmd->pfd_in[0]);        
+	close(cmd->pfd_in[0]);
 	sigemptyset(&(envs->sig_i.sa_mask));
-        sigaddset(&(envs->sig_i.sa_mask), SIGINT);
-      	envs->sig_i.sa_handler = SIG_DFL;
-        envs->sig_i.sa_flags = 0;
-        sigaction(SIGINT, &(envs->sig_i), NULL);
+	sigaddset(&(envs->sig_i.sa_mask), SIGINT);
+	envs->sig_i.sa_handler = SIG_DFL;
+	envs->sig_i.sa_flags = 0;
+	sigaction(SIGINT, &(envs->sig_i), NULL);
 	buff = readline(">");
 	if (!buff)
 		exit_non_buff(envs, cmd->pfd_in);
 	while (ft_strncmp(buff, token[1].token, ft_strlen(buff)) != 0)
-	{
-		write(1, buff, ft_strlen(buff));
-		write(1, "\n", 1);
-		if (buff)
-			free(buff);
-		buff = NULL;
-		buff = readline(">");
-		if (!buff)
-			exit_non_buff(envs, cmd->pfd_in);
-	}
+		exec_redir(&buff, envs, cmd);
 	if (buff)
 		free(buff);
-	close(cmd->pfd_in[1]);        
+	close(cmd->pfd_in[1]);
 	free_all_env(envs);
-	write(1, "\n", 1);
 	exit (0);
 }
 
