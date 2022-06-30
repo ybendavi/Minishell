@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 12:21:56 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/29 22:25:20 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/30 16:08:41 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	is_env(unsigned int *i, t_env *data, char *str)
 	y = *i;
 	while (data->lexed[y].type == ENV)
 	{
-		if (y + 1 < data->nb_token
+		if (y + 1 < data->nb_token && data->lexed[y + 1].token 
 			&& is_char_env(data->lexed[y + 1].token[0]))
 		{
 			y++;
