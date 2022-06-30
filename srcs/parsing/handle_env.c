@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 17:39:48 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/30 00:09:26 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/30 18:35:50 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ int	handle_env(char **temp, t_env *data, unsigned int *i, char *line)
 		(*i)++;
 		return (get_lexed(temp, data, ENV));
 	}
-	else if (line[*i + 1] == '"' || line[*i + 1] == '\'')
+	else if (line[*i + 1] == '\''
+		|| (line[*i - 1] != '"' && line[*i + 1] == '"'))
 		return (get_lexed(temp, data, STR));
 	return (get_lexed(ft_cpy(temp, "$"), data, STR));
 }
