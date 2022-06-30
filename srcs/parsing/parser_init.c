@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:49:03 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/29 22:28:52 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/30 14:20:14 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ int	set_parser(t_env *data)
 	count = count_parser_token(data);
 	if (count < 0)
 		return (count);
-//	printf("nb parsed = %d\n", count);
 	data->parsed = ft_calloc(count * sizeof(t_token) + 8);
 	if (!data->parsed)
 		return (-1);
@@ -94,7 +93,6 @@ int	init_parser(t_env *data)
 	}
 	add_null_token(data);
 	free_lexed(data);
-//	printf("nb really parsed = %d\n", data->nb_parsed);
 	ret = check_parsing_errors(data);
 	if (ret)
 		return (ret);

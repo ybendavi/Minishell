@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 22:24:47 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/29 21:16:35 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/30 14:25:22 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@ int	init_lexer(t_env *data, char **temp, char *line)
 	if (!temp)
 		return (-1);
 	token_count = count_lexer_token(line, temp, 0, 0);
-//	printf("token_count = %d\n", token_count);
-	if (token_count < 0)
-		return (token_count);
 	data->lexed = ft_calloc(sizeof(t_token) * (token_count + 7));
 	if (!data->lexed)
 		return (-1);
@@ -104,6 +101,5 @@ int	lexer(char *line, t_env *data)
 	if (ft_strlen(temp) != 0)
 		get_lexed(&temp, data, STR);
 	free(temp);
-//	printf("real nb of token = %d\n", data->nb_token);
 	return (0);
 }

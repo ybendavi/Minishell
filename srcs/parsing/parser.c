@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 12:23:06 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/27 16:47:15 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/30 13:50:47 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*ft_concat(char *s1, char *s2)
 		}
 	}
 	y = 0;
-	while (s2[y])
+	while (s2 && s2[y])
 		ret[i++] = s2[y++];
 	if (s1)
 		free(s1);
@@ -62,6 +62,8 @@ int	is_str(unsigned int *i, t_env *data)
 	token.token = NULL;
 	while (data->lexed[*i].type == STR)
 	{
+		if (!data->lexed[*i].token)
+			return (0);
 		token.token = ft_concat(token.token, data->lexed[*i].token);
 		if (!token.token)
 			return (-1);

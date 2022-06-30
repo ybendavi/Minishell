@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 16:42:52 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/29 19:35:51 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/30 00:30:55 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,6 @@ int	count_quote(char *line, unsigned int *i, char **temp)
 	*i = *i + 1;
 	while (line[*i] && line[*i] != q)
 		*i = *i + 1;
-	if (*i == ft_strlen(line))
-		return (-2);
 	if (q == '"')
 		count += count_double(line, i, start + 1, temp);
 	else

@@ -80,3 +80,79 @@ echo '$'''
 echo '$'''
 echo '$HO''ME'
 echo "'$HO''ME'"
+echo -nnnn $hola
+echo > <
+echo | |
+>echo>
+<echo>
+>>echo<<
+echo $""
+ echo '$'''
+ echo "$"""
+echo $"HOME"
+echo $""HOME
+echo $''HOME
+echo '$HO''ME
+echo '$HO'ME
+echo "$HO"ME
+echo "'$HO''ME'"
+echo ""$HOME
+echo '' $HOME
+ echo "" $HOME
+ echo $"HO""ME"
+echo $'HOME'
+echo $'HO''ME
+echo "$"HOME
+echo $=HOME
+ echo $"HOLA"
+echo $'HOLA'
+ echo $DONTEXIST Hola
+echo "hola"
+echo 'hola'
+echo ''hola''
+ echo "''h'o'la''"
+echo "'"h'o'la"'"
+echo ''h'o'la''
+echo"'hola'"
+echo "'hola'"
+echo '"hola"'
+echo '''ho"''''l"a'''
+echo hola""""""""""""  | cat -e
+echo hola"''''''''''"
+echo hola''''''''''''
+ echo hola'""""""""""'
+ e"cho hola"
+e'cho hola'
+echo "hola     " | cat -e
+echo ""hola
+echo ""             hola
+echo "" hola
+echo "" hola
+echo ""hola
+"e"'c'ho 'b'"o"nj"o"'u'r
+echo hola""bonjour
+""e"'c'ho 'b'"o"nj"o"'u'r"
+echo "$DONTEXIST"Makefile
+echo "$DONTEXIST""Makefile"
+ echo "$DONTEXIST" "Makefile"
+$?
+$?$?
+?$HOME
+$
+$HOME
+$HOMEdskjhfkdshfsd
+"$HOMEdskjhfkdshfsd"
+$HOMEdskjhfkdshfsd'
+$DONTEXIST
+ $LESS$VAR
+
+ export HOLA=p
+export BYE=w
+$HOLA"BYE"d
+"$HOLA"'$BYE'd
+"$HOLA""$BYE"d
+$"HOLA"$"BYE"d
+$'HOLA'$'BYE'd
+$'HOLA'$'BYE'd
+
+

@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 23:10:03 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/29 22:23:36 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/30 00:12:38 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,12 @@ int	handle_double_2(t_env *data, unsigned int *j, char *line)
 {
 	if (handle_env(data->temp, data, j, line))
 		return (-1);
-	while (is_char_env(line[++(*j)]))
+	(*j)++;
+	while (is_char_env(line[*j]))
+	{
 		add_temp(line, data->temp, *j);
+		(*j)++;
+	}
 	if (check_temp(data->temp, data))
 		return (-1);
 	return (0);
