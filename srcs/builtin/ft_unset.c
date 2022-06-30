@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 23:00:42 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/29 16:33:22 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 15:47:22 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	is_existing_var(char *str, char **env)
 {
 	int unsigned	i;
-	int		y;
+	int			y;
 
 	i = 0;
 	if (!is_char_env(str[i]))

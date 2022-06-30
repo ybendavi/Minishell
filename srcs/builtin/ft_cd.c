@@ -6,11 +6,26 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 16:39:42 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/29 16:43:57 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 14:30:33 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	no_arg_ch_dir(t_env *envs, char *cupath, int i)
+{
+	cupath = ft_strdup(&(ft_strchr(envs->env[i], '=')[1]));
+	if (chdir(cupath) == -1)
+	{
+		write(2, "bash: ", 6);
+		perror(cupath);
+		free(cupath);
+		return (1);
+	}
+	if (cupath)
+		free(cupath);
+	return (0);
+}
 
 int	ft_cd_no_args(t_env *envs)
 {
@@ -21,15 +36,13 @@ int	ft_cd_no_args(t_env *envs)
 	cupath = NULL;
 	if (envs->env)
 	{
-		while (envs->env[i] && ft_strnstr(envs->env[i], "HOME=", 5) == NULL)
+		while (envs->env[i] && ft_strncmp(envs->env[i], "HOME=", 5) != 0)
 			i++;
-		if (ft_strnstr(envs->env[i], "HOME=", 5) != NULL)
+		if (envs->env[i] && ft_strncmp(envs->env[i], "HOME=", 5) == 0)
 		{
-			cupath = ft_strdup(&(ft_strchr(envs->env[i], '=')[1]));
-			if (chdir(cupath) == -1)
-				perror(envs->cupath);
-			if (cupath)
-				free(cupath);
+			i = no_arg_ch_dir(envs, cupath, i);
+			if (i != 0)
+				return (i);
 		}
 		else
 		{
@@ -49,6 +62,7 @@ int	cd_other_case(char **av, t_env *envs, int i)
 	{
 		if (chdir(av[1]) == -1)
 		{
+			write(2, "bash: ", 6);
 			perror(av[1]);
 			return (1);
 		}

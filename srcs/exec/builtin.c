@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 15:33:52 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/30 01:47:34 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 14:38:26 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,7 @@ int	builtins(t_cmds *cmds, char **env, t_env *envs)
 
 	(void)env;
 	ret = 0;
-	if (ft_strcmp(cmds->cmd, "cd") == 0 && cmds->pfd_in[0] == -1
-		&& cmds->pfd_out[0] == -1)
+	if (ft_strcmp(cmds->cmd, "cd") == 0)
 		ret = cd_main(cmds->cmds, envs);
 	if (ft_strcmp(cmds->cmd, "pwd") == 0)
 		ret = pwd_main(envs);
@@ -71,8 +70,7 @@ int	builtins(t_cmds *cmds, char **env, t_env *envs)
 		ret = ft_unset(cmds->cmds, envs);
 	if (ft_strcmp(cmds->cmd, "env") == 0)
 		ret = ft_env(envs, cmds->cmds);
-	if (ft_strcmp(cmds->cmd, "exit") == 0 && cmds->pfd_in[0] == -1
-		&& cmds->pfd_out[0] == -1)
+	if (ft_strcmp(cmds->cmd, "exit") == 0)
 		ret = ft_exit(envs, cmds->cmds);
 	if (ft_strcmp(cmds->cmd, "echo") == 0)
 		ret = ft_echo(cmds->cmds);
