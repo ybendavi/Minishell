@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 15:51:36 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/30 18:05:06 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/30 18:33:51 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	signal_init(t_env *data)
 	sig_q.sa_flags = 0;
 	ret = sigaction(SIGINT, &sig_i, NULL);
 	ret = sigaction(SIGQUIT, &sig_q, NULL);
-	data->sig_i = sig_i;	
+	data->sig_i = sig_i;
 	data->sig_q = sig_q;
 	if (ret)
 		return (ret);

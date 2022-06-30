@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:08:00 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/30 18:20:38 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/30 18:36:13 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	redir_process(t_token *token, t_cmds *cmd, t_env *envs)
 
 	(void) envs;
 	close(cmd->pfd_in[0]);
-	buff = readline(">");	
+	buff = readline(">");
 	while (ft_strncmp(buff, token[1].token, ft_strlen(token[1].token + 1)) != 0)
 	{
 		write(cmd->pfd_in[1], buff, ft_strlen(buff));
@@ -43,7 +43,7 @@ void	redir_process(t_token *token, t_cmds *cmd, t_env *envs)
 void	redir_lim(t_token *token, t_cmds *cmd, t_env *envs)
 {
 	pid_t	forking;
-	int	status;
+	int		status;
 
 	pipe(cmd->pfd_in);
 	forking = fork();
