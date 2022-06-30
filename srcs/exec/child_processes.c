@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:38:51 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/30 23:28:45 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/01 01:18:19 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int	no_builtin(t_cmds *cmd, char **env, t_env *envs, int ret)
 	if (ret == 127)
 	{
 		errno = 2;
+		write(2, "bash: ", ft_strlen("bash: ");
 		exit(errno_two(cmd->cmd, envs));
 	}
 	if (cmd->cmd && is_builtin(cmd) == 0)
