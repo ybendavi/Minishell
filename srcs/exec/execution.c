@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/29 20:33:03 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 14:38:16 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ int	launcher(t_cmds *cmds, t_env *envs, int retu)
 	int	ret;
 
 	ret = 0;
-	if (ft_strcmp(cmds->cmd, "cd") == 0 || ft_strcmp(cmds->cmd, "exit") == 0)
+	if (is_builtin(cmds) == 0 && cmds->pfd_in[0] == -1
+		&& cmds->pfd_out[0] == -1)
 	{
 		if (cmds->next)
 			launcher(cmds->next, envs, retu);
@@ -73,7 +74,8 @@ int	exec_loop(t_cmds *cmds, int status, int status_code, t_env *envs)
 {
 	while (cmds)
 	{
-		if (ft_strcmp(cmds->cmd, "cd") && ft_strcmp(cmds->cmd, "exit"))
+		if (is_builtin(cmds) || (is_builtin(cmds) == 0
+				&& (cmds->pfd_in[0] != -1 || cmds->pfd_out[0] != -1)))
 		{
 			if (cmds->fork > 0)
 			{
@@ -83,7 +85,7 @@ int	exec_loop(t_cmds *cmds, int status, int status_code, t_env *envs)
 		}
 		else
 		{
-			status_code = builtins(cmds, envs->env, envs);
+			status_code = exec_no_pipe(cmds, envs);
 			cmds = cmds->next;
 		}
 	}

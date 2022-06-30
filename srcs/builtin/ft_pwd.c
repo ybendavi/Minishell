@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 16:34:36 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/29 16:34:38 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 15:43:18 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ int	pwd_main(t_env *envs)
 	i = 0;
 	if (envs->env)
 	{
-		while (envs->env[i] && ft_strnstr(envs->env[i], "PWD=", 4) == NULL)
+		while (envs->env[i] && ft_strncmp(envs->env[i], "PWD=", 4) != 0)
 			i++;
-		if (ft_strnstr(envs->env[i], "PWD=", 4) != NULL)
+		if (ft_strncmp(envs->env[i], "PWD=", 4) == 0)
 			printf("%s\n", &ft_strchr(envs->env[i], '=')[1]);
 	}
 	return (0);
