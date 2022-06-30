@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:49:03 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/30 14:20:14 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/30 20:04:10 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@ int	get_parsed(t_env *data, t_token token)
 {
 	if (token.type == WHITE_SPACE)
 		return (0);
-	else
+	else if (token.token)
 		data->parsed[data->nb_parsed].token = ft_cpy2(token.token);
+	else
+		return (0);
 	if (!data->parsed[data->nb_parsed].token)
 		return (-1);
 	data->parsed[data->nb_parsed].size

@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 12:23:06 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/30 15:53:58 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 20:01:54 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ int	is_pipe(unsigned int i, t_env *data)
 {
 	if (i == 0)
 		return (-3);
-	if (data->parsed[data->nb_parsed - 1].type != STR)
+	if (data->nb_parsed > 0
+		&& data->parsed[data->nb_parsed - 1].type != STR)
 		return (-3);
 	else
 	{
@@ -87,7 +88,8 @@ int	is_redir(unsigned int i, t_env *data)
 		if (get_parsed(data, data->lexed[i]))
 			return (-1);
 	}
-	else if (data->parsed[data->nb_parsed - 1].type != PIPE
+	else if (data->nb_parsed > 0
+		&& data->parsed[data->nb_parsed - 1].type != PIPE
 		&& data->parsed[data->nb_parsed - 1].type != STR
 		&& data->parsed[data->nb_parsed - 1].type != ENV)
 		return (-3);
