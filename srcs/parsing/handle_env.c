@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 17:39:48 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/29 17:40:22 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/30 00:09:26 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,12 @@ int	env_var(char **temp, t_env *data, unsigned int *i, char *line)
 	ret = get_lexed(ft_cpy(temp, "$"), data, ENV);
 	if (ret)
 		return (ret);
-	while (is_str_env(line[++(*i)]))
+	(*i)++;
+	while (is_str_env(line[*i]))
+	{
 		add_temp(line, temp, *i);
+		(*i)++;
+	}
 	(*i)--;
 	return (get_lexed(temp, data, ENV));
 }

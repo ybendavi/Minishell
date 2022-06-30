@@ -62,6 +62,8 @@ int	is_str(unsigned int *i, t_env *data)
 	token.token = NULL;
 	while (data->lexed[*i].type == STR)
 	{
+		if (!data->lexed[*i].token)
+			return (0);
 		token.token = ft_concat(token.token, data->lexed[*i].token);
 		if (!token.token)
 			return (-1);

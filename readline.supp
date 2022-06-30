@@ -734,4 +734,18 @@
    fun:readline
    fun:main
 }
-
+{
+   readline_leak 
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xmalloc
+   fun:sh_get_home_dir
+   fun:tilde_expand_word
+   fun:tilde_expand
+   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.0
+   fun:rl_read_init_file
+   fun:rl_initialize
+   fun:readline
+   fun:main
+}

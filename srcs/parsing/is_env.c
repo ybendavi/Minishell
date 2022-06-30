@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 12:21:56 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/30 16:08:41 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 14:20:03 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,11 @@ int	add_to_prev_token(t_env *data, char **str)
 int	parse_env(unsigned int *i, t_env *data, int y, char **str)
 {
 	if (!*str)
+	{
+		*i = y - 1;
 		return (0);
-	while (data->lexed[y].type == STR)
+	}
+	while (str && data->lexed[y].type == STR)
 	{
 		*str = ft_concat(*str, data->lexed[y].token);
 		if (!*str)
@@ -65,11 +68,11 @@ int	parse_env(unsigned int *i, t_env *data, int y, char **str)
 
 int	is_env_2(t_env *data, char **str, unsigned int y)
 {
-	if (get_env_var(data->env, &(data->lexed[y].token)))
+	if (get_env_var(data->env, &(data->lexed[y + 1].token)))
 		return (-1);
-	if (data->lexed[y].token)
+	if (data->lexed[y + 1].token)
 	{
-		*str = ft_concat(*str, data->lexed[y].token);
+		*str = ft_concat(*str, data->lexed[y + 1].token);
 		if (!*str)
 			return (-1);
 	}
@@ -83,19 +86,19 @@ int	is_env(unsigned int *i, t_env *data, char *str)
 	y = *i;
 	while (data->lexed[y].type == ENV)
 	{
-		if (y + 1 < data->nb_token && data->lexed[y + 1].token 
+		if (y + 1 < data->nb_token && data->lexed[y].token[1] != '?'
 			&& is_char_env(data->lexed[y + 1].token[0]))
 		{
-			y++;
 			if (is_env_2(data, &str, y))
 				return (-1);
+			y += 2;
 		}
 		else if (data->lexed[y].token && data->lexed[y].token[1] == '?')
 		{
 			if (is_status_code(data, &str))
 				return (-1);
+			y++;
 		}
-		y++;
 	}
 	return (parse_env(i, data, y, &str));
 }

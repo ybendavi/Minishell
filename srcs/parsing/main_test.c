@@ -1,39 +1,6 @@
 #include "minishell.h"
-
-int	handle_buff(t_env *data, char **buff)
-{
-	int	ret;
-
-	ret = lexer(*buff, data);
-	if (ret)
-	{
-		free(*buff);
-		*buff = NULL;
-		return (ft_return(ret, data));
-	}
-//	printf("/°\\_/°\\_/°\\_/°\\ Lexer Output /°\\_/°\\_/°\\_/°\\\n\n");
-		unsigned int	i = 0;
-		while (i < data->nb_token)
-		{
-		//	printf("%d = %d %d %s\n", i, data->lexed[i].type, data->lexed[i].size, data->lexed[i].token);
-			i++;
-		}
-
-	ret = init_parser(data, data->env);
-	if (ret)
-		return (ft_return(ret, data));
-	add_history(*buff);
-	free(*buff);
-	*buff = NULL;
-	return (0);
-}
-
-void	reset(t_env *data)
-{
-	set_null(data);	
-}
 	
-int	main(int ac, char **av, char **env)
+/*int	main(int ac, char **av, char **env)
 {
 	t_env	data;
 	char	*buff;
@@ -57,14 +24,7 @@ int	main(int ac, char **av, char **env)
 		{
 		//test
 			unsigned int i = 0;
-			//printf("/°\\_/°\\_/°\\_/°\\ Parser Output /°\\_/°\\_/°\\_/°\\\n\n");
-			while (i < data.nb_parsed)
-			{
-			//	printf("%d = %d %d %s\n", i, data.parsed[i].type, data.parsed[i].size, data.parsed[i].token);
-				i++;
-			}
-			//printf("______________________________________________________\n");
-		//end-test
+				//end-test
 			ret = parsing(&data);
 		//	if (ret)
 		//		return (ret);
@@ -107,4 +67,91 @@ int	main(int ac, char **av, char **env)
 		reset(&data);
 	}
 	return(0);
+}*/
+
+int	handle_buff(t_env *data, char **buff)
+{
+	int	ret;
+
+	ret = lexer(*buff, data);
+	printf("/°\\_/°\\_/°\\_/°\\ Lexer Output /°\\_/°\\_/°\\_/°\\\n\n");
+		unsigned int	i = 0;
+		while (i < data->nb_token)
+		{
+			printf("%d = %d %d %s\n", i, data->lexed[i].type, data->lexed[i].size, data->lexed[i].token);
+			i++;
+		}
+	printf("%d\n", ret);
+
+	if (ret)
+	{
+		free(*buff);
+		*buff = NULL;
+		return (ft_return(ret, data));
+	}
+		ret = init_parser(data);
+	if (ret)
+		return (ft_return(ret, data));
+	add_history(*buff);
+	free(*buff);
+	*buff = NULL;
+	return (0);
+}
+
+void	reset(t_env *data)
+{
+	set_null(data);
+}
+
+void	main_error(t_env *data)
+{
+	freeer(data);
+	free_lexed(data);
+	free_parsed(data);
+}
+
+int	handle_exec(t_env *data)
+{
+	int	ret;
+
+	ret = parsing(data);
+	if (ret == -1)
+		return (ft_return(-1, data));
+	data->status_code = execution(data);
+	if (data->status_code == -1)
+		return (ft_return(-1, data));
+	freeer(data);
+	return (0);
+}
+
+int	main(int ac, char **av, char **env)
+{
+	t_env	data;
+	char	*buff;
+
+	(void)ac;
+	(void)av;
+	if (ft_init(&data, env))
+		ft_return(1, &data);
+	while (7)
+	{
+		buff = readline("minishell$ ");
+		if (!buff)
+			ft_return(1, &data);
+		data.status_code = handle_buff(&data, &buff);
+		unsigned int i = 0;
+		printf("/°\\_/°\\_/°\\_/°\\ Parser Output /°\\_/°\\_/°\\_/°\\\n\n");
+		while (i < data.nb_parsed)
+		{
+			printf("%d = %d %d %s\n", i, data.parsed[i].type, data.parsed[i].size, data.parsed[i].token);
+			i++;
+		}
+		printf("______________________________________________________\n");
+		if (!data.status_code)
+			handle_exec(&data);
+		else
+			main_error(&data);
+		reset(&data);
+	}
+	return (0);
 }
