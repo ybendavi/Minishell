@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 19:48:19 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/30 16:33:19 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/30 22:49:45 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,15 @@ void	free_env(t_env *data)
 	i = 0;
 	while (data->env[i])
 	{
-		if (data->env[i])
-			free(data->env[i]);
+		free(data->env[i]);
+		data->env[i] = NULL;
 		i++;
 	}
 	if (data->env)
+	{
 		free(data->env);
+		data->env = NULL;
+	}
 }
 
 void	cases_neg_ret(int ret, t_env *data)

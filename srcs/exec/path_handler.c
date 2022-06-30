@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:18 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/29 21:10:33 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 22:27:55 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ int	set_paths(t_env *envs)
 
 	paths = set_env(envs->env);
 	ret = set_path_error(paths);
+	printf("ret2:%d\n", ret);
 	if (ret)
 		return (ret);
 	tmp = envs->c_tbls;

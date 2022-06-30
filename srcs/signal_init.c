@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 15:51:36 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/30 18:33:51 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/30 21:51:38 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ void	handler_sig(int sig, siginfo_t *info, void *context)
 	(void) context;
 	if (sig == SIGINT)
 	{
-		write(1, "\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
+		write(1, "\nminishell$ ", 13);
 	}
 }
 
@@ -40,7 +38,6 @@ int	signal_init(t_env *data)
 	sig_q.sa_flags = 0;
 	ret = sigaction(SIGINT, &sig_i, NULL);
 	ret = sigaction(SIGQUIT, &sig_q, NULL);
-	data->sig_i = sig_i;
 	data->sig_q = sig_q;
 	if (ret)
 		return (ret);

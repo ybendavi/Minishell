@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 16:52:15 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/30 18:18:41 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 22:51:52 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	path_error(const char *cmd, t_env *envs, int fd)
 }
 
 int	errno_two(const char *cmd, t_env *envs)
-{	
+{
 	write(2, cmd, ft_strlen(cmd));
 	write(2, ": ", 2);
 	write(2, "command not found\n", ft_strlen("command not found\n"));

@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:38:51 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/30 15:06:29 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/30 22:44:37 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,15 @@ void	quit_proc(t_cmds *tmp, t_env *envs)
 int	no_builtin(t_cmds *cmd, char **env, t_env *envs, int ret)
 {
 	close_fds(cmd);
+	printf("ret:%d\n", ret);
 	if (ret == 127)
 	{
 		errno = 2;
-		exec_errors(127, cmd->cmd, envs);
-		exit(127);
+		exit(errno_two(cmd->cmd, envs));
 	}
 	if (cmd->cmd && is_builtin(cmd) == 0)
 		exit(builtins(cmd, envs->env, envs));
-	else if (cmd && cmd->cmd && is_builtin(cmd))
+	else if (cmd && cmd->path && cmd->cmd && is_builtin(cmd))
 	{
 		execve(cmd->path, cmd->cmds, env);
 	}
@@ -92,6 +92,7 @@ void	fork_handler(t_cmds *cmd)
 
 int	child_process(t_cmds *cmd, char **env, t_env *envs, int ret)
 {
+	
 	fork_handler(cmd);
 	if (cmd->in == -1 || cmd->out == -1)
 		quit_proc(cmd, envs);
@@ -100,7 +101,7 @@ int	child_process(t_cmds *cmd, char **env, t_env *envs, int ret)
 	sigaddset(&(envs->sig_q.sa_mask), SIGQUIT);
 	envs->sig_q.sa_handler = SIG_DFL;
 	envs->sig_q.sa_flags = 0;
-	ret = sigaction(SIGQUIT, &(envs->sig_q), NULL);
+	sigaction(SIGQUIT, &(envs->sig_q), NULL);
 	if (is_builtin(cmd) == 0)
 		exit(builtins(cmd, envs->env, envs));
 	else
