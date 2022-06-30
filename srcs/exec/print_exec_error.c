@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 16:52:15 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/29 16:52:19 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 18:18:41 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,11 @@ int	exec_errors(int status_code, const char *cmd, t_env *envs)
 		if (ret != 0)
 			return (ret);
 	}
-	if (errno == 2)
+	if (errno == 2 || errno == 13)
 		return (errno_two(cmd, envs));
 	if (errno == 13)
 	{
+		write(2, "bash: ", 6);
 		perror(cmd);
 		write(2, "Permission denied\n", 18);
 		free_all_env(envs);

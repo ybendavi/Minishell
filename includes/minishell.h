@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/30 17:57:21 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/30 19:07:26 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,9 @@ int				signal_init(t_env *data);
 /********BUILT-IN*********/
 
 int				ft_export(char **strs, t_env *data);
+int				not_valid(char *str);
+int				is_good_str(char *str);
+int				print_env_w_export(t_env *data);
 int				cd_main(char **av, t_env *envs);
 int				pwd_main(t_env *envs);
 int				ft_env(t_env *data, char **strs);

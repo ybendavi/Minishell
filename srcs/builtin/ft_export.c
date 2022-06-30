@@ -6,62 +6,15 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 19:58:50 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/28 19:58:24 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 19:03:45 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	print_env_w_export(t_env *data)
-{
-	int	i;
-	char	**strs;
-
-	i = 0;
-	while (data->env[i])
-	{
-		strs=ft_split(data->env[i], '=');
-		if (!strs)
-			return (-1);
-		if (strs[1] == NULL)
-			strs[1] = ft_strdup("");
-		printf("export %s=\"%s\"\n", strs[0], strs[1]);
-		free(strs[0]);
-		free(strs[1]);
-		free(strs);
-		i++;
-	}
-	return (0);
-}
-
-int	is_good_str(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (!is_char_env(str[i]))
-		return (0);
-	i++;
-	while (str[i] && is_str_env(str[i]))
-		i++;
-	if (str[i] == '=' && i != 0)
-		return (1);
-	else if (str[i] == 0)
-		return (2);
-	else
-		return (0);
-}
-
-void	not_valid(char *str)
-{
-	write(2, "bash: export: `", 16);
-	write(2, str, ft_strlen(str));
-	write(2, "': not a valid identifier\n", 27);
-}
-
 int	realloc_env(t_env *data)
 {
-	int	i;
+	int		i;
 	char	**new;
 
 	i = 0;
@@ -78,7 +31,7 @@ int	realloc_env(t_env *data)
 			return (-1);
 		i++;
 	}
-	free_env(data);	
+	free_env(data);
 	data->env = new;
 	return (0);
 }
@@ -161,15 +114,11 @@ int	ft_export(char **strs, t_env *data)
 		if (ret == 1)
 		{
 			if (check_already_exist(data->env, strs[i], data))
-				return (-1);	
+				return (-1);
 		}
 		else if (ret == 0)
-		{
-			mark = 1;
-			not_valid(strs[i]);
-		}
+			mark = not_valid(strs[i]);
 		i++;
 	}	
 	return (mark);
 }
-
