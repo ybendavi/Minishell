@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/01 00:18:39 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 23:15:35 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ int				exec_no_pipe(t_cmds *cmd, t_env *envs);
 int				execution(t_env *envs);
 void			parent_process(t_cmds *cmds);
 void			exit_non_buff(t_env *envs, int *fds);
+void			exec_redir(char **buff, t_env *envs, t_cmds *cmd);
 void			redir_handler(t_cmds *cmd);
 void			free_all_env(t_env *env);
 void			paths_free(char **paths);
