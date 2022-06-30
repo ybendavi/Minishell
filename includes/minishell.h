@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/30 01:18:14 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 17:57:21 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,10 @@ typedef struct s_env {
 	char			**temp;
 	t_cmds			*c_tbls;
 	char			**env;
+	struct sigaction	sig_q;
+	struct sigaction	sig_i;
 	int				status_code;
+	int				nb_sig;
 	unsigned int	nb_token;
 	unsigned int	nb_parsed;
 }			t_env;
@@ -147,7 +150,7 @@ void			add_temp(char *line, char **temp, unsigned int i);
 /*********SIG***********/
 
 char			*sig_error(int sig);
-int				signal_init(void);
+int				signal_init(t_env *data);
 
 /********BUILT-IN*********/
 

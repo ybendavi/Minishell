@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/30 14:38:16 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 16:03:51 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	launcher(t_cmds *cmds, t_env *envs, int retu)
 	return (ret);
 }
 
-int	check_sig(int status)
+int	check_sig(int status, t_env *envs)
 {
 	char	*str;
 	int		sig;
@@ -49,24 +49,28 @@ int	check_sig(int status)
 	if (WIFSIGNALED(status))
 	{
 		sig = WTERMSIG(status);
-		str = sig_error(sig);
-		if (str)
+		if (envs->nb_sig != sig)
 		{
-			write(2, str, ft_strlen(str));
-			write(2, "\n", 1);
+			envs->nb_sig = sig;
+			str = sig_error(sig);
+			if (str)
+			{
+				write(2, str, ft_strlen(str));
+				write(2, "\n", 1);
+			}
 		}
 		return (128 + sig);
 	}
 	return (0);
 }
 
-int	child_waiter(t_cmds *cmds, int status, int status_code)
+int	child_waiter(t_cmds *cmds, t_env *envs, int status, int status_code)
 {
 	waitpid(cmds->fork, &status, 0);
 	if (WIFEXITED(status) != 0)
 		status_code = WEXITSTATUS(status);
 	else
-		status_code = check_sig(status);
+		status_code = check_sig(status, envs);
 	return (status_code);
 }
 
@@ -79,7 +83,7 @@ int	exec_loop(t_cmds *cmds, int status, int status_code, t_env *envs)
 		{
 			if (cmds->fork > 0)
 			{
-				status_code = child_waiter(cmds, status, status_code);
+				status_code = child_waiter(cmds, envs, status, status_code);
 				cmds = cmds->next;
 			}
 		}

@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 12:23:06 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/30 15:53:58 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 16:20:18 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	is_pipe(unsigned int i, t_env *data)
 {
 	if (i == 0)
 		return (-3);
-	if (data->parsed[data->nb_parsed - 1].type != STR)
+	if (data->parsed[data->nb_parsed - 1].type == PIPE)
 		return (-3);
 	else
 	{

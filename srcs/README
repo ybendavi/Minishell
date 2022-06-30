@@ -1,1 +1,0 @@
-lancer valgrind avec le flag --suppressions=./readline.supp pour ignorer les leaks de readline

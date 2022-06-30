@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 15:51:36 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/30 14:17:01 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/30 18:05:06 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	handler_sig(int sig, siginfo_t *info, void *context)
 	}
 }
 
-int	signal_init(void)
+int	signal_init(t_env *data)
 {
 	struct sigaction	sig_q;
 	struct sigaction	sig_i;
@@ -40,6 +40,8 @@ int	signal_init(void)
 	sig_q.sa_flags = 0;
 	ret = sigaction(SIGINT, &sig_i, NULL);
 	ret = sigaction(SIGQUIT, &sig_q, NULL);
+	data->sig_i = sig_i;	
+	data->sig_q = sig_q;
 	if (ret)
 		return (ret);
 	return (0);

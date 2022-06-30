@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 19:48:19 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/29 22:58:03 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/06/30 16:33:19 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,10 @@ void	free_env(t_env *data)
 void	cases_neg_ret(int ret, t_env *data)
 {	
 	if (ret == -1)
+	{
+		freeer(data);
 		write(2, "Malloc error.\n", 14);
+	}
 	if (ret == -2)
 		write(1, "Lone quote.\n", 12);
 	if (ret == -3)
