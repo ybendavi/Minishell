@@ -837,7 +837,7 @@
    fun:main
 }
 {
-   realdine_leak
+   readline_leak
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:realloc
@@ -853,5 +853,53 @@
    fun:handle_exec
    fun:main
 }
-
-
+{
+   readline_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xmalloc
+   fun:rl_set_prompt
+   fun:readline
+   fun:redir_process
+   fun:redir_lim
+   fun:redir_parse
+   fun:recu_parse
+   fun:parsing
+   fun:handle_exec
+   fun:main
+}
+{
+   readline_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xmalloc
+   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.0
+   fun:rl_expand_prompt
+   fun:rl_set_prompt
+   fun:readline
+   fun:redir_process
+   fun:redir_lim
+   fun:redir_parse
+   fun:recu_parse
+   fun:parsing
+   fun:handle_exec
+}
+{
+   readline_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:realloc
+   fun:xrealloc
+   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.0
+   fun:rl_expand_prompt
+   fun:rl_set_prompt
+   fun:readline
+   fun:redir_process
+   fun:redir_lim
+   fun:redir_parse
+   fun:recu_parse
+   fun:parsing
+   fun:handle_exec
+}

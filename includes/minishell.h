@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/30 18:38:56 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/01 00:18:39 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct command_table_list
 }					t_cmds;
 
 typedef struct s_env {
+	struct sigaction	sig_i;
 	struct sigaction	sig_q;
 	t_token				*tab;
 	t_token				*lexed;
@@ -101,6 +102,7 @@ int				builtins(t_cmds *cmds, char **env, t_env *envs);
 int				exec_no_pipe(t_cmds *cmd, t_env *envs);
 int				execution(t_env *envs);
 void			parent_process(t_cmds *cmds);
+void			exit_non_buff(t_env *envs, int *fds);
 void			redir_handler(t_cmds *cmd);
 void			free_all_env(t_env *env);
 void			paths_free(char **paths);
@@ -163,6 +165,7 @@ int				ft_env(t_env *data, char **strs);
 int				ft_unset(char **strs, t_env *data);
 int				ft_echo(char **strs);
 int				ft_exit(t_env *data, char **strs);
+int				malloc_error(char **neww);
 
 /*********UTILS*************/
 

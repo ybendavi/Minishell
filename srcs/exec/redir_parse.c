@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:08:00 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/30 18:36:13 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/01 00:59:29 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,45 +16,52 @@ void	redir_process(t_token *token, t_cmds *cmd, t_env *envs)
 {
 	char	*buff;
 
-	(void) envs;
-	close(cmd->pfd_in[0]);
+	close(cmd->pfd_in[0]);        
+	sigemptyset(&(envs->sig_i.sa_mask));
+        sigaddset(&(envs->sig_i.sa_mask), SIGINT);
+      	envs->sig_i.sa_handler = SIG_DFL;
+        envs->sig_i.sa_flags = 0;
+        sigaction(SIGINT, &(envs->sig_i), NULL);
 	buff = readline(">");
-	while (ft_strncmp(buff, token[1].token, ft_strlen(token[1].token + 1)) != 0)
+	if (!buff)
+		exit_non_buff(envs, cmd->pfd_in);
+	while (ft_strncmp(buff, token[1].token, ft_strlen(buff)) != 0)
 	{
-		write(cmd->pfd_in[1], buff, ft_strlen(buff));
-		write(cmd->pfd_in[1], "\n", 1);
+		write(1, buff, ft_strlen(buff));
+		write(1, "\n", 1);
 		if (buff)
 			free(buff);
 		buff = NULL;
 		buff = readline(">");
 		if (!buff)
-		{
-			write(1, "warning: here-document delimited by ", 36);
-			write(1, "end-of-file (wanted `file')\n", 29);
-			exit (0);
-		}
+			exit_non_buff(envs, cmd->pfd_in);
 	}
-	close(cmd->pfd_in[1]);
 	if (buff)
 		free(buff);
+	close(cmd->pfd_in[1]);        
+	free_all_env(envs);
+	write(1, "\n", 1);
 	exit (0);
 }
 
 void	redir_lim(t_token *token, t_cmds *cmd, t_env *envs)
 {
 	pid_t	forking;
-	int		status;
 
 	pipe(cmd->pfd_in);
 	forking = fork();
 	if (forking < 0)
-		return ;
-	if (forking == 0)
-		redir_process(token, cmd, envs);
-	else if (forking > 0)
 	{
+		return ;
+	}
+	if (forking == 0)
+	{
+		redir_process(token, cmd, envs);
+	}
+	else
+	{
+		waitpid(forking, NULL, 0);
 		close(cmd->pfd_in[1]);
-		wait(&status);
 	}
 }
 

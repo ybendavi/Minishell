@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:38:51 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/30 22:44:37 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 23:28:45 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ void	quit_proc(t_cmds *tmp, t_env *envs)
 int	no_builtin(t_cmds *cmd, char **env, t_env *envs, int ret)
 {
 	close_fds(cmd);
-	printf("ret:%d\n", ret);
 	if (ret == 127)
 	{
 		errno = 2;
@@ -92,7 +91,6 @@ void	fork_handler(t_cmds *cmd)
 
 int	child_process(t_cmds *cmd, char **env, t_env *envs, int ret)
 {
-	
 	fork_handler(cmd);
 	if (cmd->in == -1 || cmd->out == -1)
 		quit_proc(cmd, envs);

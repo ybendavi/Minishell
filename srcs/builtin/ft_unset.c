@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 23:00:42 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/30 22:44:20 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 23:14:32 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,10 @@ int	delete_var(t_env *data, int line)
 		{
 			new[y] = ft_strdup(data->env[i]);
 			if (!new[y])
-				return (-1);
+				return (malloc_error(new));
+			y++;
 		}
 		i++;
-		y++;
 	}
 	free_env(data);
 	data->env = new;
