@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 15:51:36 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/01 00:18:26 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/01 01:09:49 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	handler_sig(int sig, siginfo_t *info, void *context)
 	(void) context;
 	if (sig == SIGINT)
 	{
+		rl_replace_line("", 0);
 		write(1, "\nminishell$ ", 13);
 	}
 }
