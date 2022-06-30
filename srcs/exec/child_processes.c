@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:38:51 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/30 14:29:06 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 15:06:29 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,11 @@ int	child_process(t_cmds *cmd, char **env, t_env *envs, int ret)
 	if (cmd->in == -1 || cmd->out == -1)
 		quit_proc(cmd, envs);
 	redir_handler(cmd);
+	sigemptyset(&(envs->sig_q.sa_mask));
+	sigaddset(&(envs->sig_q.sa_mask), SIGQUIT);
+	envs->sig_q.sa_handler = SIG_DFL;
+	envs->sig_q.sa_flags = 0;
+	ret = sigaction(SIGQUIT, &(envs->sig_q), NULL);
 	if (is_builtin(cmd) == 0)
 		exit(builtins(cmd, envs->env, envs));
 	else

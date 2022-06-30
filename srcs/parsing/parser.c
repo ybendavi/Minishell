@@ -17,7 +17,7 @@ int	is_pipe(unsigned int i, t_env *data)
 	if (i == 0)
 		return (-3);
 	if (data->nb_parsed > 0
-		&& data->parsed[data->nb_parsed - 1].type != STR)
+    && data->parsed[data->nb_parsed - 1].type == PIPE)
 		return (-3);
 	else
 	{

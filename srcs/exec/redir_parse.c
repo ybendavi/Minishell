@@ -6,18 +6,19 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:08:00 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/29 18:09:19 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 18:20:38 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	redir_lim(t_token *token, t_cmds *cmd)
+void	redir_process(t_token *token, t_cmds *cmd, t_env *envs)
 {
 	char	*buff;
 
-	pipe(cmd->pfd_in);
-	buff = readline(">");
+	(void) envs;
+	close(cmd->pfd_in[0]);
+	buff = readline(">");	
 	while (ft_strncmp(buff, token[1].token, ft_strlen(token[1].token + 1)) != 0)
 	{
 		write(cmd->pfd_in[1], buff, ft_strlen(buff));
@@ -26,10 +27,35 @@ void	redir_lim(t_token *token, t_cmds *cmd)
 			free(buff);
 		buff = NULL;
 		buff = readline(">");
+		if (!buff)
+		{
+			write(1, "warning: here-document delimited by ", 36);
+			write(1, "end-of-file (wanted `file')\n", 29);
+			exit (0);
+		}
 	}
 	close(cmd->pfd_in[1]);
 	if (buff)
 		free(buff);
+	exit (0);
+}
+
+void	redir_lim(t_token *token, t_cmds *cmd, t_env *envs)
+{
+	pid_t	forking;
+	int	status;
+
+	pipe(cmd->pfd_in);
+	forking = fork();
+	if (forking < 0)
+		return ;
+	if (forking == 0)
+		redir_process(token, cmd, envs);
+	else if (forking > 0)
+	{
+		close(cmd->pfd_in[1]);
+		wait(&status);
+	}
 }
 
 int	redir_set_cmds(t_token *token, t_cmds *tmp)
@@ -63,7 +89,7 @@ int	redir_parse(t_env *envs, t_token *token)
 	if ((*token).type != REDIR_LIM)
 		i = set_fd(tmp, token);
 	else
-		redir_lim(token, tmp);
+		redir_lim(token, tmp, envs);
 	if (i != 0)
 		return (i);
 	return (redir_set_cmds(token, tmp));
