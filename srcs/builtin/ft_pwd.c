@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 16:34:36 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/30 15:43:18 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 18:41:12 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 int	pwd_main(t_env *envs)
 {
-	int	i;
+	char	*path;
 
-	i = 0;
-	if (envs->env)
+	(void)envs;
+	path = ft_calloc(sizeof(char) * 1000);
+	getcwd(path, 999);
+	if (path)
 	{
-		while (envs->env[i] && ft_strncmp(envs->env[i], "PWD=", 4) != 0)
-			i++;
-		if (ft_strncmp(envs->env[i], "PWD=", 4) == 0)
-			printf("%s\n", &ft_strchr(envs->env[i], '=')[1]);
+		printf("%s\n", path);
+		free(path);
 	}
 	return (0);
 }

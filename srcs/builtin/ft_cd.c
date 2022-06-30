@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 16:39:42 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/30 14:30:33 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 17:40:50 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ int	cd_other_case(char **av, t_env *envs, int i)
 		if (chdir(av[1]) == -1)
 		{
 			write(2, "bash: ", 6);
+			write(2, av[0], ft_strlen(av[0]));
+			write(2, ": ", 2);
 			perror(av[1]);
 			return (1);
 		}

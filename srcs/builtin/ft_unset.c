@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 23:00:42 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/30 15:47:22 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/06/30 18:48:02 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	is_existing_var(char *str, char **env)
 {
 	int unsigned	i;
-	int			y;
+	int				y;
 
 	i = 0;
 	if (!is_char_env(str[i]))
@@ -38,15 +38,23 @@ int	is_existing_var(char *str, char **env)
 	return (0);
 }
 
+int	env_size(t_env *data)
+{
+	int	i;
+
+	i = 0;
+	while (data->env[i])
+		i++;
+	return (i);
+}
+
 int	delete_var(t_env *data, int line)
 {
 	char	**new;
 	int		i;
 	int		y;
 
-	i = 0;
-	while (data->env[i])
-		i++;
+	i = env_size(data);
 	new = ft_calloc(sizeof(char *) * i);
 	if (!new)
 		return (-1);
@@ -83,9 +91,7 @@ int	ft_unset(char **strs, t_env *data)
 
 	mark = 0;
 	i = 1;
-	if (!strs)
-		return (0);
-	if (!strs[1])
+	if (!strs || !strs[1])
 		return (0);
 	while (strs[i])
 	{
