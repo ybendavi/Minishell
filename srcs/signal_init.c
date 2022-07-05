@@ -19,7 +19,9 @@ void	handler_sig(int sig, siginfo_t *info, void *context)
 	if (sig == SIGINT)
 	{
 		rl_replace_line("", 0);
-		write(1, "\nminishell$ ", 13);
+		rl_on_new_line();
+		//definir une valeur pour la globale : quand un processus est interrompu par sigint, on reaffiche pas la prochaine ligne
+		write(1, "\nminishell$ \r", 14);
 	}
 }
 

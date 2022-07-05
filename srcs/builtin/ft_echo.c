@@ -12,6 +12,20 @@
 
 #include "minishell.h"
 
+int	ft_compflag(char *str)
+{
+	unsigned int	i;
+
+	i = 0;
+	if (str[i] == '-')
+		i++;
+	while (str[i] && str[i] == 'n')
+		i++;
+	if (i == ft_strlen(str))
+		return (1);
+	return (0);
+}
+
 int	ft_echo(char **strs)
 {
 	char	mark;
@@ -22,7 +36,7 @@ int	ft_echo(char **strs)
 		return (0);
 	mark = 0;
 	i = 1;
-	while (!(ft_strncmp(strs[i], "-n", 2)))
+	while (strs[i] && ft_compflag(strs[i]))
 	{
 		mark = 1;
 		i++;

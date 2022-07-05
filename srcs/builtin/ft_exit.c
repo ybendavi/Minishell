@@ -45,11 +45,11 @@ int	ft_get_status(char *str, t_env *data)
 	}
 	while (str[i] >= 48 && str[i] <= 67)
 		i++;
-	if (i != ft_strlen(str))
+	if (i != ft_strlen(str) || ft_cmp(str, ""))
 	{
-		write(2, "bash: exit: ", 13);
+		write(2, "exit\nbash: exit: ", 18);
 		write(2, str, ft_strlen(str));
-		write(2, ": numeric argument required\n", 29);
+		write(2, " : numeric argument required\n", 29);
 		free_all_env(data);
 		exit(2);
 	}
