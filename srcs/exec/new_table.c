@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:27:38 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/29 18:27:39 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/06 20:54:10 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	set_null_table(t_cmds **tmp)
 	(*tmp)->in = 0;
 	(*tmp)->out = 1;
 	(*tmp)->next = NULL;
+	(*tmp)->delim = NULL;
+	(*tmp)->lim = malloc(sizeof(int) * 2);
 	(*tmp)->pfd_in = malloc(sizeof(int) * 2);
 	(*tmp)->pfd_out = malloc(sizeof(int) * 2);
 }
@@ -32,9 +34,13 @@ int	test_table(t_env *envs, t_cmds *tmp)
 		return (-1);
 	if (!tmp->pfd_out)
 		return (-1);
+	if (!tmp->lim)
+		return (-1);
+	tmp->lim[0] = -1;
 	tmp->pfd_in[0] = -1;
 	tmp->pfd_out[0] = -1;
 	tmp->pfd_in[1] = -1;
+	tmp->lim[1] = -1;
 	tmp->pfd_out[1] = -1;
 	if (!envs->c_tbls || !tmp)
 		return (-1);

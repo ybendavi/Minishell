@@ -6,54 +6,19 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:08:00 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/06 17:07:29 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/06 21:21:55 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	redir_process(t_token *token, t_cmds *cmd, t_env *envs)
+int	redir_lim(t_token *token, t_cmds *cmd)
 {
-	char	*buff;
-
-	close(cmd->pfd_in[0]);
-	cmd->pfd_in[0] = -3;
-	sigemptyset(&(envs->sig_i.sa_mask));
-	sigaddset(&(envs->sig_i.sa_mask), SIGINT);
-	envs->sig_i.sa_handler = SIG_DFL;
-	envs->sig_i.sa_flags = 0;
-	sigaction(SIGINT, &(envs->sig_i), NULL);
-	buff = readline(">");
-	if (!buff)
-		exit_non_buff(envs, cmd->pfd_in);
-	while (ft_strncmp(buff, token[1].token, ft_strlen(buff)) != 0)
-		exec_redir(&buff, envs, cmd);
-	if (buff)
-		free(buff);
-	close(cmd->pfd_in[1]);
-	free_exec(envs);
-	exit (0);
-}
-
-void	redir_lim(t_token *token, t_cmds *cmd, t_env *envs)
-{
-	pid_t	forking;
-
-	pipe(cmd->pfd_in);
-	forking = fork();
-	if (forking < 0)
-	{
-		return ;
-	}
-	if (forking == 0)
-	{
-		redir_process(token, cmd, envs);
-	}
-	else
-	{
-		waitpid(forking, NULL, 0);
-		close(cmd->pfd_in[1]);
-	}
+	cmd->delim = ft_strdup(token[1].token);
+	if (!cmd->delim)
+		return (-1);
+	pipe(cmd->lim);
+	return (0);
 }
 
 int	redir_set_cmds(t_token *token, t_cmds *tmp)
@@ -87,7 +52,7 @@ int	redir_parse(t_env *envs, t_token *token)
 	if ((*token).type != REDIR_LIM)
 		i = set_fd(tmp, token);
 	else
-		redir_lim(token, tmp, envs);
+		i = redir_lim(token, tmp);
 	if (i != 0)
 		return (i);
 	return (redir_set_cmds(token, tmp));

@@ -6,29 +6,30 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/30 23:31:39 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/30 23:15:19 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/06 21:26:21 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	exit_non_buff(t_env *envs, int *fds)
+
+
+
+void	redir_process(t_token *token, t_cmds *cmd, t_env *envs)
 {
-	close(fds[1]);
-	write(1, "warning: here-document delimited by ", 36);
-	write(1, "end-of-file (wanted `file')\n", 29);
-	free_all_env(envs);
-	exit (0);
+	char	*buff;
+
+	close(cmd->pfd_in[0]);
+	cmd->pfd_in[0] = -3;
+	buff = readline(">");
+	if (!buff)
+		exit_non_buff(envs, cmd->pfd_in);
+	while (ft_strncmp(buff, token[1].token, ft_strlen(buff)) != 0)
+		exec_redir(&buff, envs, cmd);
+	if (buff)
+		free(buff);
+	close(cmd->pfd_in[1]);
+	free_exec(envs);
+	exit(0);
 }
 
-void	exec_redir(char **buff, t_env *envs, t_cmds *cmd)
-{
-	write(1, *buff, ft_strlen(*buff));
-	write(1, "\n", 1);
-	if (*buff)
-		free(*buff);
-	*buff = NULL;
-	*buff = readline(">");
-	if (!*buff)
-		exit_non_buff(envs, cmd->pfd_in);
-}

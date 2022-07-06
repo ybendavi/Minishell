@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/06 18:29:59 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/06 21:21:11 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <errno.h>
+
+static const int	g_sig = 0;
 
 typedef enum e_token_type {
 	REDIR_ADD,
@@ -49,8 +51,10 @@ typedef struct command_table_list
 	char						*path;
 	char						*file_in;
 	char						*file_out;
+	char						*delim;
 	int							in;
 	int							out;
+	int							*lim;
 	int							*pfd_in;
 	int							*pfd_out;
 	pid_t						fork;
@@ -103,8 +107,6 @@ int				exec_no_pipe(t_cmds *cmd, t_env *envs);
 int				execution(t_env *envs);
 int				close_fds(t_cmds *cmd);
 void			parent_process(t_cmds *cmds);
-void			exit_non_buff(t_env *envs, int *fds);
-void			exec_redir(char **buff, t_env *envs, t_cmds *cmd);
 void			redir_handler(t_cmds *cmd);
 void			free_all_env(t_env *env);
 void			paths_free(char **paths);
