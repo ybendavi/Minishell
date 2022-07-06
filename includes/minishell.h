@@ -101,6 +101,7 @@ int				is_builtin(t_cmds *cmds);
 int				builtins(t_cmds *cmds, char **env, t_env *envs);
 int				exec_no_pipe(t_cmds *cmd, t_env *envs);
 int				execution(t_env *envs);
+int				close_fds(t_cmds *cmd);
 void			parent_process(t_cmds *cmds);
 void			exit_non_buff(t_env *envs, int *fds);
 void			exec_redir(char **buff, t_env *envs, t_cmds *cmd);
@@ -110,6 +111,7 @@ void			paths_free(char **paths);
 void			free_cmds_table(t_cmds *tbls);
 void			free_pfds(t_cmds *cmds);
 void			freeer(t_env *envs);
+void			free_exec(t_env *envs);
 
 /****parser*****/
 

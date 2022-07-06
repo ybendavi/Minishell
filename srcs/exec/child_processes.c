@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:38:51 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/30 23:25:34 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/06 17:45:48 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,16 @@ int	close_fds(t_cmds *cmd)
 		tmp = tmp->prev;
 	while (tmp)
 	{
-		if (tmp->in != 0 && tmp != cmd && tmp->in != -1)
+		if (tmp->in != 0 && tmp->in != -1 && tmp->in != -3)
+		{
 			close(tmp->in);
-		if (tmp->out != 1 && tmp != cmd && tmp != cmd->prev && tmp->out != -1)
+			tmp->in = -3;
+		}
+		if (tmp->out != 1 && tmp->out != -1 && tmp->out != -3)
+		{
 			close(tmp->out);
+			tmp->out = -3;
+		}
 		tmp = tmp->next;
 	}
 	return (0);
@@ -33,17 +39,17 @@ int	close_fds(t_cmds *cmd)
 void	quit_proc(t_cmds *tmp, t_env *envs)
 {
 	close_fds(tmp);
-	if (tmp->in != 0 && tmp->in != -1)
+	if (tmp->in != 0 && tmp->in != -1 && tmp->in != -3)
 	{
 		close(tmp->in);
+		tmp->in = -3;
 	}
-	if (tmp->out != 1 && tmp->out != -1)
+	if (tmp->out != 1 && tmp->out != -1 && tmp->out != -3)
+	{
 		close(tmp->out);
-	freeer(envs);
-	free_lexed(envs);
-	free_parsed(envs);
-	free_all(envs);
-	rl_clear_history();
+		tmp->out = -3;
+	}
+	free_exec(envs);
 	exit(EXIT_FAILURE);
 }
 
@@ -64,11 +70,7 @@ int	no_builtin(t_cmds *cmd, char **env, t_env *envs, int ret)
 	}
 	else
 	{
-		freeer(envs);
-		free_lexed(envs);
-		free_parsed(envs);
-		free_all(envs);
-		rl_clear_history();
+		free_exec(envs);
 		exit(0);
 	}
 	return (0);
@@ -76,17 +78,19 @@ int	no_builtin(t_cmds *cmd, char **env, t_env *envs, int ret)
 
 void	fork_handler(t_cmds *cmd)
 {	
-	if (cmd->pfd_in[0] != -1)
+	if (cmd->pfd_in[0] != -1 && cmd->pfd_in[0] != -3)
 	{
 		close(cmd->pfd_in[1]);
+		cmd->pfd_in[1] = -3;
 		dup2(cmd->pfd_in[0], 0);
 		close(cmd->pfd_in[0]);
+		cmd->pfd_in[0] = -3;
 	}
-	if (cmd->pfd_out[0] != -1)
+	if (cmd->pfd_out[0] != -1 && cmd->pfd_out[0] != -3)
 	{
 		close(cmd->pfd_out[0]);
+		cmd->pfd_out[0] = -3;
 		dup2(cmd->pfd_out[1], 1);
-		close(cmd->pfd_out[1]);
 	}
 }
 
