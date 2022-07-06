@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:08:00 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/30 23:15:40 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/06 17:07:29 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	redir_process(t_token *token, t_cmds *cmd, t_env *envs)
 	char	*buff;
 
 	close(cmd->pfd_in[0]);
+	cmd->pfd_in[0] = -3;
 	sigemptyset(&(envs->sig_i.sa_mask));
 	sigaddset(&(envs->sig_i.sa_mask), SIGINT);
 	envs->sig_i.sa_handler = SIG_DFL;
@@ -30,7 +31,7 @@ void	redir_process(t_token *token, t_cmds *cmd, t_env *envs)
 	if (buff)
 		free(buff);
 	close(cmd->pfd_in[1]);
-	free_all_env(envs);
+	free_exec(envs);
 	exit (0);
 }
 

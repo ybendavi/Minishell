@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:42:15 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/29 21:11:01 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/06 18:20:20 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,15 @@ int	set_forks(t_env	*envs)
 
 void	parent_process(t_cmds *cmds)
 {	
-	if (cmds->in != 0 && cmds->in != -1)
+	if (cmds->in != 0 && cmds->in != -1 && cmds->in != -3)
+	{
 		close(cmds->in);
-	if (cmds->prev && cmds->prev->out != 1 && cmds->prev->out != -1)
+		cmds->in = -3;
+	}
+	if (cmds->prev && cmds->prev->out != 1 && cmds->prev->out != -1
+		&& cmds->prev->out != -3)
+	{
 		close(cmds->prev->out);
+		cmds->prev->out = -3;
+	}
 }

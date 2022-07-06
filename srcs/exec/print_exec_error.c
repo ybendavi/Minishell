@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 16:52:15 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/30 22:51:52 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/06 17:05:04 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ int	path_error(const char *cmd, t_env *envs, int fd)
 	if (errno == 2 && ft_strchr(cmd, '/') != NULL)
 	{
 		perror(cmd);
-		free_all_env(envs);
+		free_exec(envs);
 		return (127);
 	}
 	if (access(cmd, X_OK) == -1)
 	{
 		perror(cmd);
-		free_all_env(envs);
+		free_exec(envs);
 		return (126);
 	}
 	fd = open(cmd, O_DIRECTORY);
@@ -33,7 +33,7 @@ int	path_error(const char *cmd, t_env *envs, int fd)
 		write(2, cmd, ft_strlen(cmd));
 		write(2, ": ", 2);
 		write(2, "Is a directory\n", ft_strlen("Is a directory\n"));
-		free_all_env(envs);
+		free_exec(envs);
 		return (126);
 	}
 	return (0);
@@ -44,7 +44,7 @@ int	errno_two(const char *cmd, t_env *envs)
 	write(2, cmd, ft_strlen(cmd));
 	write(2, ": ", 2);
 	write(2, "command not found\n", ft_strlen("command not found\n"));
-	free_all_env(envs);
+	free_exec(envs);
 	return (127);
 }
 
@@ -70,9 +70,9 @@ int	exec_errors(int status_code, const char *cmd, t_env *envs)
 		write(2, "bash: ", 6);
 		perror(cmd);
 		write(2, "Permission denied\n", 18);
-		free_all_env(envs);
+		free_exec(envs);
 		return (126);
 	}
-	free_all_env(envs);
+	free_exec(envs);
 	return (EXIT_FAILURE);
 }
