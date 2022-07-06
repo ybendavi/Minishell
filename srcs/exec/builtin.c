@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 15:33:52 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/30 14:38:26 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/06 17:08:49 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,6 @@ int	builtins(t_cmds *cmds, char **env, t_env *envs)
 	if (ft_strcmp(cmds->cmd, "echo") == 0)
 		ret = ft_echo(cmds->cmds);
 	if (cmds->pfd_in[0] != -1 || cmds->pfd_out[0] != -1)
-		free_all_env(envs);
+		free_exec(envs);
 	return (ret);
 }
