@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 17:26:57 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/06 20:54:42 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/07 22:03:54 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,18 @@ void	free_pfds(t_cmds *cmds)
 
 void	free_strs_cmds(t_cmds *tbls)
 {
+	int	i;
+
+	i = 0;
 	if (tbls->delim)
+	{
+		while (tbls->delim[i])
+		{
+			free(tbls->delim[i]);
+			i++;
+		}
 		free(tbls->delim);
+	}
 	if (tbls->cmd)
 		free(tbls->cmd);
 	if (tbls->path)

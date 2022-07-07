@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/07 20:37:27 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/07 21:17:08 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	launcher(t_cmds *cmds, t_env *envs, int retu)
 	}
 	else if (cmds->fork > 0)
 	{
-		parent_process(cmds, status);
+		parent_process(cmds, status, envs);
 		if (cmds->next)
 			launcher(cmds->next, envs, retu);
 	}
@@ -110,6 +110,9 @@ int	exec_loop(t_cmds *cmds, int status, int status_code, t_env *envs)
 	}
 	envs->sig_i.sa_handler = &handler_sig;
 	sigaction(SIGINT, &(envs->sig_i), NULL);
+	if (g_sig == 42)
+		status_code = 130;
+	close_fds(envs->c_tbls);
 	return (status_code);
 }
 

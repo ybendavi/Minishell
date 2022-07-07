@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:08:00 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/06 21:21:55 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/07 21:55:57 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,31 @@
 
 int	redir_lim(t_token *token, t_cmds *cmd)
 {
-	cmd->delim = ft_strdup(token[1].token);
-	if (!cmd->delim)
-		return (-1);
-	pipe(cmd->lim);
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	if (cmd->delim)
+	{
+		while (cmd->delim[i])
+			i++;
+		cmd->delim[i] = ft_strdup(token[1].token);
+	}
+	else
+	{
+		while ((token)[i].token)
+		{
+			if ((token)[i].type == REDIR_LIM)
+				count++;
+			i++;
+		}
+		cmd->delim = ft_calloc(sizeof(char *) * (count + 1));
+		if (!cmd->delim)
+			return (-1);
+		cmd->delim[0] = ft_strdup(token[1].token);
+		pipe(cmd->lim);
+	}
 	return (0);
 }
 
