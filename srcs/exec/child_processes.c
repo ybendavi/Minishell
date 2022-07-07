@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-extern int g_sig;
+extern int	g_sig;
 
 void	close_fds_two(t_cmds *tmp)
 {

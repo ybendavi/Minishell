@@ -107,6 +107,7 @@ int	execution(t_env *envs)
 	int		status_code;
 	int		ret;
 
+	g_sig = 2;
 	ret = set_paths(envs);
 	if (ret == -1)
 		return (-1);

@@ -12,7 +12,8 @@
 
 #include "minishell.h"
 
-extern int g_sig;
+extern int	g_sig;
+
 void	set_null(t_env *data)
 {
 	data->lexed = NULL;

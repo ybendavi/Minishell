@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-extern int g_sig;
+extern int	g_sig;
 
 void	handler_sig(int sig, siginfo_t *info, void *context)
 {
@@ -24,7 +24,7 @@ void	handler_sig(int sig, siginfo_t *info, void *context)
 		{
 			rl_replace_line("", 0);
 			rl_on_new_line();
-			write(1, "\nminishell$ \r", 14);
+			write(1, "\nminishell$ ", 13);
 		}
 	}
 }

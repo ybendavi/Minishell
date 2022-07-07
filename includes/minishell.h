@@ -25,7 +25,6 @@
 # include <readline/history.h>
 # include <errno.h>
 
-
 typedef enum e_token_type {
 	REDIR_ADD,
 	REDIR_LIM,

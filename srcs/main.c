@@ -83,7 +83,7 @@ int	main(int ac, char **av, char **env)
 		ft_return(1, &data);
 	while (7)
 	{
-		buff = readline("minishell$ ");
+		buff = readline("\rminishell$ ");
 		if (!buff)
 			ft_return(1, &data);
 		data.status_code = handle_buff(&data, &buff);
