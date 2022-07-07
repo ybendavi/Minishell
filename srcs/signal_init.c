@@ -6,11 +6,13 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 15:51:36 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/07 14:53:04 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/07 17:27:48 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern int g_sig;
 
 void	handler_sig(int sig, siginfo_t *info, void *context)
 {

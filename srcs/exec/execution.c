@@ -6,16 +6,17 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/07 13:33:45 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/07 18:44:11 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+extern int	g_sig;
+
 int	launcher(t_cmds *cmds, t_env *envs, int retu)
 {
 	int	ret;
-	int	status;
 
 	ret = 0;
 	status = 0;
@@ -36,7 +37,7 @@ int	launcher(t_cmds *cmds, t_env *envs, int retu)
 	}
 	else if (cmds->fork > 0)
 	{
-		parent_process(cmds, &status);
+		parent_process(cmds, status);
 		if (cmds->next)
 			launcher(cmds->next, envs, retu);
 	}
@@ -85,7 +86,8 @@ int	exec_loop(t_cmds *cmds, int status, int status_code, t_env *envs)
 		{
 			if (cmds->fork > 0)
 			{
-				status_code = child_waiter(cmds, envs, status, status_code);
+				if (!cmds->delim)
+					status_code = child_waiter(cmds, envs, status, status_code);
 				cmds = cmds->next;
 			}
 		}

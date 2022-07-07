@@ -6,11 +6,13 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 21:17:23 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/06 13:34:20 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/07 17:24:08 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_sig = 0;
 
 int	handle_buff(t_env *data, char **buff)
 {
