@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:38:51 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/07 13:49:03 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/07 14:57:30 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,8 +119,29 @@ void	exit_non_buff(t_env *envs, int *fds)
 	exit (0);
 }
 
+void	handler_child(int sig)
+{
+	if (sig == SIGINT)
+		g_sig = 42;
+}
+
+void	exit_int(t_env *envs)
+{
+	if (g_sig == 42)
+	{
+		free_exec(envs);
+		exit (130);
+	}
+}
+
 void	exec_redir(char **buff, t_env *envs, t_cmds *cmd)
 {
+	if (g_sig == 42)
+	{
+		if (*buff)
+			free(*buff);
+		exit_int(envs);
+	}
 	write(cmd->lim[1], *buff, ft_strlen(*buff));
 	write(cmd->lim[1], "\n", 1);
 	if (*buff)
@@ -135,6 +156,7 @@ int	lim_handler(t_cmds *cmd, t_env *envs)
 {
 	char	*buff;
 
+	exit_int(envs);
 	if (!cmd->delim)
 		return (0);
 	buff = readline(">");
@@ -143,22 +165,34 @@ int	lim_handler(t_cmds *cmd, t_env *envs)
 	while (ft_strncmp(buff, cmd->delim, ft_strlen(buff)) != 0
 		|| ft_strncmp(buff, cmd->delim, ft_strlen(cmd->delim)) != 0)
 		exec_redir(&buff, envs, cmd);
-//	printf("%s = %s, %zu\n", buff, cmd->delim, ft_strlen(buff));
 	if (buff)
 		free(buff);
 	close(cmd->pfd_in[1]);
-	dup2(cmd->lim[0], 0); // si write infini mettre ca a la fin
+	dup2(cmd->lim[0], 0);
 	close(cmd->lim[0]);
 	return (0);
 }
 
-int	child_process(t_cmds *cmd, char **env, t_env *envs, int ret)
+void	set_sig_child(t_env *envs)
 {
 	sigemptyset(&(envs->sig_q.sa_mask));
 	sigaddset(&(envs->sig_q.sa_mask), SIGQUIT);
 	envs->sig_q.sa_handler = SIG_DFL;
 	envs->sig_q.sa_flags = 0;
 	sigaction(SIGQUIT, &(envs->sig_q), NULL);
+	sigemptyset(&(envs->sig_i.sa_mask));
+	sigaddset(&(envs->sig_i.sa_mask), SIGINT);
+	envs->sig_i.sa_handler = &handler_child;
+	envs->sig_i.sa_flags = 0;
+	sigaction(SIGINT, &(envs->sig_i), NULL);
+
+
+}
+
+int	child_process(t_cmds *cmd, char **env, t_env *envs, int ret)
+{
+	exit_int(envs);
+	set_sig_child(envs);
 	lim_handler(cmd, envs);
 	fork_handler(cmd);
 	if (cmd->in == -1 || cmd->out == -1)

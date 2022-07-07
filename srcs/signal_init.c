@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 15:51:36 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/01 01:09:49 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/07 14:53:04 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,12 @@ void	handler_sig(int sig, siginfo_t *info, void *context)
 	(void) context;
 	if (sig == SIGINT)
 	{
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		//definir une valeur pour la globale : quand un processus est interrompu par sigint, on reaffiche pas la prochaine ligne
-		write(1, "\nminishell$ \r", 14);
+		if (g_sig == 0)
+		{
+			rl_replace_line("", 0);
+			rl_on_new_line();
+			write(1, "\nminishell$ \r", 14);
+		}
 	}
 }
 
