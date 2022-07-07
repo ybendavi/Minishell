@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:38:51 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/07 20:25:44 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/07 21:59:20 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	close_fds(t_cmds *cmd)
 			close(tmp->out);
 			tmp->out = -3;
 		}
-		close_fds_two(cmd);
+		close_fds_two(tmp);
 		tmp = tmp->next;
 	}
 	return (0);
@@ -126,7 +126,6 @@ void	exit_non_buff(t_env *envs, int *fds)
 
 void	handler_child(int sig)
 {
-	printf("sig = %d\n", sig);
 	if (sig == SIGINT)
 	{
 		g_sig = 42;
@@ -136,12 +135,13 @@ void	handler_child(int sig)
 
 void	exit_int(t_env *envs, char **buff)
 {
-	printf("glob:%d\n", g_sig);
 	if (g_sig == 42)
 	{
-		write(1, "2\n", 2);
-		if (*buff)
-			free(*buff);
+		if (buff)
+		{
+			if (*buff)
+				free(*buff);
+		}
 		free_exec(envs);
 		exit(1);
 	}
@@ -178,18 +178,28 @@ void	set_sig_child(t_env *envs)
 int	lim_handler(t_cmds *cmd, t_env *envs)
 {
 	char	*buff;
+	int	i;
 
+	i = 0;
 	if (!cmd->delim)
 		return (0);
 	set_sig_child(envs);
 	exit_int(envs, &buff);
+	while (cmd->delim[i + 1] != NULL)
+	{
+		buff = readline(">");
+		exit_int(envs, &buff);
+		i++;
+		if (!buff)
+			exit_non_buff(envs, cmd->lim);
+		else
+			free(buff);
+	}
 	buff = readline(">");
-	exit_int(envs, &buff);
-	printf("glob1:%d\n", g_sig);
 	if (!buff)
 		exit_non_buff(envs, cmd->lim);
-	while (ft_strncmp(buff, cmd->delim, ft_strlen(buff)) != 0
-		|| ft_strncmp(buff, cmd->delim, ft_strlen(cmd->delim)) != 0)
+	while (ft_strncmp(buff, cmd->delim[i], ft_strlen(buff)) != 0
+		|| ft_strncmp(buff, cmd->delim[i], ft_strlen(cmd->delim[i])) != 0)
 		exec_redir(&buff, envs, cmd);
 	if (buff)
 		free(buff);

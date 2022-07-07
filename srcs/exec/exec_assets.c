@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:42:15 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/07 18:39:04 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/07 20:51:02 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	set_forks(t_env	*envs)
 	return (0);
 }
 
-void	parent_process(t_cmds *cmds, int status)
+void	parent_process(t_cmds *cmds, int status, t_env *envs)
 {	
 	if (cmds->in != 0 && cmds->in != -1 && cmds->in != -3)
 	{
@@ -106,6 +106,10 @@ void	parent_process(t_cmds *cmds, int status)
 			close(cmds->lim[1]);
 			cmds->lim[1] = -3;
 		}
+		envs->sig_i.sa_handler = &kill_int;
+		sigaction(SIGINT, &(envs->sig_i), NULL);
+		if (g_sig == 42)
+			kill(cmds->fork, SIGINT);
 		waitpid(cmds->fork, &status, 0);
 		if (WIFEXITED(status) != 0)
 		{
@@ -121,5 +125,7 @@ void	parent_process(t_cmds *cmds, int status)
 			//if (WTERMSIG(*status) == SIGINT)
 			//	g_sig = 42;
 		//}
+		envs->sig_i.sa_handler = &handler_sig;
+		sigaction(SIGINT, &(envs->sig_i), NULL);
 	}
 }
