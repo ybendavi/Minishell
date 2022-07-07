@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:38:51 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/07 17:21:23 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/07 18:37:01 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,55 +113,79 @@ void	fork_handler(t_cmds *cmd)
 
 void	exit_non_buff(t_env *envs, int *fds)
 {
-	close(fds[1]);
-	fds[1] = -3;
+	if (fds[1] != -1 && fds[1] != -3)
+	{
+		close(fds[1]);
+		fds[1] = -3;
+	}
 	write(2, "warning: here-document delimited by ", 36);
 	write(2, "end-of-file (wanted `file')\n", 29);
 	free_exec(envs);
 	exit (0);
 }
-/*
+
 void	handler_child(int sig)
 {
+	printf("sig = %d\n", sig);
 	if (sig == SIGINT)
+	{
 		g_sig = 42;
-}*/
+		close(0);
+	}
+}
 
-void	exit_int(t_env *envs)
+void	exit_int(t_env *envs, char **buff)
 {
+	printf("glob:%d\n", g_sig);
 	if (g_sig == 42)
 	{
+		write(1, "2\n", 2);
+		if (*buff)
+			free(*buff);
 		free_exec(envs);
-		exit (130);
+		exit(1);
 	}
 }
 
 void	exec_redir(char **buff, t_env *envs, t_cmds *cmd)
 {
-	if (g_sig == 42)
-	{
-		if (*buff)
-			free(*buff);
-		exit_int(envs);
-	}
+	exit_int(envs, buff);
 	write(cmd->lim[1], *buff, ft_strlen(*buff));
 	write(cmd->lim[1], "\n", 1);
 	if (*buff)
 		free(*buff);
 	*buff = NULL;
 	*buff = readline(">");
+	exit_int(envs, buff);
 	if (!*buff)
 		exit_non_buff(envs, cmd->lim);
+}
+
+void	set_sig_child(t_env *envs)
+{
+	sigemptyset(&(envs->sig_q.sa_mask));
+	sigaddset(&(envs->sig_q.sa_mask), SIGQUIT);
+	envs->sig_q.sa_handler = SIG_IGN;
+	envs->sig_q.sa_flags = 0;
+	sigaction(SIGQUIT, &(envs->sig_q), NULL);
+	sigemptyset(&(envs->sig_i.sa_mask));
+	sigaddset(&(envs->sig_i.sa_mask), SIGINT);
+	envs->sig_i.sa_handler = &handler_child;
+	envs->sig_i.sa_flags = 0;
+	sigaction(SIGINT, &(envs->sig_i), NULL);
 }
 
 int	lim_handler(t_cmds *cmd, t_env *envs)
 {
 	char	*buff;
 
-	exit_int(envs);
+	set_sig_child(envs);
+	exit_int(envs, &buff);
 	if (!cmd->delim)
 		return (0);
 	buff = readline(">");
+	exit_int(envs, &buff);
+	printf("glob1:%d\n", g_sig);
 	if (!buff)
 		exit_non_buff(envs, cmd->lim);
 	while (ft_strncmp(buff, cmd->delim, ft_strlen(buff)) != 0
@@ -175,27 +199,12 @@ int	lim_handler(t_cmds *cmd, t_env *envs)
 	return (0);
 }
 
-void	set_sig_child(t_env *envs)
-{
-	sigemptyset(&(envs->sig_q.sa_mask));
-	sigaddset(&(envs->sig_q.sa_mask), SIGQUIT);
-	envs->sig_q.sa_handler = SIG_DFL;
-	envs->sig_q.sa_flags = 0;
-	sigaction(SIGQUIT, &(envs->sig_q), NULL);
-	sigemptyset(&(envs->sig_i.sa_mask));
-	sigaddset(&(envs->sig_i.sa_mask), SIGINT);
-	envs->sig_i.sa_handler = SIG_DFL;
-	envs->sig_i.sa_flags = 0;
-	sigaction(SIGINT, &(envs->sig_i), NULL);
-
-
-}
-
 int	child_process(t_cmds *cmd, char **env, t_env *envs, int ret)
 {
-	exit_int(envs);
-	set_sig_child(envs);
+	exit_int(envs, NULL);
 	lim_handler(cmd, envs);
+//	envs->sig_i.sa_handler = SIG_DFL;
+//	envs->sig_q.sa_handler = SIG_DFL;
 	fork_handler(cmd);
 	if (cmd->in == -1 || cmd->out == -1)
 		quit_proc(cmd, envs);
