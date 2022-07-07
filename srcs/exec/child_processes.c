@@ -6,11 +6,13 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:38:51 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/07 14:57:30 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/07 17:21:23 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern int	g_sig;
 
 void	close_fds_two(t_cmds *tmp)
 {
@@ -118,12 +120,12 @@ void	exit_non_buff(t_env *envs, int *fds)
 	free_exec(envs);
 	exit (0);
 }
-
+/*
 void	handler_child(int sig)
 {
 	if (sig == SIGINT)
 		g_sig = 42;
-}
+}*/
 
 void	exit_int(t_env *envs)
 {
@@ -182,7 +184,7 @@ void	set_sig_child(t_env *envs)
 	sigaction(SIGQUIT, &(envs->sig_q), NULL);
 	sigemptyset(&(envs->sig_i.sa_mask));
 	sigaddset(&(envs->sig_i.sa_mask), SIGINT);
-	envs->sig_i.sa_handler = &handler_child;
+	envs->sig_i.sa_handler = SIG_DFL;
 	envs->sig_i.sa_flags = 0;
 	sigaction(SIGINT, &(envs->sig_i), NULL);
 

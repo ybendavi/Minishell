@@ -11,14 +11,14 @@ builtin/ft_echo.c builtin/ft_unset.c parsing/count_lexer_token.c parsing/count_l
 parsing/handle_env.c parsing/is_env_2.c parsing/ft_return_2.c builtin/ft_unset_2.c
 OBJS = ${SRCS:%.c=${OBJSDIR}/%.o}
 $(NAME): ${OBJS}
-	$(CC) $(OBJS) -Wall -Wextra -Werror -lreadline -o ${NAME}
+	$(CC) $(OBJS) -Wall -Wextra -lreadline -o ${NAME}
 ${OBJS}: ${OBJSDIR}/%.o: ${SRCSDIR}/%.c
 	mkdir -p ${OBJSDIR}/parsing
 	mkdir -p ${OBJSDIR}/builtin
 	mkdir -p ${OBJSDIR}/exec
 	mkdir -p ${OBJSDIR}/utils
 	cd ..
-	$(CC) -Wall -Wextra -Werror -I./includes -g -c $< -o $@
+	$(CC) -Wall -Wextra -I./includes -g -c $< -o $@
 
 all: ${NAME}
 

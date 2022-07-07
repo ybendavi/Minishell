@@ -6,11 +6,13 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 23:09:26 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/07 14:53:36 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/07 17:26:54 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern int	g_sig;
 
 void	set_null(t_env *data)
 {

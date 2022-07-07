@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/07 14:50:51 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/07 17:20:58 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <errno.h>
-
-static int	g_sig = 0;
 
 typedef enum e_token_type {
 	REDIR_ADD,
