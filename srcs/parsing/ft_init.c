@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 23:09:26 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/06 13:19:19 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/07 14:53:36 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	set_null(t_env *data)
 	data->temp = NULL;
 	data->c_tbls = NULL;
 	data->nb_sig = -1;
+	g_sig = 0;
 }
 
 int	set_env_i(t_env *data)
