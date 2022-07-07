@@ -6,11 +6,13 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/07 13:33:45 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/07 17:21:44 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern int	g_sig;
 
 int	launcher(t_cmds *cmds, t_env *envs, int retu)
 {
@@ -105,6 +107,7 @@ int	execution(t_env *envs)
 	int		status_code;
 	int		ret;
 
+	g_sig = 2;
 	ret = set_paths(envs);
 	if (ret == -1)
 		return (-1);

@@ -6,11 +6,13 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 21:17:23 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/06 13:34:20 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/07 17:27:33 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_sig = 0;
 
 int	handle_buff(t_env *data, char **buff)
 {
@@ -81,7 +83,7 @@ int	main(int ac, char **av, char **env)
 		ft_return(1, &data);
 	while (7)
 	{
-		buff = readline("minishell$ ");
+		buff = readline("\rminishell$ ");
 		if (!buff)
 			ft_return(1, &data);
 		data.status_code = handle_buff(&data, &buff);
