@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/07 17:36:02 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/07 20:41:06 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,8 @@ void			add_temp(char *line, char **temp, unsigned int i);
 
 char			*sig_error(int sig);
 int				signal_init(t_env *data);
+void			handler_sig(int sig);
+void			kill_int(int sig);
 
 /********BUILT-IN*********/
 

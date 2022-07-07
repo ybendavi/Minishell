@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 15:51:36 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/07 17:27:48 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/07 20:32:17 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,8 @@
 
 extern int	g_sig;
 
-void	handler_sig(int sig, siginfo_t *info, void *context)
+void	handler_sig(int sig)
 {
-	(void) info;
-	(void) context;
 	if (sig == SIGINT)
 	{
 		if (g_sig == 0)
@@ -35,10 +33,10 @@ int	signal_init(t_env *data)
 	struct sigaction	sig_i;
 	int					ret;
 
-	sig_i.sa_sigaction = &handler_sig;
+	sig_i.sa_handler = &handler_sig;
 	sigemptyset(&(sig_i.sa_mask));
 	sigaddset(&(sig_i.sa_mask), SIGINT);
-	sig_i.sa_flags = SA_SIGINFO;
+	sig_i.sa_flags = 0;
 	sigemptyset(&(sig_q.sa_mask));
 	sigaddset(&(sig_q.sa_mask), SIGQUIT);
 	sig_q.sa_handler = SIG_IGN;
