@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:49:03 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/30 20:04:10 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/07 21:14:49 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ int	check_type(unsigned int *i, t_env *data)
 		return (is_redir(*i, data));
 	else if (data->lexed[*i].type == PIPE)
 		return (is_pipe(*i, data));
-	else if (data->lexed[*i].type == ENV)
-		return (is_env(i, data, str));
 	else if (data->lexed[*i].type == STR)
 		return (is_str(i, data));
 	return (0);

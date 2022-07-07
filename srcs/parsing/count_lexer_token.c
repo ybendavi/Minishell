@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 14:39:24 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/29 19:37:23 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/07 21:16:50 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	count_lexer_token(char *line, char **temp, unsigned int i, int count)
 			|| line[i] == '\n' || line[i] == '\v' || line[i] == '\f')
 			ret = count_white_space(&i, line, temp);
 		else if (line[i] == '$')
-			ret = count_env(temp, &i, line);
+			ret = count_env(temp);
 		else
 			add_temp(line, temp, i);
 		if (ret < 0)
