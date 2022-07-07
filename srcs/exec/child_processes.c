@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:38:51 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/07 18:37:01 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/07 19:17:37 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,10 +179,10 @@ int	lim_handler(t_cmds *cmd, t_env *envs)
 {
 	char	*buff;
 
-	set_sig_child(envs);
-	exit_int(envs, &buff);
 	if (!cmd->delim)
 		return (0);
+	set_sig_child(envs);
+	exit_int(envs, &buff);
 	buff = readline(">");
 	exit_int(envs, &buff);
 	printf("glob1:%d\n", g_sig);
@@ -202,9 +202,10 @@ int	lim_handler(t_cmds *cmd, t_env *envs)
 int	child_process(t_cmds *cmd, char **env, t_env *envs, int ret)
 {
 	exit_int(envs, NULL);
-	lim_handler(cmd, envs);
-//	envs->sig_i.sa_handler = SIG_DFL;
-//	envs->sig_q.sa_handler = SIG_DFL;
+	if (cmd->delim)
+		lim_handler(cmd, envs);
+	envs->sig_q.sa_handler = SIG_DFL;
+	sigaction(SIGQUIT, &(envs->sig_q), NULL);
 	fork_handler(cmd);
 	if (cmd->in == -1 || cmd->out == -1)
 		quit_proc(cmd, envs);

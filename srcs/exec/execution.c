@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/07 18:44:11 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/07 18:57:01 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ extern int	g_sig;
 int	launcher(t_cmds *cmds, t_env *envs, int retu)
 {
 	int	ret;
+	int	status;
 
 	ret = 0;
 	status = 0;
