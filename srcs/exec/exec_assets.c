@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:42:15 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/06 18:20:20 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/07 13:31:42 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	set_forks(t_env	*envs)
 	return (0);
 }
 
-void	parent_process(t_cmds *cmds)
+void	parent_process(t_cmds *cmds, int *status)
 {	
 	if (cmds->in != 0 && cmds->in != -1 && cmds->in != -3)
 	{
@@ -91,5 +91,19 @@ void	parent_process(t_cmds *cmds)
 	{
 		close(cmds->prev->out);
 		cmds->prev->out = -3;
+	}
+	if (cmds->delim)
+	{
+		if (cmds->lim[0] != -1 && cmds->lim[0] != -3)
+		{
+			close(cmds->lim[0]);
+			cmds->lim[0] = -3;
+		}
+		if (cmds->lim[1] != -1 && cmds->lim[1] != -3)
+		{
+			close(cmds->lim[1]);
+			cmds->lim[1] = -3;
+		}
+		waitpid(cmds->fork, status, 0);
 	}
 }

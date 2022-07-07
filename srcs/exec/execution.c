@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/30 16:03:51 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/07 13:33:45 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,10 @@
 int	launcher(t_cmds *cmds, t_env *envs, int retu)
 {
 	int	ret;
+	int	status;
 
 	ret = 0;
+	status = 0;
 	if (is_builtin(cmds) == 0 && cmds->pfd_in[0] == -1
 		&& cmds->pfd_out[0] == -1)
 	{
@@ -34,7 +36,7 @@ int	launcher(t_cmds *cmds, t_env *envs, int retu)
 	}
 	else if (cmds->fork > 0)
 	{
-		parent_process(cmds);
+		parent_process(cmds, &status);
 		if (cmds->next)
 			launcher(cmds->next, envs, retu);
 	}
