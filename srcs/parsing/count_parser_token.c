@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 16:50:11 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/29 19:38:36 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/07 21:11:45 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ int	count_type(unsigned int *i, t_env *data)
 			return (-3);
 		return (1);
 	}
-	else if (data->lexed[*i].type == ENV)
-		return (1);
 	else if (data->lexed[*i].type == STR)
 		return (c_str(data->lexed, i));
 	return (0);

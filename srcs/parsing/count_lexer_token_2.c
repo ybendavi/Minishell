@@ -6,32 +6,17 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 16:42:52 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/30 00:30:55 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/07 21:17:38 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	count_env(char **temp, unsigned int *i, char *line)
+int	count_env(char **temp)
 {
 	int	count;
 
 	count = count_temp(temp);
-	if (is_char_env(line[(*i) + 1]))
-	{
-		(*i)++;
-		while (is_char_env(line[*i]))
-			(*i)++;
-		return (count + 2);
-	}
-	else if (ft_isdigit(line[*i] + 1))
-	{
-		*i = *i + 2;
-		if (line[*i - 1] == '0')
-			return (count + 1);
-		else
-			return (count);
-	}
 	return (count + 1);
 }
 
@@ -49,7 +34,7 @@ int	count_double(char *line, unsigned int *i, unsigned int start,
 		{
 			if (j != start)
 				count++;
-			count += count_env(temp, &j, line);
+			count += count_env(temp);
 			while (is_char_env(line[++j]))
 				add_temp(line, temp, j);
 			count += count_temp(temp);
