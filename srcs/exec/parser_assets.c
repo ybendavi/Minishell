@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:28:03 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/30 18:08:19 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/08 13:42:40 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,28 +83,5 @@ int	cmds_len(t_cmds *c_tbls, t_token *token)
 		if (!c_tbls->cmds)
 			return (-1);
 	}
-	return (i);
-}
-
-int	set_cmds(t_cmds *c_tbls, t_token *token)
-{
-	int	size;
-	int	i;
-
-	i = 0;
-	if (c_tbls->cmds)
-		return (0);
-	size = cmds_len(c_tbls, token);
-	if (size == 0)
-		return (0);
-	if (size == -1)
-		return (-1);
-	while (i < size && token[i].token != NULL)
-	{
-		c_tbls->cmds[i] = ft_strdup(token[i].token);
-		i++;
-	}
-	c_tbls->cmds[i] = 0;
-	c_tbls->cmd = ft_strdup(c_tbls->cmds[0]);
 	return (i);
 }

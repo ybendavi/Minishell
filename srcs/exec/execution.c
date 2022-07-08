@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/07 21:17:08 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/08 14:57:26 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,8 @@ extern int	g_sig;
 
 int	launcher(t_cmds *cmds, t_env *envs, int retu)
 {
-	int	ret;
 	int	status;
 
-	ret = 0;
 	status = 0;
 	if (is_builtin(cmds) == 0 && cmds->pfd_in[0] == -1
 		&& cmds->pfd_out[0] == -1)
@@ -32,17 +30,14 @@ int	launcher(t_cmds *cmds, t_env *envs, int retu)
 	if (cmds->fork < 0)
 		perror(NULL);
 	if (cmds->fork == 0)
-	{
-		ret = child_process(cmds, envs->env, envs, retu);
-		return (ret);
-	}
+		return (child_process(cmds, envs->env, envs, retu));
 	else if (cmds->fork > 0)
 	{
 		parent_process(cmds, status, envs);
 		if (cmds->next)
 			launcher(cmds->next, envs, retu);
 	}
-	return (ret);
+	return (0);
 }
 
 int	check_sig(int status, t_env *envs)
@@ -70,7 +65,7 @@ int	check_sig(int status, t_env *envs)
 
 int	child_waiter(t_cmds *cmds, t_env *envs, int status, int status_code)
 {
-	if (g_sig == 42)
+	if (check_global == 1)
 		kill(cmds->fork, SIGINT);
 	waitpid(cmds->fork, &status, 0);
 	if (WIFEXITED(status) != 0)
@@ -78,12 +73,6 @@ int	child_waiter(t_cmds *cmds, t_env *envs, int status, int status_code)
 	else
 		status_code = check_sig(status, envs);
 	return (status_code);
-}
-
-void	kill_int(int sig)
-{
-	if (sig == SIGINT)
-		g_sig = 42;
 }
 
 int	exec_loop(t_cmds *cmds, int status, int status_code, t_env *envs)
@@ -108,12 +97,7 @@ int	exec_loop(t_cmds *cmds, int status, int status_code, t_env *envs)
 			cmds = cmds->next;
 		}
 	}
-	envs->sig_i.sa_handler = &handler_sig;
-	sigaction(SIGINT, &(envs->sig_i), NULL);
-	if (g_sig == 42)
-		status_code = 130;
-	close_fds(envs->c_tbls);
-	return (status_code);
+	return (sig_back(envs, status_code));
 }
 
 int	execution(t_env *envs)
