@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:27:38 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/06 20:54:10 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/09 14:20:27 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	set_null_table(t_cmds **tmp)
 	(*tmp)->lim = malloc(sizeof(int) * 2);
 	(*tmp)->pfd_in = malloc(sizeof(int) * 2);
 	(*tmp)->pfd_out = malloc(sizeof(int) * 2);
+	(*tmp)->fork = -10;
 }
 
 int	test_table(t_env *envs, t_cmds *tmp)

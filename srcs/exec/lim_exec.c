@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 14:14:33 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/08 14:26:46 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/09 14:37:39 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,16 @@ void	exit_non_buff(t_env *envs, int *fds)
 	exit (0);
 }
 
-void	exec_redir(char **buff, t_env *envs, t_cmds *cmd)
+void	exec_redir(char **buff, t_env *envs, t_cmds *cmd, int fd)
 {
-	exit_int(envs, buff);
+	exit_int(envs, buff, fd);
 	write(cmd->lim[1], *buff, ft_strlen(*buff));
 	write(cmd->lim[1], "\n", 1);
 	if (*buff)
 		free(*buff);
 	*buff = NULL;
 	*buff = readline(">");
-	exit_int(envs, buff);
+	exit_int(envs, buff, fd);
 	if (!*buff)
 		exit_non_buff(envs, cmd->lim);
 }
@@ -53,17 +53,16 @@ void	set_sig_child(t_env *envs)
 	sigaction(SIGINT, &(envs->sig_i), NULL);
 }
 
-int	iter_delim(t_cmds *cmd, t_env *envs, char *buff)
+int	iter_delim(t_cmds *cmd, t_env *envs, char *buff, int fd)
 {	
 	int	i;
 
 	i = 0;
-	set_sig_child(envs);
-	exit_int(envs, &buff);
 	while (cmd->delim[i + 1] != NULL)
 	{
+		exit_int(envs, &buff, fd);
 		buff = readline(">");
-		exit_int(envs, &buff);
+		exit_int(envs, &buff, fd);
 		i++;
 		if (!buff)
 			exit_non_buff(envs, cmd->lim);
@@ -77,17 +76,22 @@ int	lim_handler(t_cmds *cmd, t_env *envs)
 {
 	char	*buff;
 	int		i;
+	int		fd;
 
 	if (!cmd->delim)
 		return (0);
+	fd = dup(0);
+	set_sig_child(envs);
+	exit_int(envs, &buff, fd);
 	buff = NULL;
-	i = iter_delim(cmd, envs, buff);
+	i = iter_delim(cmd, envs, buff, fd);
 	buff = readline(">");
+	exit_int(envs, &buff, fd);
 	if (!buff)
 		exit_non_buff(envs, cmd->lim);
 	while (ft_strncmp(buff, cmd->delim[i], ft_strlen(buff)) != 0
 		|| ft_strncmp(buff, cmd->delim[i], ft_strlen(cmd->delim[i])) != 0)
-		exec_redir(&buff, envs, cmd);
+		exec_redir(&buff, envs, cmd, fd);
 	if (buff)
 		free(buff);
 	close(cmd->pfd_in[1]);

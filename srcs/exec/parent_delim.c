@@ -6,14 +6,15 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 15:02:25 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/08 15:04:57 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/09 15:13:58 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell"
+#include "minishell.h"
 
-void	delim_parent(t_cmds *cmds, int status, t_env *envs)
-{	
+int	delim_parent(t_cmds *cmds, int status, t_env *envs)
+{
+	(void) envs;
 	if (cmds->lim[0] != -1 && cmds->lim[0] != -3)
 	{
 		close(cmds->lim[0]);
@@ -24,16 +25,14 @@ void	delim_parent(t_cmds *cmds, int status, t_env *envs)
 		close(cmds->lim[1]);
 		cmds->lim[1] = -3;
 	}
-	envs->sig_i.sa_handler = &kill_int;
-	sigaction(SIGINT, &(envs->sig_i), NULL);
-	if (check_global == 1)
-		kill(cmds->fork, SIGINT);
 	waitpid(cmds->fork, &status, 0);
-	envs->sig_i.sa_handler = &handler_sig;
-	sigaction(SIGINT, &(envs->sig_i), NULL);
+	if (check_global() == 1)
+		return (1);
+	return (0);
+
 }
 
-void	parent_process(t_cmds *cmds, int status, t_env *envs)
+int	parent_process(t_cmds *cmds, int status, t_env *envs)
 {
 	if (cmds->in != 0 && cmds->in != -1 && cmds->in != -3)
 	{
@@ -47,6 +46,10 @@ void	parent_process(t_cmds *cmds, int status, t_env *envs)
 		cmds->prev->out = -3;
 	}
 	if (cmds->delim)
-		delim_parent(cmds, status, envs);
+	{
+		if (delim_parent(cmds, status, envs) == 1)
+			return (1);
+	}
+	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/08 14:57:26 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/09 15:51:05 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,14 @@ int	launcher(t_cmds *cmds, t_env *envs, int retu)
 		return (0);
 	}
 	cmds->fork = fork();
-	if (cmds->fork < 0)
+	if (cmds->fork == -1)
 		perror(NULL);
 	if (cmds->fork == 0)
 		return (child_process(cmds, envs->env, envs, retu));
 	else if (cmds->fork > 0)
 	{
-		parent_process(cmds, status, envs);
+		if (parent_process(cmds, status, envs) == 1)
+			return (0);
 		if (cmds->next)
 			launcher(cmds->next, envs, retu);
 	}
@@ -65,8 +66,6 @@ int	check_sig(int status, t_env *envs)
 
 int	child_waiter(t_cmds *cmds, t_env *envs, int status, int status_code)
 {
-	if (check_global == 1)
-		kill(cmds->fork, SIGINT);
 	waitpid(cmds->fork, &status, 0);
 	if (WIFEXITED(status) != 0)
 		status_code = WEXITSTATUS(status);
@@ -77,8 +76,6 @@ int	child_waiter(t_cmds *cmds, t_env *envs, int status, int status_code)
 
 int	exec_loop(t_cmds *cmds, int status, int status_code, t_env *envs)
 {
-	envs->sig_i.sa_handler = &kill_int;
-	sigaction(SIGINT, &(envs->sig_i), NULL);
 	while (cmds)
 	{
 		if (is_builtin(cmds) || (is_builtin(cmds) == 0
@@ -88,8 +85,8 @@ int	exec_loop(t_cmds *cmds, int status, int status_code, t_env *envs)
 			{
 				if (!cmds->delim)
 					status_code = child_waiter(cmds, envs, status, status_code);
-				cmds = cmds->next;
 			}
+			cmds = cmds->next;
 		}
 		else
 		{
@@ -97,6 +94,7 @@ int	exec_loop(t_cmds *cmds, int status, int status_code, t_env *envs)
 			cmds = cmds->next;
 		}
 	}
+	wait(&status);
 	return (sig_back(envs, status_code));
 }
 
@@ -111,9 +109,13 @@ int	execution(t_env *envs)
 	ret = set_paths(envs);
 	if (ret == -1)
 		return (-1);
+	envs->sig_i.sa_handler = &kill_int;
+	sigaction(SIGINT, &(envs->sig_i), NULL);
 	cmds = envs->c_tbls;
 	status = 0;
 	status_code = launcher(cmds, envs, ret);
 	status_code = exec_loop(cmds, status, status_code, envs);
+	envs->sig_i.sa_handler = &handler_sig;
+	sigaction(SIGINT, &(envs->sig_i), NULL);
 	return (status_code);
 }
