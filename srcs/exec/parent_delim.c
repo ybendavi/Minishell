@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 15:02:25 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/09 15:13:58 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/09 17:14:15 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int	delim_parent(t_cmds *cmds, int status, t_env *envs)
 		cmds->lim[1] = -3;
 	}
 	waitpid(cmds->fork, &status, 0);
+	if (WIFEXITED(status) != 0)
+		cmds->status = WEXITSTATUS(status);
 	if (check_global() == 1)
 		return (1);
 	return (0);

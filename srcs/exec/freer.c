@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 17:26:57 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/07 22:03:54 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/09 20:40:06 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,16 @@
 
 void	free_pfds(t_cmds *cmds)
 {
+	t_fds	*tmp;
+
 	while (cmds)
 	{
+		while (cmds->fds)
+		{
+			tmp = cmds->fds->next;
+			free(cmds->fds);
+			cmds->fds = tmp;
+		}
 		free(cmds->lim);
 		free(cmds->pfd_in);
 		free(cmds->pfd_out);

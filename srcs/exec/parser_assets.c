@@ -6,11 +6,37 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:28:03 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/08 13:42:40 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/09 20:37:42 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	new_fds_list(t_cmds *cmd, int fd)
+{
+	t_fds	*tmp;
+
+	if (!cmd->fds)
+	{
+		cmd->fds = ft_calloc(sizeof(t_fds) * 1);
+		if (!cmd->fds)
+			return (-1);
+		cmd->fds->fd = fd;
+		cmd->fds->next = NULL;
+	}
+	if (cmd->fds)
+	{
+		tmp = cmd->fds;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = ft_calloc(sizeof(t_fds) * 1);
+		if (!tmp->next)
+			return (-1);
+		tmp->next->fd = fd;
+		tmp->next->next = NULL;
+	}
+	return (0);
+}
 
 int	new_fd(char *filename, t_token_type type)
 {
@@ -51,7 +77,9 @@ int	set_fd(t_cmds *c_tbls, t_token *token)
 		{
 			perror(NULL);
 			return (-1);
-		}
+		}	
+		if (new_fds_list(c_tbls, c_tbls->out) == -1)
+			return (-1);
 	}
 	else
 	{
@@ -63,7 +91,9 @@ int	set_fd(t_cmds *c_tbls, t_token *token)
 		{
 			perror(NULL);
 			return (-1);
-		}
+		}	
+		if (new_fds_list(c_tbls, c_tbls->in) == -1)
+			return (-1);
 	}
 	return (0);
 }

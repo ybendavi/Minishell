@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:27:38 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/09 14:20:27 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/09 20:07:16 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@ void	set_null_table(t_cmds **tmp)
 	(*tmp)->path = NULL;
 	(*tmp)->in = 0;
 	(*tmp)->out = 1;
+	(*tmp)->status = 0;
 	(*tmp)->next = NULL;
 	(*tmp)->delim = NULL;
+	(*tmp)->fds = NULL;
 	(*tmp)->lim = malloc(sizeof(int) * 2);
 	(*tmp)->pfd_in = malloc(sizeof(int) * 2);
 	(*tmp)->pfd_out = malloc(sizeof(int) * 2);

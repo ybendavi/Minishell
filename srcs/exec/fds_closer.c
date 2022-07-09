@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 14:24:05 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/09 15:19:19 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/09 20:38:14 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,21 +49,22 @@ void	close_fds_two(t_cmds *tmp)
 int	close_fds(t_cmds *cmd)
 {
 	t_cmds	*tmp;
+	t_fds	*ftmp;
 
 	tmp = cmd;
 	while (tmp->prev)
 		tmp = tmp->prev;
 	while (tmp)
 	{
-		if (tmp->in != 0 && tmp->in != -1 && tmp->in != -3)
+		ftmp = tmp->fds;
+		while (ftmp)
 		{
-			close(tmp->in);
-			tmp->in = -3;
-		}
-		if (tmp->out != 1 && tmp->out != -1 && tmp->out != -3)
-		{
-			close(tmp->out);
-			tmp->out = -3;
+			if (ftmp->fd != -3)
+			{
+				close(ftmp->fd);
+				ftmp->fd = -3;
+			}
+			ftmp = ftmp->next;
 		}
 		close_fds_two(tmp);
 		tmp = tmp->next;

@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:38:51 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/09 14:41:29 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/09 19:49:27 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,7 @@ int	no_builtin(t_cmds *cmd, char **env, t_env *envs, int ret)
 	if (cmd->cmd && is_builtin(cmd) == 0)
 		exit(builtins(cmd, envs->env, envs));
 	else if (cmd && cmd->path && cmd->cmd && is_builtin(cmd))
-	{
 		execve(cmd->path, cmd->cmds, env);
-	}
 	else
 	{
 		free_exec(envs);
@@ -58,21 +56,17 @@ void	fork_handler(t_cmds *cmd)
 	{
 		close(cmd->pfd_in[1]);
 		cmd->pfd_in[1] = -3;
-		dup2(cmd->pfd_in[0], 0);
-		close(cmd->pfd_in[0]);
-		cmd->pfd_in[0] = -3;
 	}
 	if (cmd->pfd_out[0] != -1 && cmd->pfd_out[0] != -3)
 	{
 		close(cmd->pfd_out[0]);
 		cmd->pfd_out[0] = -3;
-		dup2(cmd->pfd_out[1], 1);
 	}
 }
 
 int	child_process(t_cmds *cmd, char **env, t_env *envs, int ret)
 {
-	exit_int(envs, NULL, -1);
+	exit_int(envs, NULL);
 	if (cmd->delim)
 		lim_handler(cmd, envs);
 	envs->sig_i.sa_handler = SIG_DFL;

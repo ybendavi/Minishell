@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/09 15:51:05 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/09 17:21:14 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,7 @@ int	exec_loop(t_cmds *cmds, int status, int status_code, t_env *envs)
 		{
 			if (cmds->fork > 0)
 			{
-				if (!cmds->delim)
-					status_code = child_waiter(cmds, envs, status, status_code);
+				status_code = child_waiter(cmds, envs, status, status_code);
 			}
 			cmds = cmds->next;
 		}
