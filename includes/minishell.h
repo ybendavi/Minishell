@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/08 19:39:43 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/09 18:06:09 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,8 +133,8 @@ int				handle_quote(char *line, unsigned int *i, char **temp,
 int				handle_white_space(unsigned int *i, char *line,
 					char **temp, t_env *data);
 int				count_lexer_token(char *line, char **temp,
-					unsigned int i, int count);
-int				count_env(char **temp);
+					t_env *data, unsigned int i);
+int				count_env(char **temp, char *line, unsigned int *i, t_env *data);
 int				count_quote(char *line, unsigned int *i, char **temp);
 int				count_parser_token(t_env *data);
 int				count_temp(char **temp);
@@ -151,6 +151,8 @@ int				ft_return(int ret, t_env *data);
 int				is_whitespace(unsigned int *i, t_env *data);
 int				is_redir(unsigned int i, t_env *data);
 int				ft_getenv(char *var, char **str, char **env);
+int				is_status_code(unsigned int *i, char **temp, t_env *ata);
+int				digit_var(char **temp, t_env *data, unsigned int *i, char *line);
 void			add_temp(char *line, char **temp, unsigned int i);
 
 /*********SIG***********/

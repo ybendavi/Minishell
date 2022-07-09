@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/07 21:17:08 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/09 14:25:19 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ int	check_sig(int status, t_env *envs)
 
 int	child_waiter(t_cmds *cmds, t_env *envs, int status, int status_code)
 {
-	if (g_sig == 42)
-		kill(cmds->fork, SIGINT);
+//	if (g_sig == 42)
+//		kill(cmds->fork, SIGINT);
 	waitpid(cmds->fork, &status, 0);
 	if (WIFEXITED(status) != 0)
 		status_code = WEXITSTATUS(status);
@@ -88,8 +88,8 @@ void	kill_int(int sig)
 
 int	exec_loop(t_cmds *cmds, int status, int status_code, t_env *envs)
 {
-	envs->sig_i.sa_handler = &kill_int;
-	sigaction(SIGINT, &(envs->sig_i), NULL);
+//	envs->sig_i.sa_handler = &kill_int;
+//	sigaction(SIGINT, &(envs->sig_i), NULL);
 	while (cmds)
 	{
 		if (is_builtin(cmds) || (is_builtin(cmds) == 0
@@ -108,8 +108,6 @@ int	exec_loop(t_cmds *cmds, int status, int status_code, t_env *envs)
 			cmds = cmds->next;
 		}
 	}
-	envs->sig_i.sa_handler = &handler_sig;
-	sigaction(SIGINT, &(envs->sig_i), NULL);
 	if (g_sig == 42)
 		status_code = 130;
 	close_fds(envs->c_tbls);
@@ -124,6 +122,8 @@ int	execution(t_env *envs)
 	int		ret;
 
 	g_sig = 2;
+	envs->sig_i.sa_handler = SIG_IGN;
+	sigaction(SIGINT, &(envs->sig_i), NULL);
 	ret = set_paths(envs);
 	if (ret == -1)
 		return (-1);
@@ -131,5 +131,7 @@ int	execution(t_env *envs)
 	status = 0;
 	status_code = launcher(cmds, envs, ret);
 	status_code = exec_loop(cmds, status, status_code, envs);
+	envs->sig_i.sa_handler = &handler_sig;
+	sigaction(SIGINT, &(envs->sig_i), NULL);
 	return (status_code);
 }

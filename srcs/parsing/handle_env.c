@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 16:21:57 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/08 19:44:52 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/09 17:41:21 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int	find_var_name(char *line, unsigned int *i, char **var)
 {
 	unsigned int	y;
 
+	if (!is_char_env(line[(*i) + 1]))
+		return (0);
 	(*i)++;
 	y = *i;
 	while (is_str_env(line[y]))
@@ -92,6 +94,8 @@ int	ft_getenv(char *var, char **str, char **env)
 	int		i;
 
 	i = 0;
+	if (!var || !env)
+		return (0);
 	while (env[i] && ft_env_strnstr(env[i], var, ft_strlen(var)) == NULL)
 		i++;
 	if (env[i] == NULL)
@@ -159,7 +163,7 @@ int	handle_env(char **temp, t_env *data, unsigned int *i, char *line)
 	else if (*i != 0 && (line[*i + 1] == '\''
 		|| (line[*i - 1] != '"' && line[*i + 1] == '"')))
 		return (get_lexed(temp, data, STR));
-	else if (i == 0 && (line[*i + 1] == '"' || line[*i + 1] == '\''))
+	else if (*i == 0 && (line[*i + 1] == '"' || line[*i + 1] == '\''))
 		return (get_lexed(temp, data, STR));
 	else if (is_char_env(line[(*i) + 1]))
 		return (env_var(temp, data, line, i));

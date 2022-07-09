@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 19:44:25 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/29 16:32:12 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/09 21:19:18 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	ft_echo(char **strs)
 	}
 	while (strs[i])
 	{
+		if (ft
 		ret = write(1, strs[i], ft_strlen(strs[i]));
 		if (strs[i + 1])
 			write(1, " ", 1);

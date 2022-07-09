@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 23:09:26 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/07 17:27:13 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/09 13:50:51 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,6 @@ int	env_init(t_env *data, char **env)
 
 int	ft_init(t_env *data, char **env)
 {
-	int	ret;
-
 	data->tab = NULL;
 	data->status_code = 0;
 	set_null(data);
@@ -88,8 +86,6 @@ int	ft_init(t_env *data, char **env)
 		return (-1);
 	if (token_init(data) == -1)
 		return (-1);
-	ret = signal_init(data);
-	if (ret)
-		printf("sigerror, ret = %d\n", ret);
+	signal_init(data);
 	return (0);
 }
