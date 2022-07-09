@@ -32,7 +32,6 @@ typedef enum e_token_type {
 	REDIR_OUT,
 	PIPE,
 	WHITE_SPACE,
-	ENV,
 	STR
 }		t_token_type;
 
@@ -143,7 +142,7 @@ int				handle_white_space(unsigned int *i, char *line,
 					char **temp, t_env *data);
 int				count_lexer_token(char *line, char **temp,
 					unsigned int i, int count);
-int				count_env(char **temp, unsigned int *i, char *line);
+int				count_env(char **temp);
 int				count_quote(char *line, unsigned int *i, char **temp);
 int				count_parser_token(t_env *data);
 int				count_temp(char **temp);

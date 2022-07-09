@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 17:42:26 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/29 18:49:10 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/07 22:14:53 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,21 @@ int	get_env_var(char **env, char **var)
 		i++;
 	if (env[i] == NULL)
 	{
-		if (*var)
-			free(*var);
-		*var = NULL;
+		i = 0;
+		while ((*var)[i])
+		{
+			(*var)[i] = 0;
+			i++;
+		}
 		return (0);
 	}
 	str = ft_strchr(env[i], '=');
-	if (*var)
-		free(*var);
-	if (ft_mcpy(&str[1], var))
-		return (-1);
+	i = 0;
+	while ((*var)[i])
+	{
+		(*var)[i] = 0;
+		i++;
+	}
+	ft_cpy(var, &str[1]);
 	return (0);
 }
