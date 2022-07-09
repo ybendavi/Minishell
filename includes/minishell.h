@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/07 21:21:54 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/09 20:05:44 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,12 @@ typedef struct s_token {
 	t_token_type	type;
 }	t_token;
 
+typedef struct fds_list
+{
+	int	fd;
+	struct fds_list	*next;
+}			t_fds;
+
 typedef struct command_table_list
 {
 	char						**cmds;
@@ -49,15 +55,14 @@ typedef struct command_table_list
 	char						*file_in;
 	char						*file_out;
 	char						**delim;
+	int							status;
 	int							in;
 	int							out;
 	int							*lim;
 	int							*pfd_in;
 	int							*pfd_out;
-	int							origin_one;
-	int							origin_zero;
-	int							origin_two;
 	pid_t						fork;
+	t_fds				*fds;
 	struct command_table_list	*next;
 	struct command_table_list	*prev;
 }					t_cmds;
@@ -98,6 +103,7 @@ int				redir_parse(t_env *envs, t_token *token);
 int				new_table(t_env *envs);
 int				set_paths(t_env *env);
 int				set_path_error(char **paths);
+int				lim_handler(t_cmds *cmd, t_env *envs);
 int				child_process(t_cmds *cmd, char **env, t_env *envs, int ret);
 int				exec_errors(int status_code, const char *cmd, t_env *envs);
 int				errno_two(const char *cmd, t_env *envs);
@@ -106,7 +112,9 @@ int				builtins(t_cmds *cmds, char **env, t_env *envs);
 int				exec_no_pipe(t_cmds *cmd, t_env *envs);
 int				execution(t_env *envs);
 int				close_fds(t_cmds *cmd);
-void			parent_process(t_cmds *cmds, int status, t_env *envs);
+int				child_waiter(t_cmds *cmds, t_env *envs, int status, int status_code);
+void			exit_int(t_env *envs, char **buff);
+int				parent_process(t_cmds *cmds, int status, t_env *envs);
 void			redir_handler(t_cmds *cmd);
 void			free_all_env(t_env *env);
 void			paths_free(char **paths);
@@ -157,7 +165,10 @@ void			add_temp(char *line, char **temp, unsigned int i);
 
 char			*sig_error(int sig);
 int				signal_init(t_env *data);
+int				check_sig(int status, t_env *envs);
+int    				sig_back(t_env *envs, int status_code);
 void			handler_sig(int sig);
+void			handler_child(int sig);
 void			kill_int(int sig);
 
 /********BUILT-IN*********/
@@ -185,6 +196,7 @@ char			*ft_itoa(int n);
 char			*ft_strchr(const char *s, int c);
 void			*ft_calloc(size_t nmem);
 size_t			ft_strlen(const char *str);
+int				check_global(void);
 int				ft_isdigit(int c);
 int				ft_strcmp(char *s1, char *s2);
 int				is_str_env(char c);

@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 19:26:46 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/06 18:26:39 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/09 20:57:15 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,11 @@ void	numeric_required(t_env *data, char *str)
 	write(2, "exit\nbash: exit: ", 18);
 	write(2, str, ft_strlen(str));
 	write(2, " : numeric argument required\n", 29);
+	close_fds(data->c_tbls);
 	free_all_env(data);
+	close(0);
+	close(1);
+	close(2);
 	exit(2);
 }
 
@@ -83,7 +87,11 @@ int	ft_exit(t_env *data, char **strs)
 	if (strs[1] && strs[2])
 		return (too_many());
 	write(1, "exit\n", 5);
+	close_fds(data->c_tbls);
 	free_all_env(data);
+	close(0);
+	close(1);
+	close(2);
 	exit(nb);
 	return (0);
 }

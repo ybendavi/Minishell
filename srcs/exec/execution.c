@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 19:02:08 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/07 21:17:08 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/09 17:21:14 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,8 @@ extern int	g_sig;
 
 int	launcher(t_cmds *cmds, t_env *envs, int retu)
 {
-	int	ret;
 	int	status;
 
-	ret = 0;
 	status = 0;
 	if (is_builtin(cmds) == 0 && cmds->pfd_in[0] == -1
 		&& cmds->pfd_out[0] == -1)
@@ -29,20 +27,18 @@ int	launcher(t_cmds *cmds, t_env *envs, int retu)
 		return (0);
 	}
 	cmds->fork = fork();
-	if (cmds->fork < 0)
+	if (cmds->fork == -1)
 		perror(NULL);
 	if (cmds->fork == 0)
-	{
-		ret = child_process(cmds, envs->env, envs, retu);
-		return (ret);
-	}
+		return (child_process(cmds, envs->env, envs, retu));
 	else if (cmds->fork > 0)
 	{
-		parent_process(cmds, status, envs);
+		if (parent_process(cmds, status, envs) == 1)
+			return (0);
 		if (cmds->next)
 			launcher(cmds->next, envs, retu);
 	}
-	return (ret);
+	return (0);
 }
 
 int	check_sig(int status, t_env *envs)
@@ -70,8 +66,6 @@ int	check_sig(int status, t_env *envs)
 
 int	child_waiter(t_cmds *cmds, t_env *envs, int status, int status_code)
 {
-	if (g_sig == 42)
-		kill(cmds->fork, SIGINT);
 	waitpid(cmds->fork, &status, 0);
 	if (WIFEXITED(status) != 0)
 		status_code = WEXITSTATUS(status);
@@ -80,16 +74,8 @@ int	child_waiter(t_cmds *cmds, t_env *envs, int status, int status_code)
 	return (status_code);
 }
 
-void	kill_int(int sig)
-{
-	if (sig == SIGINT)
-		g_sig = 42;
-}
-
 int	exec_loop(t_cmds *cmds, int status, int status_code, t_env *envs)
 {
-	envs->sig_i.sa_handler = &kill_int;
-	sigaction(SIGINT, &(envs->sig_i), NULL);
 	while (cmds)
 	{
 		if (is_builtin(cmds) || (is_builtin(cmds) == 0
@@ -97,10 +83,9 @@ int	exec_loop(t_cmds *cmds, int status, int status_code, t_env *envs)
 		{
 			if (cmds->fork > 0)
 			{
-				if (!cmds->delim)
-					status_code = child_waiter(cmds, envs, status, status_code);
-				cmds = cmds->next;
+				status_code = child_waiter(cmds, envs, status, status_code);
 			}
+			cmds = cmds->next;
 		}
 		else
 		{
@@ -108,12 +93,8 @@ int	exec_loop(t_cmds *cmds, int status, int status_code, t_env *envs)
 			cmds = cmds->next;
 		}
 	}
-	envs->sig_i.sa_handler = &handler_sig;
-	sigaction(SIGINT, &(envs->sig_i), NULL);
-	if (g_sig == 42)
-		status_code = 130;
-	close_fds(envs->c_tbls);
-	return (status_code);
+	wait(&status);
+	return (sig_back(envs, status_code));
 }
 
 int	execution(t_env *envs)
@@ -127,9 +108,13 @@ int	execution(t_env *envs)
 	ret = set_paths(envs);
 	if (ret == -1)
 		return (-1);
+	envs->sig_i.sa_handler = &kill_int;
+	sigaction(SIGINT, &(envs->sig_i), NULL);
 	cmds = envs->c_tbls;
 	status = 0;
 	status_code = launcher(cmds, envs, ret);
 	status_code = exec_loop(cmds, status, status_code, envs);
+	envs->sig_i.sa_handler = &handler_sig;
+	sigaction(SIGINT, &(envs->sig_i), NULL);
 	return (status_code);
 }

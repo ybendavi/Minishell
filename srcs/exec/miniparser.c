@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 12:32:13 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/06/29 18:25:35 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/09 19:46:02 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@ int	pipe_parse(t_env *envs, t_token *token)
 		perror(NULL);
 		return (-3);
 	}
-	if (tmp->out == 1)
-		tmp->out = tmp->pfd_out[1];
+	tmp->out = tmp->pfd_out[1];
 	tmp->next->pfd_in[0] = tmp->pfd_out[0];
 	tmp->next->pfd_in[1] = tmp->pfd_out[1];
 	tmp->next->in = tmp->next->pfd_in[0];

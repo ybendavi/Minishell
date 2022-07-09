@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/30 01:51:41 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/06 17:13:21 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/09 20:53:02 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,28 +23,20 @@ void	free_exec(t_env *envs)
 
 void	redir_handler(t_cmds *cmd)
 {
-	if (cmd->in != 0 && cmd->in != cmd->pfd_in[0] && cmd->in != -3)
+	if (cmd->in != 0 && cmd->in != -3 && cmd->in != -1)
 	{
 		dup2(cmd->in, 0);
-		close(cmd->in);
-		cmd->in = -3;
 	}
-	if (cmd->out != 1 && cmd->out != cmd->pfd_out[1] && cmd->out != -3)
+	if (cmd->out != 1 && cmd->out != -3 && cmd->out != -1)
 	{
 		dup2(cmd->out, 1);
-		close(cmd->out);
-		cmd->out = -3;
 	}
 }
 
 int	exec_no_pipe(t_cmds *cmd, t_env *envs)
 {
-	int	in;
-	int	out;
 	int	status_code;
 
-	in = dup(0);
-	out = dup(1);
 	status_code = 0;
 	redir_handler(cmd);
 	if (is_builtin(cmd) == 0)
@@ -59,9 +51,8 @@ int	exec_no_pipe(t_cmds *cmd, t_env *envs)
 		close(cmd->in);
 		cmd->out = -3;
 	}
-	dup2(in, 0);
-	close(in);
-	dup2(out, 1);
-	close(out);
+	close(0);
+	close(1);
+	close(2);
 	return (status_code);
 }
