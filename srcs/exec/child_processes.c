@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:38:51 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/09 19:49:27 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 15:56:00 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	no_builtin(t_cmds *cmd, char **env, t_env *envs, int ret)
 		exit(errno_two(cmd->cmd, envs));
 	}
 	if (cmd->cmd && is_builtin(cmd) == 0)
-		exit(builtins(cmd, envs->env, envs));
+		exit(builtins(cmd, 0, 1, envs));
 	else if (cmd && cmd->path && cmd->cmd && is_builtin(cmd))
 		execve(cmd->path, cmd->cmds, env);
 	else
@@ -71,12 +71,14 @@ int	child_process(t_cmds *cmd, char **env, t_env *envs, int ret)
 		lim_handler(cmd, envs);
 	envs->sig_i.sa_handler = SIG_DFL;
 	sigaction(SIGINT, &(envs->sig_i), NULL);
+	envs->sig_q.sa_handler = SIG_DFL;
+	sigaction(SIGQUIT, &(envs->sig_q), NULL);
 	fork_handler(cmd);
 	if (cmd->in == -1 || cmd->out == -1)
 		quit_proc(cmd, envs);
 	redir_handler(cmd);
 	if (is_builtin(cmd) == 0)
-		exit(builtins(cmd, envs->env, envs));
+		exit(builtins(cmd, 0, 1, envs));
 	else
 		no_builtin(cmd, env, envs, ret);
 	exit(exec_errors(0, cmd->cmd, envs));

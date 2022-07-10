@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 16:21:57 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/09 17:41:21 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/10 14:47:48 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,8 +122,8 @@ int	env_var(char **temp, t_env *data, char *line, unsigned int *i)
 	if (!str)
 		return (0);
 	y = 0;
-	while(str[y] && str[y] != ' ' && line[y] != '\r' && line[y] != '\t'
-		&& line[y] != '\n' && line[y] != '\v' && line[y] != '\f')
+	while(str[y] && str[y] != ' ' && str[y] != '\r' && str[y] != '\t'
+		&& str[y] != '\n' && str[y] != '\v' && str[y] != '\f')
 		y++;
 	if (y == ft_strlen(str))
 	{

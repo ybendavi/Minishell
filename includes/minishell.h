@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/09 20:05:44 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 15:57:20 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int				child_process(t_cmds *cmd, char **env, t_env *envs, int ret);
 int				exec_errors(int status_code, const char *cmd, t_env *envs);
 int				errno_two(const char *cmd, t_env *envs);
 int				is_builtin(t_cmds *cmds);
-int				builtins(t_cmds *cmds, char **env, t_env *envs);
+int				builtins(t_cmds *cmds, int in, int out, t_env *envs);
 int				exec_no_pipe(t_cmds *cmd, t_env *envs);
 int				execution(t_env *envs);
 int				close_fds(t_cmds *cmd);
@@ -186,7 +186,8 @@ int				pwd_main(t_env *envs);
 int				ft_env(t_env *data, char **strs);
 int				ft_unset(char **strs, t_env *data);
 int				ft_echo(char **strs);
-int				ft_exit(t_env *data, char **strs);
+int				ft_exit(t_env *data, char **strs, int in, int out);
+void			exit_fd(int in, int out);
 int				malloc_error(char **neww);
 
 /*********UTILS*************/
