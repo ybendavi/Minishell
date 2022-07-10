@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:38:51 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/10 21:14:17 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 23:24:04 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,11 @@ int	child_process(t_cmds *cmd, char **env, t_env *envs, int ret)
 	exit_int(envs, NULL);
 	if (cmd->delim)
 		lim_handler(cmd, envs);
+	if (cmd->in == 0 && cmd->file_in)
+	{
+		free_exec(envs);
+		exit(1);
+	}
 	envs->sig_i.sa_handler = SIG_DFL;
 	sigaction(SIGINT, &(envs->sig_i), NULL);
 	envs->sig_q.sa_handler = SIG_DFL;
