@@ -12,51 +12,6 @@
 
 #include "minishell.h"
 
-int	size_of_env(char *line, unsigned int *i, t_env *data)
-{
-	char	*str;
-	char	*var;
-	int		y;
-
-	var = NULL;
-	str = NULL;
-	if (find_var_name(line, i, &var))
-		return (-1);
-	if (ft_getenv(var, &str, data->env))
-		return (-1);
-	free(var);
-	if (!str)
-		return (0);
-	y = 0;
-	while (str[y])
-		y++;
-	free(str);
-	return (y);
-}
-
-int	count_size_temp(char *line, t_env *data)
-{
-	unsigned int	i;
-	int	ret;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (line[i])
-	{
-		if (line[i] == '$')
-		{
-			ret = size_of_env(line, &i, data);
-			if (ret == -1)
-				return (ret);
-			count += ret;
-		}
-		i++;
-	}
-	count += i;
-	return (count);
-}
-
 int	init_lexer(t_env *data, char **temp, char *line)
 {
 	int	token_count;
@@ -65,11 +20,10 @@ int	init_lexer(t_env *data, char **temp, char *line)
 	token_count = count_size_temp(line, data);
 	if (token_count == -1)
 		return (-1);
-	*temp = ft_calloc( token_count + 2);
+	*temp = ft_calloc(token_count + 2);
 	if (!temp)
 		return (-1);
 	token_count = count_lexer_token(line, temp, data, 0);
-//	printf("token count = %d\n", token_count);
 	data->lexed = ft_calloc(sizeof(t_token) * (token_count + 7));
 	if (!data->lexed)
 		return (-1);
@@ -137,7 +91,7 @@ int	lexer(char *line, t_env *data)
 	if (ret)
 		return (ret);
 	i = 0;
-	while (line[i])
+	while (line && line[i])
 	{
 		ret = lexer2(line, &temp, &i, data);
 		if (ret < 0)

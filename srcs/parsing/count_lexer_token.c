@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 14:39:24 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/09 17:04:35 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/10 15:48:00 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,15 +46,6 @@ int	count_redir(char *line, unsigned int *i, char **temp)
 	return (count);
 }
 
-int	count_pipe(char **temp)
-{
-	int	count;
-
-	count = count_temp(temp);
-	count++;
-	return (count);
-}
-
 int	count_white_space(unsigned int *i, char *line, char **temp)
 {
 	unsigned int	start;
@@ -71,33 +62,40 @@ int	count_white_space(unsigned int *i, char *line, char **temp)
 	return (count);
 }
 
+int	clt_2(char *line, char **temp, t_env *data, unsigned int i)
+{
+	int	ret;
+
+	ret = 0;
+	if (line[i] == '|')
+		ret = count_pipe(temp);
+	else if (line[i] == '>' || line[i] == '<')
+		ret = count_redir(line, &i, temp);
+	else if (line[i] == '\'' || line[i] == '"')
+		ret = count_quote(line, &i, temp);
+	else if (line[i] == ' ' || line[i] == '\r' || line[i] == '\t'
+		|| line[i] == '\n' || line[i] == '\v' || line[i] == '\f')
+		ret = count_white_space(&i, line, temp);
+	else if (line[i] == '$')
+		ret = count_env(temp, line, &i, data);
+	else
+		add_temp(line, temp, i);
+	return (ret);
+}
+
 int	count_lexer_token(char *line, char **temp, t_env *data, unsigned int i)
 {
 	int	ret;
 	int	count;
 
 	count = 0;
-	while (line[i])
+	while (line && line[i])
 	{
-		ret = 0;
-		if (line[i] == '|')
-			ret = count_pipe(temp);
-		else if (line[i] == '>' || line[i] == '<')
-			ret = count_redir(line, &i, temp);
-		else if (line[i] == '\'' || line[i] == '"')
-			ret = count_quote(line, &i, temp);
-		else if (line[i] == ' ' || line[i] == '\r' || line[i] == '\t'
-			|| line[i] == '\n' || line[i] == '\v' || line[i] == '\f')
-			ret = count_white_space(&i, line, temp);
-		else if (line[i] == '$')
-			ret = count_env(temp, line, &i, data);
-		else
-			add_temp(line, temp, i);
+		ret = clt_2(line, temp, data, i);
 		if (ret < 0)
 			return (ret);
 		count += ret;
 		i++;
 	}
-	count += count_temp(temp);
-	return (count);
+	return (count += count_temp(temp));
 }

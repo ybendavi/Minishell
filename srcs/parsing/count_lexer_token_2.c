@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 16:42:52 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/09 17:30:17 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/10 15:44:02 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	size_env(char *line, unsigned int *i, t_env *data, int count)
 	{
 		y++;
 		if (str[y] == ' ' || str[y] == '\r' || str[y] == '\t'
-		|| str[y] == '\n' || str[y] == '\v' || str[y] == '\f')
+			|| str[y] == '\n' || str[y] == '\v' || str[y] == '\f')
 			count++;
 	}
 	free(str);
@@ -85,5 +85,14 @@ int	count_quote(char *line, unsigned int *i, char **temp)
 		count += count_double(line, i, start + 1);
 	else
 		count++;
+	return (count);
+}
+
+int	count_pipe(char **temp)
+{
+	int	count;
+
+	count = count_temp(temp);
+	count++;
 	return (count);
 }
