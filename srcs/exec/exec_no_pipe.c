@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/30 01:51:41 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/09 20:53:02 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 13:21:01 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,5 @@ int	exec_no_pipe(t_cmds *cmd, t_env *envs)
 		close(cmd->in);
 		cmd->out = -3;
 	}
-	close(0);
-	close(1);
-	close(2);
 	return (status_code);
 }
