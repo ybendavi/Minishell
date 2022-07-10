@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 23:10:03 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/09 21:00:24 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/10 15:49:09 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int	handle_env_quotes(char **temp, t_env *data, unsigned int *i, char *line)
 		return (-1);
 	if (ft_isdigit(line[*i + 1]))
 		return (digit_var(temp, data, i, line));
+	else if (line[*i + 1] == '?')
+		return (is_status_code(i, temp, data));
 	else if (line[*i + 1] == '$')
 	{
 		(*temp)[0] = '$';
@@ -44,10 +46,8 @@ int	handle_env_quotes(char **temp, t_env *data, unsigned int *i, char *line)
 		(*i)++;
 		return (get_lexed(temp, data, STR));
 	}
-	else if (line[*i + 1] == '?')
-		return (is_status_code(i, temp, data));
 	else if (*i != 0 && (line[*i + 1] == '\''
-		|| (line[*i - 1] != '"' && line[*i + 1] == '"')))
+			|| (line[*i - 1] != '"' && line[*i + 1] == '"')))
 		return (get_lexed(temp, data, STR));
 	else if (*i == 0 && (line[*i + 1] == '"' || line[*i + 1] == '\''))
 		return (get_lexed(temp, data, STR));
@@ -74,30 +74,29 @@ char	**copy_quote(char **temp, char *line, unsigned int i,
 int	handle_double(char *line, unsigned int *i, unsigned int start,
 			t_env *data)
 {
-	unsigned int	j;
+	unsigned int	y;
 
-	j = start;
-	while (j < *i)
+	y = 0;
+	while (start < *i)
 	{
-		if (line[j] == '$')
+		if (line[start] == '$')
 		{
-			if (j != start)
-			{
-				if (get_lexed(copy_quote(data->temp, line,
-							j - 1, start), data, STR))
+			if (y)
+			{	
+				if (get_lexed(data->temp, data, STR))
 					return (-1);
+				y = 0;
 			}
-			if (handle_env_quotes(data->temp, data, &j, line))
+			if (handle_env_quotes(data->temp, data, &start, line))
 				return (-1);
-			if (j == *i)
+			if (start == *i)
 				return (0);
-			start = j + 1;
 		}
-		j++;
+		else
+			(*data->temp)[y++] = line[start];
+		start++;
 	}
-	if (line[j - 1] == '$')
-		start--;
-	return (get_lexed(copy_quote(data->temp, line, j - 1, start), data, STR));
+	return (get_lexed(data->temp, data, STR));
 }
 
 int	handle_quote(char *line, unsigned int *i, char **temp, t_env *data)
@@ -117,8 +116,10 @@ int	handle_quote(char *line, unsigned int *i, char **temp, t_env *data)
 	if (q == '"')
 	{
 		data->temp = temp;
-		if (handle_double(line, i, start + 1, data))
-			return (-1);
+		{
+			if (handle_double(line, i, start + 1, data))
+				return (-1);
+		}
 	}
 	else
 	{
