@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 14:24:05 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/09 20:38:14 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 13:33:25 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	close_fds(t_cmds *cmd)
 		ftmp = tmp->fds;
 		while (ftmp)
 		{
-			if (ftmp->fd != -3)
+			if (ftmp->fd != -3 && ftmp->fd != -1)
 			{
 				close(ftmp->fd);
 				ftmp->fd = -3;

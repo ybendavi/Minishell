@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 15:33:52 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/09 20:49:32 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 16:03:41 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,10 @@ void	free_all_env(t_env *envs)
 	rl_clear_history();
 }
 
-int	builtins(t_cmds *cmds, char **env, t_env *envs)
+int	builtins(t_cmds *cmds, int in, int out, t_env *envs)
 {
 	int	ret;
 
-	(void)env;
 	ret = 0;
 	if (ft_strcmp(cmds->cmd, "cd") == 0)
 		ret = cd_main(cmds->cmds, envs);
@@ -71,7 +70,7 @@ int	builtins(t_cmds *cmds, char **env, t_env *envs)
 	if (ft_strcmp(cmds->cmd, "env") == 0)
 		ret = ft_env(envs, cmds->cmds);
 	if (ft_strcmp(cmds->cmd, "exit") == 0)
-		ret = ft_exit(envs, cmds->cmds);
+		ret = ft_exit(envs, cmds->cmds, in, out);
 	if (ft_strcmp(cmds->cmd, "echo") == 0)
 		ret = ft_echo(cmds->cmds);
 	if (cmds->pfd_in[0] != -1 || cmds->pfd_out[0] != -1)

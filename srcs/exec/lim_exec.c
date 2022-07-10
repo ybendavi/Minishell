@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 14:14:33 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/09 17:46:01 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 13:37:09 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,10 @@ int	lim_handler(t_cmds *cmd, t_env *envs)
 		exec_redir(&buff, envs, cmd);
 	if (buff)
 		free(buff);
-	close(cmd->pfd_in[1]);
+	if (cmd->pfd_in[1] != -1 && cmd->pfd_in[1] != -3)
+	{
+		close(cmd->pfd_in[1]);
+		cmd->pfd_in[1] = -3;
+	}
 	return (0);
 }

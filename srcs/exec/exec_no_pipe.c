@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/30 01:51:41 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/10 13:21:01 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 16:22:05 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,63 @@ void	redir_handler(t_cmds *cmd)
 	}
 }
 
+int	delim_no_pipe(t_env *envs, t_cmds *cmd)
+{
+	int	status;
+	pid_t	child;
+
+	status = 0;
+	child = fork();
+	if (child < 0)
+		return (-2);
+	if (child == 0)
+	{
+		lim_handler(cmd, envs);
+		free_exec(envs);
+		exit(0);
+	}
+	else
+	{
+		waitpid(child, &status, 0);
+		if (WIFEXITED(status) != 0)
+		{
+			if (WEXITSTATUS(status) != 0)
+				return (130);
+		}
+		return (0);
+	}
+	return (0);
+}
+
 int	exec_no_pipe(t_cmds *cmd, t_env *envs)
 {
 	int	status_code;
+	int	in;
+	int	out;
 
 	status_code = 0;
+	if (cmd->delim)
+		status_code = delim_no_pipe(envs, cmd);
+	in = dup(0);
+	out = dup(1);
 	redir_handler(cmd);
-	if (is_builtin(cmd) == 0)
-		status_code = builtins(cmd, envs->env, envs);
+	if (is_builtin(cmd) == 0 && status_code == 0)
+		status_code = builtins(cmd, in, out, envs);
 	if (cmd->out != 1 && cmd->out != -3)
 	{
 		close(cmd->out);
 		cmd->out = -3;
+		close(0);
 	}
 	if (cmd->in != 0 && cmd->in != -3)
 	{
 		close(cmd->in);
 		cmd->out = -3;
+		close(1);
 	}
+	dup2(in, 0);
+	dup2(out, 1);
+	close(in);
+	close(out);
 	return (status_code);
 }

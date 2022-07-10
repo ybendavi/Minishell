@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 19:26:46 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/09 20:57:15 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 15:53:57 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,18 @@ long long int	ft_mini_atoi(char *str)
 	return (ret);
 }
 
-void	numeric_required(t_env *data, char *str)
+void	numeric_required(t_env *data, char *str, int in, int out)
 {
 	write(2, "exit\nbash: exit: ", 18);
 	write(2, str, ft_strlen(str));
 	write(2, " : numeric argument required\n", 29);
 	close_fds(data->c_tbls);
 	free_all_env(data);
-	close(0);
-	close(1);
-	close(2);
+	exit_fd(in, out);
 	exit(2);
 }
 
-long long int	ft_get_status(char *str, t_env *data)
+long long int	ft_get_status(char *str, t_env *data, int in, int out)
 {
 	unsigned int			i;
 	char					mark;
@@ -60,7 +58,7 @@ long long int	ft_get_status(char *str, t_env *data)
 		i++;
 	printf("i = %d\n", i);
 	if (i != ft_strlen(str) || ft_cmp(str, "") || i > 19)
-		numeric_required(data, str);
+		numeric_required(data, str, in, out);
 	return (ft_mini_atoi(str) * mark);
 }
 
@@ -70,7 +68,7 @@ int	too_many(void)
 	return (127);
 }
 
-int	ft_exit(t_env *data, char **strs)
+int	ft_exit(t_env *data, char **strs, int in, int out)
 {
 	long long int	nb;
 
@@ -80,18 +78,16 @@ int	ft_exit(t_env *data, char **strs)
 	if (strs)
 	{
 		if (strs[1])
-			nb = ft_get_status(strs[1], data);
+			nb = ft_get_status(strs[1], data, in, out);
 	}
 	if (nb < -9223372036854775807)
-		numeric_required(data, strs[1]);
+		numeric_required(data, strs[1], in, out);
 	if (strs[1] && strs[2])
 		return (too_many());
 	write(1, "exit\n", 5);
 	close_fds(data->c_tbls);
 	free_all_env(data);
-	close(0);
-	close(1);
-	close(2);
+	exit_fd(in, out);
 	exit(nb);
 	return (0);
 }
