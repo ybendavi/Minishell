@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 19:26:46 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/10 15:53:57 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 18:35:49 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ long long int	ft_get_status(char *str, t_env *data, int in, int out)
 	}
 	while (str[i] >= 48 && str[i] <= 67)
 		i++;
-	printf("i = %d\n", i);
 	if (i != ft_strlen(str) || ft_cmp(str, "") || i > 19)
 		numeric_required(data, str, in, out);
 	return (ft_mini_atoi(str) * mark);
@@ -84,7 +83,7 @@ int	ft_exit(t_env *data, char **strs, int in, int out)
 		numeric_required(data, strs[1], in, out);
 	if (strs[1] && strs[2])
 		return (too_many());
-	write(1, "exit\n", 5);
+	exit_write(data);
 	close_fds(data->c_tbls);
 	free_all_env(data);
 	exit_fd(in, out);
