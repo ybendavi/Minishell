@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/09 20:05:44 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 15:44:13 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,9 +144,12 @@ int				count_lexer_token(char *line, char **temp,
 					t_env *data, unsigned int i);
 int				count_env(char **temp, char *line, unsigned int *i, t_env *data);
 int				count_quote(char *line, unsigned int *i, char **temp);
+int				count_pipe(char **temp);
 int				count_parser_token(t_env *data);
 int				count_temp(char **temp);
 int				init_parser(t_env *data);
+int				size_of_env(char *line, unsigned int *i, t_env *data);
+int				count_size_temp(char *line, t_env *data);
 int				is_env(unsigned int *i, t_env *data, char *str);
 int				is_str(unsigned int *i, t_env *data);
 int				ft_cmp(char *s1, char *s2);
