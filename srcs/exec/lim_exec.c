@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 14:14:33 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/10 13:37:09 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 19:44:20 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	iter_delim(t_cmds *cmd, t_env *envs, char *buff)
 		exit_int(envs, &buff);
 		buff = readline(">");
 		exit_int(envs, &buff);
-		if (ft_strncmp(buff, cmd->delim[i], ft_strlen(buff)) == 0 
+		if (ft_strncmp(buff, cmd->delim[i], ft_strlen(buff)) == 0
 			&& ft_strncmp(buff, cmd->delim[i], ft_strlen(cmd->delim[i])) == 0)
 			i++;
 		if (!buff)

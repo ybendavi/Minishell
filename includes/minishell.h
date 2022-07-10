@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/10 17:23:14 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 19:42:41 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,9 @@ int				builtins(t_cmds *cmds, int in, int out, t_env *envs);
 int				exec_no_pipe(t_cmds *cmd, t_env *envs);
 int				execution(t_env *envs);
 int				close_fds(t_cmds *cmd);
+int				open_fd_out(t_cmds *c_tbls, t_token *token);
+int				redir_out(char *filename);
+int				new_fds_list(t_cmds *cmd, int fd);
 int				child_waiter(t_cmds *cmds, t_env *envs, int status, int status_code);
 void			exit_int(t_env *envs, char **buff);
 int				parent_process(t_cmds *cmds, int status, t_env *envs);

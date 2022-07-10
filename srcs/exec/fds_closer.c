@@ -6,11 +6,30 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 14:24:05 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/10 13:33:25 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 20:36:01 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	close_fds_three(t_cmds *tmp)
+{
+	if (tmp->pfd_in[1] != -1 && tmp->pfd_in[1] != -3)
+	{
+		close(tmp->pfd_in[1]);
+		tmp->pfd_in[1] = -3;
+	}
+	if (tmp->pfd_out[0] != -1 && tmp->pfd_out[0] != -3)
+	{
+		close(tmp->pfd_out[0]);
+		tmp->pfd_out[0] = -3;
+	}
+	if (tmp->pfd_out[1] != -1 && tmp->pfd_out[1] != -3)
+	{
+		close(tmp->pfd_out[1]);
+		tmp->pfd_out[1] = -3;
+	}
+}
 
 void	close_fds_two(t_cmds *tmp)
 {
@@ -29,21 +48,7 @@ void	close_fds_two(t_cmds *tmp)
 		close(tmp->pfd_in[0]);
 		tmp->pfd_in[0] = -3;
 	}
-	if (tmp->pfd_in[1] != -1 && tmp->pfd_in[1] != -3)
-	{
-		close(tmp->pfd_in[1]);
-		tmp->pfd_in[1] = -3;
-	}
-	if (tmp->pfd_out[0] != -1 && tmp->pfd_out[0] != -3)
-	{
-		close(tmp->pfd_out[0]);
-		tmp->pfd_out[0] = -3;
-	}
-	if (tmp->pfd_out[1] != -1 && tmp->pfd_out[1] != -3)
-	{
-		close(tmp->pfd_out[1]);
-		tmp->pfd_out[1] = -3;
-	}
+	close_fds_three(tmp);
 }
 
 int	close_fds(t_cmds *cmd)

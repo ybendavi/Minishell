@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:28:03 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/10 16:43:30 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 19:42:56 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,15 +63,7 @@ int	new_fd(char *filename, t_token_type type)
 		return (fd);
 	}
 	else if (type == REDIR_OUT)
-	{
-		fd = open(filename, O_RDONLY);
-		if (fd == -1)
-		{
-			write(2, "bash: ", 6);
-			perror(filename);
-		}
-		return (fd);
-	}
+		redir_out(filename);
 	return (0);
 }
 
@@ -94,21 +86,7 @@ int	set_fd(t_cmds *c_tbls, t_token *token)
 			return (-1);
 	}
 	else
-	{
-		c_tbls->in = new_fd(token[1].token, (*token).type);
-		if (c_tbls->in < 0)
-			return (-2);
-		if (c_tbls->file_in)
-			free(c_tbls->file_in);
-		c_tbls->file_in = ft_strdup(token[1].token);
-		if (c_tbls->file_in == NULL)
-		{
-			perror(NULL);
-			return (-1);
-		}	
-		if (new_fds_list(c_tbls, c_tbls->in) == -1)
-			return (-1);
-	}
+		return (open_fd_out(c_tbls, token));
 	return (0);
 }
 
