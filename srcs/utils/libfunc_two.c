@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 19:51:05 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/09 16:57:04 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/10 16:42:40 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,4 +96,12 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		j++;
 	}
 	return (dest);
+}
+
+int	is_ws(char c)
+{
+	if (c == ' ' || c == '\r' || c == '\t'
+		|| c == '\n' || c == '\v' || c == '\f')
+		return (1);
+	return (0);
 }
