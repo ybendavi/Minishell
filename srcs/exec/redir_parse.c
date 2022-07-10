@@ -6,19 +6,39 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:08:00 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/09 18:06:53 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 20:34:34 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	redir_lim(t_token *token, t_cmds *cmd)
+int	delims_setter(t_cmds *cmd, t_token *token)
 {
-	int	i;
 	int	count;
+	int	i;
 
 	i = 0;
 	count = 0;
+	while ((token)[i].token)
+	{
+		if ((token)[i].type == REDIR_LIM)
+			count++;
+		i++;
+	}
+	cmd->delim = ft_calloc(sizeof(char *) * (count + 1));
+	if (!cmd->delim)
+		return (-1);
+	cmd->delim[0] = ft_strdup(token[1].token);
+	pipe(cmd->lim);
+	cmd->in = cmd->lim[0];
+	return (0);
+}
+
+int	redir_lim(t_token *token, t_cmds *cmd)
+{
+	int	i;
+
+	i = 0;
 	if (cmd->delim)
 	{
 		while (cmd->delim[i])
@@ -26,20 +46,7 @@ int	redir_lim(t_token *token, t_cmds *cmd)
 		cmd->delim[i] = ft_strdup(token[1].token);
 	}
 	else
-	{
-		while ((token)[i].token)
-		{
-			if ((token)[i].type == REDIR_LIM)
-				count++;
-			i++;
-		}
-		cmd->delim = ft_calloc(sizeof(char *) * (count + 1));
-		if (!cmd->delim)
-			return (-1);
-		cmd->delim[0] = ft_strdup(token[1].token);
-		pipe(cmd->lim);
-		cmd->in = cmd->lim[0];
-	}
+		return (delims_setter(cmd, token));
 	return (0);
 }
 

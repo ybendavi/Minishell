@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 15:02:25 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/09 17:14:15 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 20:36:37 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int	delim_parent(t_cmds *cmds, int status, t_env *envs)
 	if (check_global() == 1)
 		return (1);
 	return (0);
-
 }
 
 int	parent_process(t_cmds *cmds, int status, t_env *envs)
@@ -54,4 +53,3 @@ int	parent_process(t_cmds *cmds, int status, t_env *envs)
 	}
 	return (0);
 }
-
