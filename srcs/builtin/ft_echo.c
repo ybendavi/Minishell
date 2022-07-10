@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 19:44:25 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/29 16:32:12 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 13:07:01 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int	ft_compflag(char *str)
 	i = 0;
 	if (str[i] == '-')
 		i++;
+	else
+		return (0);
 	while (str[i] && str[i] == 'n')
 		i++;
 	if (i == ft_strlen(str))

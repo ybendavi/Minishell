@@ -8,7 +8,7 @@ parsing/check_parsing_errors.c parsing/ft_init.c parsing/ft_return.c parsing/han
 parsing/lexer.c parsing/parser_init.c parsing/token_list_init.c signal_init.c signal_errors.c builtin/ft_export.c\
 parsing/handle_quote.c utils/utils_2.c parsing/parser.c utils/utils.c exec/path_handler.c exec/builtin.c builtin/ft_cd.c\
 builtin/ft_echo.c builtin/ft_unset.c parsing/count_lexer_token.c parsing/count_lexer_token_2.c parsing/count_parser_token.c builtin/ft_pwd.c\
-parsing/handle_env.c parsing/is_env_2.c parsing/ft_return_2.c builtin/ft_unset_2.c
+parsing/handle_env.c parsing/ft_return_2.c builtin/ft_unset_2.c
 OBJS = ${SRCS:%.c=${OBJSDIR}/%.o}
 $(NAME): ${OBJS}
 	$(CC) $(OBJS) -Wall -Wextra -Werror -lreadline -o ${NAME}

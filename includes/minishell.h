@@ -125,9 +125,9 @@ void			free_exec(t_env *envs);
 
 /****parser*****/
 
-t_token			struct_env(char *str, int type);
 char			**ft_cpy(char **temp, char *s1);
 char			*ft_concat(char *s1, char *s2);
+int				find_var_name(char *line, unsigned int *i, char **var);
 int				get_lexed(char **temp, t_env *data, t_token_type type);
 int				token_init(t_env *data);
 int				check_temp(char **temp, t_env *data);
@@ -141,8 +141,8 @@ int				handle_quote(char *line, unsigned int *i, char **temp,
 int				handle_white_space(unsigned int *i, char *line,
 					char **temp, t_env *data);
 int				count_lexer_token(char *line, char **temp,
-					unsigned int i, int count);
-int				count_env(char **temp);
+					t_env *data, unsigned int i);
+int				count_env(char **temp, char *line, unsigned int *i, t_env *data);
 int				count_quote(char *line, unsigned int *i, char **temp);
 int				count_parser_token(t_env *data);
 int				count_temp(char **temp);
@@ -158,7 +158,9 @@ int				get_parsed(t_env *data, t_token token);
 int				ft_return(int ret, t_env *data);
 int				is_whitespace(unsigned int *i, t_env *data);
 int				is_redir(unsigned int i, t_env *data);
-int				get_env_var(char **env, char **var);
+int				ft_getenv(char *var, char **str, char **env);
+int				is_status_code(unsigned int *i, char **temp, t_env *ata);
+int				digit_var(char **temp, t_env *data, unsigned int *i, char *line);
 void			add_temp(char *line, char **temp, unsigned int i);
 
 /*********SIG***********/

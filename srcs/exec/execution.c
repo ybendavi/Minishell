@@ -105,6 +105,8 @@ int	execution(t_env *envs)
 	int		ret;
 
 	g_sig = 2;
+	envs->sig_i.sa_handler = SIG_IGN;
+	sigaction(SIGINT, &(envs->sig_i), NULL);
 	ret = set_paths(envs);
 	if (ret == -1)
 		return (-1);

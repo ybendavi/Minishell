@@ -6,20 +6,11 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 17:42:26 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/07 22:14:53 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/08 19:20:13 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-t_token	struct_env(char *str, int type)
-{
-	t_token	token;
-
-	token.token = str;
-	token.type = type;
-	return (token);
-}
 
 int	get_env_var(char **env, char **var)
 {
