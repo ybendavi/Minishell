@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/10 17:21:27 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/10 17:23:14 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,6 +193,7 @@ int				ft_unset(char **strs, t_env *data);
 int				ft_echo(char **strs);
 int				ft_exit(t_env *data, char **strs, int in, int out);
 void			exit_fd(int in, int out);
+void			exit_write(t_env *data);
 int				malloc_error(char **neww);
 
 /*********UTILS*************/

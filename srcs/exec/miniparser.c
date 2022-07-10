@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 12:32:13 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/09 19:46:02 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 19:13:38 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ int	parsing(t_env *envs)
 		i = set_cmds(envs->c_tbls, envs->parsed);
 	}
 	ret = recu_parse(envs, &envs->parsed[i]);
-	if (ret != 0)
-		return (-1);
+	if (ret == -1)
+		return (ret);
 	free_parsed(envs);
 	return (0);
 }
