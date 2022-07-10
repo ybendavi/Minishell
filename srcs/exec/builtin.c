@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 15:33:52 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/06 17:08:49 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/09 20:49:32 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	is_builtin(t_cmds *cmds)
 }
 
 void	free_all_env(t_env *envs)
-{	
+{
 	freeer(envs);
 	free_lexed(envs);
 	free_parsed(envs);

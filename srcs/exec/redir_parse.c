@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:08:00 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/07 21:55:57 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/09 18:06:53 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	redir_lim(t_token *token, t_cmds *cmd)
 			return (-1);
 		cmd->delim[0] = ft_strdup(token[1].token);
 		pipe(cmd->lim);
+		cmd->in = cmd->lim[0];
 	}
 	return (0);
 }
