@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/10 15:36:41 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/10 15:37:19 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/10 23:26:22 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,12 @@ int	count_size_temp(char *line, t_env *data)
 	}
 	count += i;
 	return (count);
+}
+
+int	ultimate_good_char(char c)
+{
+	if ((c > 32 && c < 127) && c != '<'
+		&& c != '>' && c != '|' && c != '\'' && c != '"')
+		return (1);
+	return (0);
 }

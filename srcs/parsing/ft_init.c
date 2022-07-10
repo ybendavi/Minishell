@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 23:09:26 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/09 13:50:51 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/10 22:55:00 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,11 @@ int	set_env_i(t_env *data)
 		return (-1);
 	getcwd(data->env[i], 1000);
 	i++;
-	data->env[i] = ft_cpy2("SHLVL=1\n");
+	data->env[i] = ft_cpy2("SHLVL=1");
 	if (!data->env[i])
 		return (-1);
 	i++;
-	data->env[i] = ft_cpy2("_=/usr/bin/env\n");
+	data->env[i] = ft_cpy2("_=/usr/bin/env");
 	if (!data->env[i])
 		return (-1);
 	return (0);
@@ -57,7 +57,7 @@ int	env_init(t_env *data, char **env)
 	int	i;
 
 	i = 0;
-	if (!env)
+	if (!env || !env[i])
 		return (set_env_i(data));
 	while (env[i])
 		i++;

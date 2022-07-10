@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 23:13:31 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/10 19:15:58 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/10 23:24:48 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,10 @@ int	handle_pipe(char **temp, t_env *data)
 int	parse_lim_token(char **temp, t_env *data, char *line, unsigned int *i)
 {
 	unsigned int	j;
-	char	c;
+	char			c;
 
+	if (line[*i] == 0)
+		return (0);
 	j = *i;
 	if (line[*i] && (line[*i] == '"' || line[*i] == '\''))
 	{
@@ -35,15 +37,15 @@ int	parse_lim_token(char **temp, t_env *data, char *line, unsigned int *i)
 			(*i)++;
 		if (*i == ft_strlen(line) && line[*i] != c)
 			return (-2);
-
 		return (get_lexed(copy_quote(temp, line, *i - 1,
-				*i - (*i - j) + 1), data, STR));
+					*i - (*i - j) + 1), data, STR));
 	}
-	while (line[*i] && (line[*i] > 32 && line[*i] < 127))
+	while (line[*i] && ultimate_good_char(line[*i]))
 	{
 		add_temp(line, temp, *i);
 		(*i)++;
 	}
+	(*i)--;
 	return (get_lexed(temp, data, STR));
 }
 
@@ -66,7 +68,7 @@ int	is_double_redir(char **temp, t_env *data, char *line, unsigned int *i)
 			(*i)++;
 		}
 		if (line[*i] && (line[*i] == '|'
-			|| line[*i] == '<' || line[*i] == '>'))
+				|| line[*i] == '<' || line[*i] == '>'))
 		{
 			(*i)--;
 			return (0);

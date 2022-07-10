@@ -6,18 +6,11 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 16:21:57 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/10 15:31:43 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/10 21:40:28 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	cut_var_2(char *var, int *y)
-{
-	while (var[*y] && (var[*y] != ' ' && var[*y] != '\r' && var[*y] != '\t'
-			&& var[*y] != '\n' && var[*y] != '\v' && var[*y] != '\f'))
-			(*y)++;
-}
 
 int	cut_var(char **temp, t_env *data, char *var, int y)
 {
@@ -25,10 +18,11 @@ int	cut_var(char **temp, t_env *data, char *var, int y)
 	int		i;
 	int		j;
 
-	i = y - 1;
+	i = 0;
 	while (var[y])
 	{
-		cut_var_2(var, &y);
+		while (var[y] && !is_ws(var[y]))
+			y++;
 		str = ft_calloc(y - i + 1);
 		if (!str)
 			return (-1);
@@ -38,8 +32,7 @@ int	cut_var(char **temp, t_env *data, char *var, int y)
 		if (get_lexed(ft_cpy(temp, str), data, STR))
 			return (-1);
 		free(str);
-		while (var[y] == ' ' || var[y] == '\r' || var[y] == '\t'
-			|| var[y] == '\n' || var[y] == '\v' || var[y] == '\f')
+		while (is_ws(var[y]))
 			y++;
 		if (get_lexed(ft_cpy(temp, " "), data, WHITE_SPACE))
 			return (-1);
@@ -62,8 +55,8 @@ int	env_var_2(char **temp, t_env *data, char *str)
 			return (-1);
 	}
 	else
-	{	
-		if (cut_var(temp, data, str, y))
+	{
+		if (cut_var(temp, data, str, 0))
 			return (-1);
 	}
 	return (0);

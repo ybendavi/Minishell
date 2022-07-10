@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/10 15:49:28 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/10 18:06:16 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 23:26:46 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ void	exit_write(t_env *data)
 
 	tmp = data->c_tbls;
 	while (tmp && tmp->cmd
-		&& ft_strncmp(tmp->cmd, "exit",
-		ft_strlen(tmp->cmd)) != 0)
+		&& ft_strncmp(tmp->cmd, "exit", ft_strlen(tmp->cmd)) != 0)
 	{
 		tmp = tmp->next;
 	}
