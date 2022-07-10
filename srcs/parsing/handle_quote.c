@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 23:10:03 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/10 15:49:09 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/10 23:03:10 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,11 @@ int	env_var_quotes(char **temp, t_env *data, char *line, unsigned int *i)
 	if (!str)
 		return (0);
 	if (get_lexed(ft_cpy(temp, str), data, STR))
+	{
+		free(str);
 		return (-1);
+	}
+	free(str);
 	return (0);
 }
 
@@ -116,10 +120,8 @@ int	handle_quote(char *line, unsigned int *i, char **temp, t_env *data)
 	if (q == '"')
 	{
 		data->temp = temp;
-		{
-			if (handle_double(line, i, start + 1, data))
-				return (-1);
-		}
+		if (handle_double(line, i, start + 1, data))
+			return (-1);
 	}
 	else
 	{

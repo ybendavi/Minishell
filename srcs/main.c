@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 21:17:23 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/10 19:15:50 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/10 23:25:48 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,7 @@ int	handle_buff(t_env *data, char **buff)
 
 	if (ft_strncmp(*buff, "", ft_strlen(*buff)))
 		add_history(*buff);
-	ret = lexer(*buff, data);
-/*	int i = 0;
-	while (data->lexed[i].token)
-	{
-		printf("Lexed = %d = type = %d str = %s\n", i, data->lexed[i].type, data->lexed[i].token);
-		i++;
-	}*/
+	ret = lexer(*buff, data, 0);
 	if (ret)
 	{
 		free(*buff);
@@ -38,12 +32,6 @@ int	handle_buff(t_env *data, char **buff)
 	ret = init_parser(data);
 	if (ret)
 		return (ft_return(ret, data));
-/*	i = 0;
-	while (data->parsed[i].token)
-	{
-		printf("Parsed = %d = type = %d str = %s\n", i, data->parsed[i].type, data->parsed[i].token);
-		i++;
-	}*/
 	return (0);
 }
 

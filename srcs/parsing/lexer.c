@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 22:24:47 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/10 13:17:36 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 22:59:02 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,19 +79,19 @@ int	lexer2(char *line, char **temp, unsigned int *i, t_env *data)
 	return (0);
 }
 
-int	lexer(char *line, t_env *data)
+int	lexer(char *line, t_env *data, unsigned int i)
 {
 	char			*temp;
 	int				ret;
-	unsigned int	i;
+	unsigned int	len;
 
 	if (ft_cmp(line, "") == 1)
 		return (0);
 	ret = init_lexer(data, &temp, line);
 	if (ret)
 		return (ret);
-	i = 0;
-	while (line && line[i])
+	len = ft_strlen(line);
+	while (line && i < len && line[i])
 	{
 		ret = lexer2(line, &temp, &i, data);
 		if (ret < 0)
