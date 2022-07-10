@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/10 19:32:34 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/10 19:43:47 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 23:09:34 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 int	open_fd_out(t_cmds *c_tbls, t_token *token)
 {
 	c_tbls->in = new_fd(token[1].token, (*token).type);
+	if (c_tbls->in > 0)
+	{
+		if (new_fds_list(c_tbls, c_tbls->in) == -1)
+			return (-1);
+	}
 	if (c_tbls->in < 0)
 		return (-2);
 	if (c_tbls->file_in)
@@ -24,9 +29,7 @@ int	open_fd_out(t_cmds *c_tbls, t_token *token)
 	{
 		perror(NULL);
 		return (-1);
-	}	
-	if (new_fds_list(c_tbls, c_tbls->in) == -1)
-		return (-1);
+	}
 	return (0);
 }
 

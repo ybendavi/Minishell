@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 18:28:03 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/10 19:42:56 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 23:13:41 by ybendavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	new_fd(char *filename, t_token_type type)
 		return (fd);
 	}
 	else if (type == REDIR_OUT)
-		redir_out(filename);
+		return (redir_out(filename));
 	return (0);
 }
 
