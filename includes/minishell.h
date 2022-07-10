@@ -6,7 +6,7 @@
 /*   By: ybendavi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 18:46:40 by ybendavi          #+#    #+#             */
-/*   Updated: 2022/07/10 15:57:20 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 17:21:27 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,8 @@ void			free_exec(t_env *envs);
 
 char			**ft_cpy(char **temp, char *s1);
 char			*ft_concat(char *s1, char *s2);
+char			**copy_quote(char **temp, char *line, unsigned int i,
+				unsigned int start);
 int				find_var_name(char *line, unsigned int *i, char **var);
 int				get_lexed(char **temp, t_env *data, t_token_type type);
 int				token_init(t_env *data);
@@ -202,6 +204,7 @@ char			*ft_itoa(int n);
 char			*ft_strchr(const char *s, int c);
 void			*ft_calloc(size_t nmem);
 size_t			ft_strlen(const char *str);
+int				is_ws(char c);
 int				check_global(void);
 int				ft_isdigit(int c);
 int				ft_strcmp(char *s1, char *s2);

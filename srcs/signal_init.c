@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 15:51:36 by ccottin           #+#    #+#             */
-/*   Updated: 2022/07/09 14:22:34 by ccottin          ###   ########.fr       */
+/*   Updated: 2022/07/10 16:33:57 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,10 @@ void	handler_sig(int sig)
 	{
 		if (g_sig == 0)
 		{
+			write(1, "\n", 1);
 			rl_replace_line("", 0);
 			rl_on_new_line();
-			write(1, "\nminishell$ ", 13);
+			rl_redisplay();
 		}
 	}
 }

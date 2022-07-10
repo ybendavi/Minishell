@@ -6,7 +6,7 @@
 /*   By: ccottin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 19:48:19 by ccottin           #+#    #+#             */
-/*   Updated: 2022/06/30 22:49:45 by ybendavi         ###   ########.fr       */
+/*   Updated: 2022/07/10 18:53:47 by ccottin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,9 @@ void	cases_neg_ret(int ret, t_env *data)
 	if (ret == -1)
 	{
 		freeer(data);
+		free_parsed(data);
+		free_lexed(data);
+
 		write(2, "Malloc error.\n", 14);
 	}
 	if (ret == -2)
