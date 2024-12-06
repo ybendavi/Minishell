@@ -43,7 +43,6 @@ Ce projet consiste à développer un **mini-interpréteur de commandes** en C, s
 
 ## Usage
 
-1. Clonez le dépôt :
-   ```bash
-   make
-   ./minishell
+```bash
+make
+./minishell
